@@ -382,7 +382,7 @@ public class SQLBase  {
 
     //update offline
     public void OFFLINE_TASK_DELETE(String _uniqueid){
-        sqLiteDB.execSQL("DELETE FROM " + Tables.tblofflinetask.name
+        sqLiteDB.execSQL("DELETE  FROM " + Tables.tblofflinetask.name
                 + " WHERE " + Tables.tblofflinetask.Task_Id + "=" + _uniqueid);
     }
 
