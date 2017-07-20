@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:paddingBottom="5dp"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
+    android:paddingTop="20dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <TextView
+        android:layout_width="match_parent"
+        android:gravity="center_horizontal"
+        android:layout_height="wrap_content"
+        android:textColor="#000"
+        android:textSize="17dp"
+        android:text="@string/return_msg"/>
+
+    <Spinner
+        android:paddingTop="10dp"
+        android:paddingLeft="20dp"
+        android:paddingBottom="10dp"
+        android:paddingRight="20dp"
+        android:layout_marginTop="10dp"
+        android:id="@+id/rej_list_spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="20dp"
+        android:gravity="end">
+
+        <Button
+            android:id="@+id/cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:layout_weight="1"
+            android:layout_marginRight="40dp"
+            android:background="@color/green_light"
+            android:text="@string/alert_no_text"
+            android:textColor="@color/white" />
+
+        <Button
+            android:layout_weight="1"
+            android:textColor="@color/white"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:text="@string/return_button"
+           android:id="@+id/returne"
+            android:background="@color/red_light"/>
+    </LinearLayout>
+</LinearLayout>

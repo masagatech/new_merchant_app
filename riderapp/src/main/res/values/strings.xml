@@ -1,0 +1,138 @@
+<resources>
+    <string name="title_activity_splash_screen" translatable="false">splash_screen</string>
+    <string name="lblSarthiName">Sarathi Name :</string>
+    <string name="app_name">Travel Tracker</string>
+    <string name="mytrp_todaytrip">Today\'s Trips</string>
+    <string name="mytrp_history">History</string>
+    <string name="del_schoolnm">Dhiru Bhai Ambani School</string>
+    <string name="mytrp_title">Today\'s Trips</string>
+    <string name="login_title">LOGIN</string>
+    <string name="login_usrnamehint">MOBILE NUMBER</string>
+    <string name="login_passwordhint">PASSWORD</string>
+    <string name="login_loginbtntext">Sign In</string>
+    <string name="dashboard_mytrips">Trips</string>
+    <string name="pickup">PICKUP</string>
+    <string name="status_completed">COMPLETED</string>
+    <string name="status_pending">PENDING</string>
+    <string name="status_started">STARTED</string>
+    <string name="status_canceled">CANCELED</string>
+    <string name="drop">DROP</string>
+    <string name="status_pause">PAUSE</string>
+    <string name="dashboard_title">Menu</string>
+    <string name="confirm_logout">Are you sure you want to Log Out?</string>
+    <string name="logout">Log Out</string>
+    <string name="presagain_exit">Press again to exit</string>
+    <string name="alert_no_text">CANCEL</string>
+    <string name="alert_ok_text">OK</string>
+    <string name="login_signin">SIGN IN</string>
+    <string name="pickup_opt_pickup">PICKED UP</string>
+    <string name="pickup_opt_absent">ABSENT</string>
+    <string name="pickup_opt_call">CALL</string>
+    <string name="pickup_opt_info">INFO</string>
+    <string name="pickup_title">Pickup\'s Detail</string>
+    <string name="str_stop">STOP</string>
+    <string name="str_start">START</string>
+    <string name="dashboard_menu_trips">Today\'s Trips</string>
+    <string name="dashboard_menu_settings">Settings</string>
+    <string name="pickup_opt_route">Route</string>
+    <string name="language_title">Language</string>
+    <string name="settings_title">Settings</string>
+    <string name="str_change">CHANGE</string>
+    <string name="menu_refresh">Refresh</string>
+    <string name="crew_status_pickedup">PICKED</string>
+    <string name="crew_status_drop">DROPPED</string>
+    <string name="crew_status_absent">ABSENT</string>
+    <string name="crew_status_pending">PENDING</string>
+    <string name="alertconfirmtext_stopstrop">Do you want to stop this trip?</string>
+    <string name="alertconfirmtext_starttrip">Do you want to start this trip?</string>
+    <string name="alert_start_text">START</string>
+    <string name="pickup_exit">This trip is in progress. If you exit from the screen we unable to track your vehicle. Do you still want to exit?</string>
+    <string name="alert_yes_text">YES</string>
+
+
+    <string name="slide_1_title">How This Works?</string>
+    <string name="slide_1_desc">App will give you Real time tracking without annoying ads!!</string>
+
+    <string name="slide_2_title">Tracking</string>
+    <string name="slide_2_desc">Track your users anywhere in the world!</string>
+
+    <string name="slide_3_title">Detailed Info</string>
+    <string name="slide_3_desc">We will give you detailed info about your traveling</string>
+
+    <string name="slide_4_title">Easy to use</string>
+    <string name="slide_4_desc">few taps away for your tracking</string>
+
+    <string name="play_again_desc">To see the welcome slider again, goto Settings -> apps -> welcome slider -> clear data</string>
+    <string name="play_again">Play Again</string>
+
+    <string name="Pending_Order" translatable="false">My Tasks</string>
+    <string name="Complated_Order" translatable="false">Today Visits</string>
+    <string name="Cash_Collection" translatable="false">Leave</string>
+    <string name="All_Order" translatable="false">Tags</string>
+    <string name="New_Order" translatable="false">Notifications</string>
+    <string name="Rejected_Order" translatable="false">Leave</string>
+    <string name="Push_Order" translatable="false">Push</string>
+    <string name="order_details">Report</string>
+    <string name="title_activity_custemer_maps" translatable="false">Map</string>
+    <string name="exp">Expired !!!</string>
+    <string name="notification_accept">ACCEPTED</string>
+    <string name="notification_reject">REJECTED</string>
+    <string name="notification_alredyassign">Already Assigned</string>
+    <string name="reject_reason_body">Are you sure you want Reject this order?   Tell us why!</string>
+    <string name="reject_reason_head">Reject</string>
+    <string name="yes">Yes!</string>
+    <string name="acceptorder_notifi">You Have Aceepted This Order!</string>
+    <string name="msg_delivered">Delivered</string>
+    <string name="msg_returned">Returned</string>
+    <string name="wait_msg">Please wait..</string>
+    <string name="msg_stoptrip">No Pending Delivery. Are you want Stop Trip?</string>
+    <string name="head_stoptrip">Stop Trip</string>
+    <string name="select_rider_msg">Please select a Rider first!</string>
+    <string name="select_rider">Select Rider..</string>
+    <string name="returned_at">Returned At  </string>
+    <string name="dilvered_at">Deliverd At  </string>
+    <string name="logout_msg_with_online">Logging out will makes you Time-Out, Are you sure want do so?</string>
+    <string name="logout_msg_normal">Are you sure want Logout?</string>
+    <string name="online_head">Time-In</string>
+    <string name="online_body">You sure want to register Time-In?</string>
+    <string name="online_yes">Yes</string>
+    <string name="offline_head">Time-Out</string>
+    <string name="offline_body">Are you sure you want register Time-Out?</string>
+    <string name="switch_online_text">Time-In</string>
+    <string name="offline_switch_text">Time-Out</string>
+    <string name="update_head">Update</string>
+    <string name="update_body">Your using older version of the app,  \nPlease Update to continue..</string>
+    <string name="update_yes">Take me to app store!</string>
+    <string name="update_no">Not now</string>
+    <string name="starttrip_head">Start Trip</string>
+    <string name="starttrip_body">Are you want Start Trip?</string>
+    <string name="stoptrip_head">Stop Trip</string>
+    <string name="stoptrip_body">Are you sure you want Stop Trip?</string>
+    <string name="stoptrip_msg">You have Deliverd all food.   \nPress Stop to continue..</string>
+    <string name="allorder_empthy_msg">Oops You dont have any order history. Start Delivery Now!</string>
+    <string name="complated_empthy_msg">No Orders Complated! Start Delivery Now!</string>
+    <string name="exit_map">exit</string>
+    <string name="notification_emthy_msg">Seems People are resting.   There are no orders for you right now. Rest for a while before order starts pouring...</string>
+    <string name="pending_empthy_msg">Whooho No Pending Delivery!!</string>
+    <string name="push_empthy_msg">No orders right now :(</string>
+    <string name="returned_empthy_msg">No Orders Returned!! :D</string>
+    <string name="orderdetails_date">DATE</string>
+    <string name="orderdetails_total">TOTAL</string>
+    <string name="return_msg">Are you sure you want return delivery? Tell us why!</string>
+    <string name="return_button">Return</string>
+    <string name="no_rider_avalble_msg">Oops there were no riders available right now!!</string>
+    <string name="reject_notification">Reject</string>
+    <string name="accept_notification">Accept</string>
+    <string name="rejectorder_notifi">You have rejected this order!</string>
+    <string name="offline_rider_head">Offline</string>
+    <string name="offline_rider_body">Selected Rider is offline. You still wants to push this order?</string>
+    <string name="slider_login">Login</string>
+    <string name="slider_contact_us">Contact us</string>
+    <string name="add_tasks">Add Stops</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_today_visits_maps">Map</string>
+
+
+</resources>

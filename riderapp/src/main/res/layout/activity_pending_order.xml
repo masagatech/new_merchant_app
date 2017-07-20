@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:background="@color/colorBackground"
+    tools:context="com.goyo.traveltracker.forms.pending_order">
+
+    <TextView
+        android:layout_marginTop="60dp"
+        android:id="@+id/txtNodata"
+        android:drawableTop="@drawable/no_pending_data"
+        android:layout_width="match_parent"
+        android:gravity="center"
+        android:textColor="@color/blue_light"
+        android:layout_height="wrap_content"
+        android:text="@string/pending_empthy_msg"
+        android:textSize="20sp"
+        android:visibility="gone"
+        android:layout_centerInParent="true"
+        />
+
+    <include layout="@layout/content_pending_orders" />
+
+
+
+
+</android.support.design.widget.CoordinatorLayout>
+
