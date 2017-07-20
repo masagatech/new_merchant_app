@@ -12,4 +12,11 @@
         <attr name="linePadding" format="dimension"/>
         <attr name="markerInCenter" format="boolean"/>
     </declare-styleable>
+
+    <declare-styleable name="KMPAutoComplTextView">
+        <attr name="completionHighlightColor" format="reference|color" />
+        <attr name="completionTextColor" format="reference|color" />
+        <attr name="completionTextSize" format="dimension" />
+        <attr name="completionIgnoreCase" format="boolean" />
+    </declare-styleable>
 </resources>

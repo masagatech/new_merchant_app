@@ -467,6 +467,7 @@ public class SQLBase  {
         public void onCreate(SQLiteDatabase db) {
             //db.execSQL(Procedures.tbl_driver_info.CREATE);
             db.execSQL(Procedures.tblnotification.CREATE);
+            db.execSQL(Procedures.tbltag.CREATE);
         }
 
         @Override

@@ -45,6 +45,7 @@ import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.gson.JsonObject;
 import com.goyo.traveltracker.R;
 import com.goyo.traveltracker.database.SQLBase;
+import com.goyo.traveltracker.database.Tables;
 import com.goyo.traveltracker.gloabls.Global;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
@@ -59,14 +60,18 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 
 import static android.content.Context.LOCATION_SERVICE;
 import static com.goyo.traveltracker.Service.NetworkStateReceiver.IsConnected;
 import static com.goyo.traveltracker.forms.dashboard.REQUEST_CHECK_SETTINGS;
 import static com.goyo.traveltracker.forms.dashboard.mGoogleApiClient;
 import static com.goyo.traveltracker.forms.pending_order.TripId;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -102,6 +107,26 @@ public class NewStops extends AAH_FabulousFragment implements LocationListener{
         View contentView = View.inflate(getContext(), R.layout.activity_task__add, null);
         RelativeLayout rl_content = (RelativeLayout) contentView.findViewById(R.id.rl_content);
 
+
+        SQLBase db = new SQLBase(getActivity());
+
+        List<String> data = new ArrayList<String>();
+        List<HashMap<String,String>> d = db.Get_Tags();
+        if(d.size()>0) {
+            for (int i = 0; i <= d.size() - 1; i++) {
+                data.add(d.get(i).get(Tables.tbltags.Tag_Title));
+            }
+        }
+
+        KMPAutoComplTextView complTextView = (KMPAutoComplTextView) contentView.findViewById(R.id.tvAutoCompl);
+        complTextView.setDatas(data);
+        complTextView.setOnPopupItemClickListener(new KMPAutoComplTextView.OnPopupItemClickListener() {
+            @Override
+            public void onPopupItemClick(CharSequence charSequence) {
+                Toast.makeText(getActivity(), charSequence.toString(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
         //map
         map = (ImageView) contentView.findViewById(R.id.map);
 
@@ -114,7 +139,7 @@ public class NewStops extends AAH_FabulousFragment implements LocationListener{
         remark = (EditText) contentView.findViewById(R.id.Task_Body);
         remark_title = (EditText) contentView.findViewById(R.id.Task_Title);
 
-        final SQLBase db = new SQLBase(getActivity());
+//        final SQLBase db = new SQLBase(getActivity());
         //final List<model_task> task = db.getAllContacts();
 //        for (model_task cn : task) {
 //            String log = "Id: "+cn.get_id()+" ,Title: " + cn.get_title() + " ,Body: " + cn.get_body()+ " ,Lat: " + cn.get_lat()+ " ,Lon: " + cn.get_lon()+ " ,EMP ID: " + cn.get_empl_id()+ " ,Created On: " + cn.get_creat_on()+ " ,Is Server Send: " + cn.get_is_server_send();

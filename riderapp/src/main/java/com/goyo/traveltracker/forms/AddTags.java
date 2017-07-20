@@ -17,7 +17,7 @@ import java.util.Date;
 
 public class AddTags extends AppCompatActivity {
     private EditText Tag_Name,Tag_Remark_1,Tag_Remark_2,Tag_Remark_3;
-     SQLBase db = new SQLBase(this);
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,8 +27,8 @@ public class AddTags extends AppCompatActivity {
         this.setTitle("Add Tags");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-
-
+//        SQLBase db = new SQLBase(this);
+//
 //        List<HashMap<String,String>> d = db.Get_Tags();
 //        if(d.size()>0) {
 //            for (int i = 0; i <= d.size() - 1; i++) {
@@ -53,7 +53,7 @@ public class AddTags extends AppCompatActivity {
         tag_remark_1=Tag_Remark_1.getText().toString();
         tag_remark_2=Tag_Remark_2.getText().toString();
         tag_remark_3=Tag_Remark_3.getText().toString();
-
+        SQLBase db = new SQLBase(this);
         db.TAG_ADDTAG(new model_tag(tag_name,tag_remark_1,tag_remark_2,tag_remark_3,Empl_Id,currentDateTimeString,0));
     }
 

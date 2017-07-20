@@ -61,7 +61,7 @@
             float:fletTextAppearance="@style/floatlabelededittext2">
         <EditText
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="70dp"
             android:background="@drawable/border_cash_collection"
             android:gravity="top"
             android:id="@+id/Task_Body"
@@ -72,11 +72,25 @@
             android:padding="10dp" />
         </com.wrapp.floatlabelededittext.FloatLabeledEditText>
 
+        <com.goyo.traveltracker.forms.KMPAutoComplTextView
+            android:id="@+id/tvAutoCompl"
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_below="@+id/remark_form"
+            android:completionThreshold="1"
+            app:completionHighlightColor="@color/colorAccent"
+            app:completionTextColor="#80000000"
+            app:completionTextSize="18sp"
+            app:completionIgnoreCase="true"/>
+
+
+
         <ImageView
             android:id="@+id/map"
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            android:layout_below="@+id/remark_form"
+            android:layout_below="@+id/tvAutoCompl"
             android:layout_marginTop="10dp"
             android:background="#cacaca"
             android:fontFamily="sans-serif-light" />
