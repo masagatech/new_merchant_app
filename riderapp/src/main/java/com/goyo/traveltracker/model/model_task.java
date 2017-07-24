@@ -6,28 +6,28 @@ package com.goyo.traveltracker.model;
 
 public class model_task {
     int _id;
-    int _is_server_send;
+    String _is_server_send;
     String _title;
     String _body;
     String _lat;
     String _lon;
-    String _empl_id;
+    String _tags;
     String _creat_on;
 
-    public String get_empl_id() {
-        return _empl_id;
+    public String get_tags() {
+        return _tags;
     }
 
-    public int get_is_server_send() {
+    public void set_tags(String _tags) {
+        this._tags = _tags;
+    }
+
+    public String get_is_server_send() {
         return _is_server_send;
     }
 
-    public void set_is_server_send(int _is_server_send) {
+    public void set_is_server_send(String _is_server_send) {
         this._is_server_send = _is_server_send;
-    }
-
-    public void set_empl_id(String _empl_id) {
-        this._empl_id = _empl_id;
     }
 
     public String get_creat_on() {
@@ -85,24 +85,24 @@ public class model_task {
 
     }
     // constructor
-    public model_task(int id, String title, String body, String lat,String lon,String emp_id,String creat_on,int is_server_send){
+    public model_task(int id, String title, String body, String lat,String lon,String tags,String creat_on,String is_server_send){
         this._id = id;
         this._title = title;
         this._body = body;
         this._lat = lat;
         this._lon = lon;
-        this._empl_id = emp_id;
+        this._tags = tags;
         this._creat_on = creat_on;
         this._is_server_send = is_server_send;
     }
 
     // constructor
-    public model_task(String _title, String _body, String _lat,String _lon,String _emp_id,String _creat_on,int _is_server_send){
+    public model_task(String _title, String _body, String _lat,String _lon,String tags,String _creat_on,String _is_server_send){
         this._title = _title;
         this._body = _body;
         this._lat = _lat;
         this._lon = _lon;
-        this._empl_id = _emp_id;
+        this._tags = tags;
         this._creat_on = _creat_on;
         this._is_server_send = _is_server_send;
     }

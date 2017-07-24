@@ -13,6 +13,7 @@ import android.widget.ToggleButton;
 
 import com.github.vipulasri.timelineview.TimelineView;
 import com.goyo.traveltracker.R;
+import com.pchmn.materialchips.ChipsInput;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -67,6 +68,8 @@ public class pending_order_viewHolder extends RecyclerView.ViewHolder {
     Spinner status;
     @BindView(R.id.nature_value)
     EditText nature_value;
+    @BindView(R.id.chip)
+    ChipsInput chipsInput;
 
     public pending_order_viewHolder(View itemView, int viewType) {
         super(itemView);

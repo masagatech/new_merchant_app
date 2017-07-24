@@ -129,6 +129,8 @@ public class AllOrderDetails extends AppCompatActivity {
         return mRiderList;
     }
 
+
+
     private void bindCurrentTrips(ArrayList<model_order_details> lst) {
         if (lst.size() > 0) {
             findViewById(R.id.txtNodata).setVisibility(View.GONE);

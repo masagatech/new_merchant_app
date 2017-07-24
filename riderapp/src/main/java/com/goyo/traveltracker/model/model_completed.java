@@ -16,6 +16,23 @@ public class model_completed {
     @SerializedName("stpnm")
     public String stpnm;
 
+    @SerializedName("tagnm")
+    public String tagnm;
+
+    @SerializedName("remark")
+    public String remark1;
+
+    @SerializedName("remark1")
+    public String remark2;
+
+    @SerializedName("remark2")
+    public String remark3;
+
+    @SerializedName("remark3")
+    public String remark33;
+
+    @SerializedName("createdby")
+    public String createdby;
 
     @SerializedName("createdon")
     public String createdon;

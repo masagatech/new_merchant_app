@@ -328,7 +328,7 @@ public class SQLBase  {
             values.put(Tables.tblofflinetask.Task_Body, Task.get_body());
             values.put(Tables.tblofflinetask.Task_Lat, Task.get_lat());
             values.put(Tables.tblofflinetask.Task_Lon, Task.get_lon());
-            values.put(Tables.tblofflinetask.Task_Empl_Id, Task.get_empl_id());
+            values.put(Tables.tblofflinetask.Task_Tags, Task.get_tags());
             values.put(Tables.tblofflinetask.Task_Creat_On, Task.get_creat_on());
             values.put(Tables.tblofflinetask.Is_Server_Send, Task.get_is_server_send());
 
@@ -347,8 +347,9 @@ public class SQLBase  {
                     + Tables.tblofflinetask.Task_Body +","
                     + Tables.tblofflinetask.Task_Lat +","
                     + Tables.tblofflinetask.Task_Lon +","
-                    + Tables.tblofflinetask.Task_Empl_Id +","
-                    + Tables.tblofflinetask.Task_Creat_On
+                    + Tables.tblofflinetask.Task_Tags +","
+                    + Tables.tblofflinetask.Task_Creat_On+","
+                    + Tables.tblofflinetask.Is_Server_Send
                     + " FROM " + Tables.tblnotification.name +" WHERE "
                     + Tables.tblofflinetask.Is_Server_Send + " = '0'";
             Cursor cursor = sqLiteDB.rawQuery(selectEvents, null);
@@ -361,8 +362,9 @@ public class SQLBase  {
                     map.put(Tables.tblofflinetask.Task_Body, cursor.getString(2));
                     map.put(Tables.tblofflinetask.Task_Lat, cursor.getString(3));
                     map.put(Tables.tblofflinetask.Task_Lon, cursor.getString(4));
-                    map.put(Tables.tblofflinetask.Task_Empl_Id, cursor.getString(5));
+                    map.put(Tables.tblofflinetask.Task_Tags, cursor.getString(5));
                     map.put(Tables.tblofflinetask.Task_Creat_On, cursor.getString(6));
+                    map.put(Tables.tblofflinetask.Is_Server_Send, cursor.getString(7));
                     data.add(map);
                 } while (cursor.moveToNext());
             }
@@ -398,27 +400,47 @@ public class SQLBase  {
         values.put(Tables.tbltags.Tag_remark_3, Tag.get_rem_3());
         values.put(Tables.tbltags.Tag_Empl_Id, Tag.get_empl_id());
         values.put(Tables.tbltags.Tag_Creat_On, Tag.get_creat_on());
-        values.put(Tables.tbltags.Is_Server_Send, Tag.get_creat_on());
+        values.put(Tables.tbltags.Is_Server_Send, Tag.get_is_server_send());
 
         // Inserting Row
         sqLiteDB.insert(Tables.tbltags.name, null, values);
-        sqLiteDB.close(); // Closing database connection
+//        sqLiteDB.close(); // Closing database connection
     }
 
+   public Boolean ISTAG_ALREDY_EXIST(String Tag_Name){
 
+       String Query = "SELECT "
+               + Tables.tbltags.Tag_Id+","
+               + Tables.tbltags.Tag_Title+","
+               + Tables.tbltags.Tag_remark_1 +","
+               + Tables.tbltags.Tag_remark_2 +","
+               + Tables.tbltags.Tag_remark_3 +","
+               + Tables.tbltags.Tag_Empl_Id +","
+               + Tables.tbltags.Tag_Creat_On +","
+               + Tables.tbltags.Is_Server_Send
+               + " FROM " + Tables.tbltags.name +" WHERE "
+               + Tables.tbltags.Tag_Title + " = '" + Tag_Name+ "'";
+           Cursor cursor = sqLiteDB.rawQuery(Query, null);
+           if(cursor.getCount() <= 0){
+               cursor.close();
+               return false;
+           }
+           cursor.close();
+           return true;
+    }
 
     public List<HashMap<String, String>> Get_Tags(){
         List<HashMap<String, String>> data = new ArrayList<HashMap<String, String>>();
-        String selectEvents = "SELECT "
-                + Tables.tbltags.Tag_Id
-                + Tables.tbltags.Tag_Title+","
-                + Tables.tbltags.Tag_remark_1 +","
-                + Tables.tbltags.Tag_remark_2 +","
-                + Tables.tbltags.Tag_remark_3 +","
-                + Tables.tbltags.Tag_Creat_On +","
-                + Tables.tbltags.Is_Server_Send
-                + " FROM " + Tables.tbltags.name +" WHERE "
-                + Tables.tblofflinetask.Is_Server_Send + " = '0'";
+//        String selectEvents = "SELECT "
+//                + Tables.tbltags.Tag_Id
+//                + Tables.tbltags.Tag_Title+","
+//                + Tables.tbltags.Tag_remark_1 +","
+//                + Tables.tbltags.Tag_remark_2 +","
+//                + Tables.tbltags.Tag_remark_3 +","
+//                + Tables.tbltags.Tag_Creat_On +","
+//                + Tables.tbltags.Is_Server_Send
+//                + " FROM " + Tables.tbltags.name +" WHERE "
+//                + Tables.tbltags.Is_Server_Send + " = '0'";
 //        Cursor cursor = sqLiteDB.rawQuery(selectEvents, null);
         Cursor cursor = sqLiteDB.rawQuery("SELECT * FROM "+ Tables.tbltags.name, null);
         // looping through all rows and adding to list
@@ -432,6 +454,44 @@ public class SQLBase  {
                 map.put(Tables.tbltags.Tag_remark_3, cursor.getString(4));
                 map.put(Tables.tbltags.Tag_Empl_Id, cursor.getString(5));
                 map.put(Tables.tbltags.Tag_Creat_On, cursor.getString(6));
+                map.put(Tables.tbltags.Is_Server_Send, cursor.getString(7));
+                data.add(map);
+            } while (cursor.moveToNext());
+        }
+        if (cursor != null) {
+            cursor.close();
+        }
+        return data ;
+    }
+
+
+    public List<HashMap<String, String>> Get_Tags_Offline(){
+        List<HashMap<String, String>> data = new ArrayList<HashMap<String, String>>();
+        String selectEvents = "SELECT "
+                + Tables.tbltags.Tag_Id+","
+                + Tables.tbltags.Tag_Title+","
+                + Tables.tbltags.Tag_remark_1 +","
+                + Tables.tbltags.Tag_remark_2 +","
+                + Tables.tbltags.Tag_remark_3 +","
+                + Tables.tbltags.Tag_Empl_Id +","
+                + Tables.tbltags.Tag_Creat_On +","
+                + Tables.tbltags.Is_Server_Send
+                + " FROM " + Tables.tbltags.name +" WHERE "
+                + Tables.tbltags.Is_Server_Send + " = '1'";
+        Cursor cursor = sqLiteDB.rawQuery(selectEvents, null);
+//        Cursor cursor = sqLiteDB.rawQuery("SELECT * FROM "+ Tables.tbltags.name, null);
+        // looping through all rows and adding to list
+        if (cursor.moveToFirst()) {
+            do {
+                HashMap<String, String> map = new HashMap<String, String>();
+                map.put(Tables.tbltags.Tag_Id, cursor.getString(0));
+                map.put(Tables.tbltags.Tag_Title, cursor.getString(1));
+                map.put(Tables.tbltags.Tag_remark_1, cursor.getString(2));
+                map.put(Tables.tbltags.Tag_remark_2, cursor.getString(3));
+                map.put(Tables.tbltags.Tag_remark_3, cursor.getString(4));
+                map.put(Tables.tbltags.Tag_Empl_Id, cursor.getString(5));
+                map.put(Tables.tbltags.Tag_Creat_On, cursor.getString(6));
+                map.put(Tables.tbltags.Is_Server_Send, cursor.getString(7));
                 data.add(map);
             } while (cursor.moveToNext());
         }
@@ -443,10 +503,10 @@ public class SQLBase  {
 
 
     //update offline
-    public void TAG_UPDATE(String _uniqueid, String sendtoserver){
+    public void TAG_UPDATE(String _tagName, String sendtoserver){
         sqLiteDB.execSQL("UPDATE " + Tables.tbltags.name + " SET "
-                +  Tables.tbltags.Is_Server_Send + "=" + sendtoserver
-                + " WHERE " + Tables.tbltags.Tag_Id + "=" + _uniqueid);
+                +  Tables.tbltags.Is_Server_Send + "='" + sendtoserver+ "'"
+                + " WHERE " + Tables.tbltags.Tag_Title + " = '" + _tagName+ "'");
     }
 
     //update offline

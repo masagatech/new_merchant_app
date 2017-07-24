@@ -42,13 +42,18 @@ import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStates;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
+import com.google.api.client.repackaged.com.google.common.base.Joiner;
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.goyo.traveltracker.R;
 import com.goyo.traveltracker.database.SQLBase;
 import com.goyo.traveltracker.database.Tables;
 import com.goyo.traveltracker.gloabls.Global;
+import com.goyo.traveltracker.model.model_tag_db;
+import com.goyo.traveltracker.model.model_task;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
+import com.pchmn.materialchips.ChipsInput;
 
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
@@ -67,7 +72,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import static android.content.Context.LOCATION_SERVICE;
-import static com.goyo.traveltracker.Service.NetworkStateReceiver.IsConnected;
+import static com.goyo.traveltracker.Service.NetworkStateReceiver.IsMobailConnected;
 import static com.goyo.traveltracker.forms.dashboard.REQUEST_CHECK_SETTINGS;
 import static com.goyo.traveltracker.forms.dashboard.mGoogleApiClient;
 import static com.goyo.traveltracker.forms.pending_order.TripId;
@@ -91,6 +96,7 @@ public class NewStops extends AAH_FabulousFragment implements LocationListener{
     private TextView textView1;
     private static final String IMAGE_DIRECTORY = "/demonuts";
     private int GALLERY = 1, CAMERA = 2;
+    private ChipsInput chipsInput;
 
 
     public static  NewStops newInstance() {
@@ -110,22 +116,29 @@ public class NewStops extends AAH_FabulousFragment implements LocationListener{
 
         SQLBase db = new SQLBase(getActivity());
 
-        List<String> data = new ArrayList<String>();
+        List<model_tag_db> data = new ArrayList<model_tag_db>();
         List<HashMap<String,String>> d = db.Get_Tags();
         if(d.size()>0) {
             for (int i = 0; i <= d.size() - 1; i++) {
-                data.add(d.get(i).get(Tables.tbltags.Tag_Title));
+                data.add(new model_tag_db( d.get(i).get(Tables.tbltags.Tag_Id), d.get(i).get(Tables.tbltags.Tag_Title),d.get(i).get(Tables.tbltags.Tag_remark_1),d.get(i).get(Tables.tbltags.Tag_remark_2),d.get(i).get(Tables.tbltags.Tag_remark_3),d.get(i).get(Tables.tbltags.Tag_Creat_On),d.get(i).get(Tables.tbltags.Is_Server_Send)));
             }
         }
 
-        KMPAutoComplTextView complTextView = (KMPAutoComplTextView) contentView.findViewById(R.id.tvAutoCompl);
-        complTextView.setDatas(data);
-        complTextView.setOnPopupItemClickListener(new KMPAutoComplTextView.OnPopupItemClickListener() {
-            @Override
-            public void onPopupItemClick(CharSequence charSequence) {
-                Toast.makeText(getActivity(), charSequence.toString(), Toast.LENGTH_SHORT).show();
-            }
-        });
+        chipsInput = (ChipsInput) contentView.findViewById(R.id.chip);
+        chipsInput.setFilterableList(data);
+
+
+
+
+
+//        KMPAutoComplTextView complTextView = (KMPAutoComplTextView) contentView.findViewById(R.id.tvAutoCompl);
+//        complTextView.setDatas(data);
+//        complTextView.setOnPopupItemClickListener(new KMPAutoComplTextView.OnPopupItemClickListener() {
+//            @Override
+//            public void onPopupItemClick(CharSequence charSequence) {
+//                Toast.makeText(getActivity(), charSequence.toString(), Toast.LENGTH_SHORT).show();
+//            }
+//        });
 
         //map
         map = (ImageView) contentView.findViewById(R.id.map);
@@ -177,8 +190,19 @@ public class NewStops extends AAH_FabulousFragment implements LocationListener{
                 if(Title.equals("")){
                     Toast.makeText(getActivity(), "Please Enter Info!", Toast.LENGTH_SHORT).show();
                 }else {
-                SendToServer(Empl_Id,Title,Body,Lat,Lon,currentDateTimeString);
-//                    db.OFFLINE_TASK_ADDTASK(new model_task(Title,Body,Lat,Lon,Empl_Id,currentDateTimeString,0));
+                    List<model_tag_db> contactsSelected = (List<model_tag_db>) chipsInput.getSelectedChipList();
+                    List<String> Tags = new ArrayList<String>();
+                    if(contactsSelected.size()>0) {
+                        for (int i = 0; i <= contactsSelected.size() - 1; i++) {
+                            Tags.add(contactsSelected.get(i).getLabel());
+                        }
+                    }
+                    SQLBase db = new SQLBase(getActivity());
+                SendToServer(Empl_Id,Title,Body,Lat,Lon,currentDateTimeString,Tags);
+
+                    Gson gson = new Gson();
+                    String TagString= gson.toJson(Tags);
+                db.OFFLINE_TASK_ADDTASK(new model_task(Title,Body,Lat,Lon,TagString,currentDateTimeString,"0"));
 
                 }
 
@@ -196,7 +220,8 @@ public class NewStops extends AAH_FabulousFragment implements LocationListener{
         setMainContentView(contentView); // necessary; call at end before super
         super.setupDialog(dialog, style); //call super at last
     }
-private void SendToServer(String Empl_Id,String Title,String Body,String Lat,String Lon,String currentDateTimeString) {
+private void SendToServer(String Empl_Id,String Title,String Body,String Lat,String Lon,String currentDateTimeString,List<String> Tags) {
+    String tag= Joiner.on("','").join(Tags);
     JsonObject json = new JsonObject();
     json.addProperty("stpnm", Title);
     json.addProperty("stpdesc", Body);
@@ -206,6 +231,8 @@ private void SendToServer(String Empl_Id,String Title,String Body,String Lat,Str
     json.addProperty("uid", Empl_Id);
     json.addProperty("cuid", currentDateTimeString);
     json.addProperty("enttid", Global.loginusr.getEnttid()+"");
+    json.addProperty("tag","{'" + tag + "'}");
+
     Ion.with(this)
             .load(Global.urls.saveTripStops.value)
             .setJsonObjectBody(json)
@@ -302,7 +329,7 @@ private void SendToServer(String Empl_Id,String Title,String Body,String Lat,Str
             return;
         }
 
-        if(IsConnected) {
+        if(IsMobailConnected) {
           location = locationManager2.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
         }else {
            location = locationManager2.getLastKnownLocation(LocationManager.GPS_PROVIDER);
@@ -476,5 +503,4 @@ private void SendToServer(String Empl_Id,String Title,String Body,String Lat,Str
         }
         return "";
     }
-
 }

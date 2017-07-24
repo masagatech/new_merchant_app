@@ -6,7 +6,8 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
-import android.widget.Toast;
+
+import com.goyo.traveltracker.forms.all_order;
 
 /**
  * Created by mis on 14-Jul-17.
@@ -14,7 +15,8 @@ import android.widget.Toast;
 
 public class NetworkStateReceiver extends BroadcastReceiver {
 
-    public static boolean IsConnected=true;
+    public static boolean IsMobailConnected=true;
+    public static boolean IsWifiConnected=true;
     /*
      * @see android.content.BroadcastReceiver#onReceive(android.content.Context,
      * android.content.Intent)
@@ -31,32 +33,30 @@ public class NetworkStateReceiver extends BroadcastReceiver {
         if (isWiFi) {
             if (isConnected) {
                 Log.i("APP_TAG", "Wi-Fi - CONNECTED");
-                IsConnected=true;
-                Toast.makeText(context, IsConnected+"", Toast.LENGTH_SHORT).show();
+                IsWifiConnected=true;
             } else {
                 Log.i("APP_TAG", "Wi-Fi - DISCONNECTED");
-                IsConnected=false;
-                Toast.makeText(context, IsConnected+"", Toast.LENGTH_SHORT).show();
+                IsWifiConnected=false;
             }
         } else if (isMobile) {
             if (isConnected) {
+                all_order all_order=new all_order();
+                all_order.SendOfflineTagstoServer();
                 Log.i("APP_TAG", "Mobile - CONNECTED");
-                IsConnected=true;
-                Toast.makeText(context, IsConnected+"", Toast.LENGTH_SHORT).show();
+                IsMobailConnected=true;
             } else {
                 Log.i("APP_TAG", "Mobile - DISCONNECTED");
-                IsConnected=false;
-                Toast.makeText(context, IsConnected+"", Toast.LENGTH_SHORT).show();
+                IsMobailConnected=false;
             }
         } else {
             if (isConnected) {
                 Log.i("APP_TAG", networkInfo.getTypeName() + " - CONNECTED");
-                IsConnected=true;
-                Toast.makeText(context, IsConnected+"", Toast.LENGTH_SHORT).show();
+//                IsMobailConnected=true;
+//                IsWifiConnected=true;
             } else {
                 Log.i("APP_TAG", networkInfo.getTypeName() + " - DISCONNECTED");
-                IsConnected=false;
-                Toast.makeText(context, IsConnected+"", Toast.LENGTH_SHORT).show();
+//                IsMobailConnected=false;
+//                IsWifiConnected=false;
 
             }
         }

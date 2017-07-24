@@ -66,7 +66,7 @@ public final class Tables {
         public static final String Task_Body = "task_body";
         public static final String Task_Lat = "task_lat";
         public static final String Task_Lon = "task_lon";
-        public static final String Task_Empl_Id = "task_empl_id";
+        public static final String Task_Tags = "task_tags";
         public static final String Task_Creat_On = "task_creat_on";
         public static final String Is_Server_Send = "is_server_send";
 

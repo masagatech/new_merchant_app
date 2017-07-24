@@ -107,9 +107,9 @@ public final class Procedures {
                 +  Tables.tblofflinetask.Task_Body  + " VARCHAR, "
                 +  Tables.tblofflinetask.Task_Lat  + " VARCHAR, "
                 +  Tables.tblofflinetask.Task_Lon  + " VARCHAR, "
-                +  Tables.tblofflinetask.Task_Empl_Id  + " VARCHAR, "
+                +  Tables.tblofflinetask.Task_Tags + " VARCHAR, "
                 +  Tables.tblofflinetask.Task_Creat_On  + " VARCHAR, "
-                +  Tables.tblofflinetask.Is_Server_Send  + " INTEGER "
+                +  Tables.tblofflinetask.Is_Server_Send  + " VARCHAR "
                 +")";
 
 
@@ -137,7 +137,7 @@ public final class Procedures {
                 +  Tables.tbltags.Tag_remark_3  + " VARCHAR, "
                 +  Tables.tbltags.Tag_Empl_Id  + " VARCHAR, "
                 +  Tables.tbltags.Tag_Creat_On  + " VARCHAR, "
-                +  Tables.tbltags.Is_Server_Send  + " INTEGER "
+                +  Tables.tbltags.Is_Server_Send  + " VARCHAR "
                 +")";
 
 

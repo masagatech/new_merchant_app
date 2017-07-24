@@ -218,6 +218,22 @@
                             android:textColor="@android:color/black"
                             android:textSize="15dp" />
 
+                            <LinearLayout
+                                android:id="@+id/cover"
+                                android:background="@drawable/border_cash_collection"
+                                android:layout_width="match_parent"
+                                android:layout_below="@+id/remark_form"
+                                android:layout_height="wrap_content">
+                                <com.pchmn.materialchips.ChipsInput
+                                    android:layout_margin="4dp"
+                                    android:layout_width="match_parent"
+                                    android:layout_below="@+id/remark_form"
+                                    android:layout_height="wrap_content"
+                                      android:id="@+id/chip"
+                                    app:deletable="true"
+                                    app:hint="  Enter Tags" />
+                            </LinearLayout>
+
                             <Spinner
                                 android:layout_gravity="end"
                                 android:layout_weight="1"

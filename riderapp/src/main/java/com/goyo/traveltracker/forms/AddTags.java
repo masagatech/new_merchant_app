@@ -7,13 +7,17 @@ import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.gson.JsonObject;
 import com.goyo.traveltracker.R;
 import com.goyo.traveltracker.database.SQLBase;
 import com.goyo.traveltracker.gloabls.Global;
 import com.goyo.traveltracker.model.model_tag;
+import com.koushikdutta.async.future.FutureCallback;
+import com.koushikdutta.ion.Ion;
 
-import java.text.DateFormat;
-import java.util.Date;
+import java.util.Calendar;
+
+import static com.goyo.traveltracker.Service.NetworkStateReceiver.IsMobailConnected;
 
 public class AddTags extends AppCompatActivity {
     private EditText Tag_Name,Tag_Remark_1,Tag_Remark_2,Tag_Remark_3;
@@ -45,16 +49,69 @@ public class AddTags extends AppCompatActivity {
         Tag_Remark_3=(EditText)findViewById(R.id.tag_remark_3);
     }
 
+    private void SentToServer(){
+        String  tag_name,tag_remark_1,tag_remark_2,tag_remark_3,currentDateTimeString,Empl_Id;
+        currentDateTimeString = java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
+        tag_name=Tag_Name.getText().toString();
+        Empl_Id= String.valueOf(Global.loginusr.getDriverid());
+        tag_remark_1=Tag_Remark_1.getText().toString();
+        tag_remark_2=Tag_Remark_2.getText().toString();
+        tag_remark_3=Tag_Remark_3.getText().toString();
+
+        JsonObject json = new JsonObject();
+        json.addProperty("tagnm", tag_name);
+        json.addProperty("remark1", tag_remark_1);
+        json.addProperty("remark2", tag_remark_2);
+        json.addProperty("remark3", tag_remark_3);
+        json.addProperty("cuid", currentDateTimeString);
+        json.addProperty("enttid", Global.loginusr.getEnttid()+"");
+        Ion.with(this)
+                .load(Global.urls.saveTagInfo.value)
+                .setJsonObjectBody(json)
+                .asJsonObject()
+                .setCallback(new FutureCallback<JsonObject>() {
+                    @Override
+                    public void onCompleted(Exception e, JsonObject result) {
+                        // do stuff with the result or error
+                        try {
+                            JsonObject o= result.get("data").getAsJsonArray().get(0).getAsJsonObject().get("funsave_taginfo").getAsJsonObject();
+                            Toast.makeText(AddTags.this, o.get("msg").toString(), Toast.LENGTH_SHORT).show();
+                            onBackPressed();
+
+                        } catch (Exception ea) {
+                            ea.printStackTrace();
+                        }
+
+
+                    }
+                });
+
+    }
+
     private void SavetoDb(){
         String  tag_name,tag_remark_1,tag_remark_2,tag_remark_3,currentDateTimeString,Empl_Id;
-        currentDateTimeString = DateFormat.getDateInstance().format(new Date());
+        currentDateTimeString = java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
         tag_name=Tag_Name.getText().toString();
         Empl_Id= String.valueOf(Global.loginusr.getDriverid());
         tag_remark_1=Tag_Remark_1.getText().toString();
         tag_remark_2=Tag_Remark_2.getText().toString();
         tag_remark_3=Tag_Remark_3.getText().toString();
         SQLBase db = new SQLBase(this);
-        db.TAG_ADDTAG(new model_tag(tag_name,tag_remark_1,tag_remark_2,tag_remark_3,Empl_Id,currentDateTimeString,0));
+        if(IsMobailConnected){
+                        if (!db.ISTAG_ALREDY_EXIST(tag_name)) {
+                            db.TAG_ADDTAG(new model_tag(tag_name, tag_remark_1, tag_remark_2, tag_remark_3, Empl_Id, currentDateTimeString, "0"));
+                        }else {
+                            Toast.makeText(this, "This Tag Already Exist", Toast.LENGTH_SHORT).show();
+                        }
+            }else {
+            if (!db.ISTAG_ALREDY_EXIST(tag_name)) {
+                db.TAG_ADDTAG(new model_tag(tag_name, tag_remark_1, tag_remark_2, tag_remark_3, Empl_Id, currentDateTimeString, "1"));
+                onBackPressed();
+                Toast.makeText(AddTags.this, "Saved successfully", Toast.LENGTH_SHORT).show();
+            }else {
+                Toast.makeText(this, "This Tag Already Exist", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
 
@@ -73,9 +130,13 @@ public class AddTags extends AppCompatActivity {
         switch (item.getItemId()) {
 
             case R.id.menu_driver_info_save:
-                SavetoDb();
-                Toast.makeText(this, "Saved successfully", Toast.LENGTH_SHORT).show();
-               onBackPressed();
+               String tag_name=Tag_Name.getText().toString();
+                if (tag_name.equals("")){
+                    Toast.makeText(this, "Enter Tag Name!", Toast.LENGTH_SHORT).show();
+                }else {
+                    SavetoDb();
+                    SentToServer();
+                }
                 return true;
 
             case android.R.id.home:

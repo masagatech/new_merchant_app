@@ -7,9 +7,13 @@ package com.goyo.traveltracker.model;
 public class model_tag {
 
     int _id;
-    int _is_server_send;
+    String _is_server_send;
     String _title;
     String _rem_1;
+    String _rem_2;
+    String _rem_3;
+    String _empl_id;
+    String _creat_on;
 
     public int get_id() {
         return _id;
@@ -19,11 +23,11 @@ public class model_tag {
         this._id = _id;
     }
 
-    public int get_is_server_send() {
+    public String get_is_server_send() {
         return _is_server_send;
     }
 
-    public void set_is_server_send(int _is_server_send) {
+    public void set_is_server_send(String _is_server_send) {
         this._is_server_send = _is_server_send;
     }
 
@@ -75,14 +79,11 @@ public class model_tag {
         this._creat_on = _creat_on;
     }
 
-    String _rem_2;
-    String _rem_3;
-    String _empl_id;
-    String _creat_on;
+
 
 
     // constructor
-    public model_tag(String title, String rem_1, String rem_2,String rem_3,String emp_id,String creat_on,int is_server_send){
+    public model_tag(String title, String rem_1, String rem_2,String rem_3,String emp_id,String creat_on,String is_server_send){
         this._title = title;
         this._rem_1 = rem_1;
         this._rem_2 = rem_2;

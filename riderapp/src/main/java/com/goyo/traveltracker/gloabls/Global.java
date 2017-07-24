@@ -21,8 +21,8 @@ public class Global {
 //      public final static String REST_URL = "http://order.goyo.in:8082/goyoapi";
 //      public static final String SOCKET_URL = "http://13.126.2.220:8083/";
 
-    public final static String REST_URL = "http://192.168.1.103:8092/goyoapi";
-    public static final String SOCKET_URL = "http://192.168.1.103:8091/";
+    public final static String REST_URL = "http://192.168.1.105:8092/goyoapi";
+    public static final String SOCKET_URL = "http://192.168.1.105:8091/";
 
 //    public final static String REST_URL = "http://192.168.43.10:8092/goyoapi";
 //    public static final String SOCKET_URL = "http://192.168.43.10:8083/";
@@ -73,7 +73,10 @@ public class Global {
         getMOM2("getMOM", REST_URL +"/getMOM"),
         saveNatureTask("saveNatureTask", REST_URL +"/saveNatureTask"),
         getTripReports("getTripReports", REST_URL +"/getTripReports"),
-        getNatureTask("getNatureTask", REST_URL +"/getNatureTask");
+        getNatureTask("getNatureTask", REST_URL +"/getNatureTask"),
+        saveTagInfo("saveTagInfo", REST_URL +"/saveTagInfo"),
+        getTagDetails("getTagDetails", REST_URL +"/getTagDetails"),
+        getPushTagDetails("getPushTagDetails", REST_URL +"/getPushTagDetails");
 
 
         public String key;

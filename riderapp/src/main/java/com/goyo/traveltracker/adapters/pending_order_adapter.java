@@ -17,19 +17,24 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.google.api.client.repackaged.com.google.common.base.Joiner;
 import com.google.gson.JsonObject;
 import com.goyo.traveltracker.R;
+import com.goyo.traveltracker.database.SQLBase;
+import com.goyo.traveltracker.database.Tables;
 import com.goyo.traveltracker.forms.OrderStatus;
 import com.goyo.traveltracker.forms.Orientation;
 import com.goyo.traveltracker.forms.PendingOrdersView;
 import com.goyo.traveltracker.forms.dashboard;
 import com.goyo.traveltracker.gloabls.Global;
 import com.goyo.traveltracker.model.model_pending;
+import com.goyo.traveltracker.model.model_tag_db;
 import com.goyo.traveltracker.utils.VectorDrawableUtils;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import static com.goyo.traveltracker.Service.RiderStatus.Rider_Lat;
@@ -128,7 +133,17 @@ public class pending_order_adapter extends RecyclerView.Adapter<pending_order_vi
         //getting nature of work data from server
         GetNtr_Work(holder);
 
+        SQLBase db = new SQLBase(mContext);
 
+        List<model_tag_db> data = new ArrayList<model_tag_db>();
+        List<HashMap<String,String>> d = db.Get_Tags();
+        if(d.size()>0) {
+            for (int i = 0; i <= d.size() - 1; i++) {
+                data.add(new model_tag_db( d.get(i).get(Tables.tbltags.Tag_Id), d.get(i).get(Tables.tbltags.Tag_Title),d.get(i).get(Tables.tbltags.Tag_remark_1),d.get(i).get(Tables.tbltags.Tag_remark_2),d.get(i).get(Tables.tbltags.Tag_remark_3),d.get(i).get(Tables.tbltags.Tag_Creat_On),d.get(i).get(Tables.tbltags.Is_Server_Send)));
+            }
+        }
+
+        holder.chipsInput.setFilterableList(data);
 
         //getting Status of work data from server
         GetStatus_Work(holder);
@@ -136,7 +151,7 @@ public class pending_order_adapter extends RecyclerView.Adapter<pending_order_vi
         GetCurrentStatus(newPosition,holder);
 
 
-        holder.setIsRecyclable(false);
+//        holder.setIsRecyclable(false);
 
 
 //        if(Status!=null) {
@@ -165,11 +180,22 @@ public class pending_order_adapter extends RecyclerView.Adapter<pending_order_vi
                 if(Remark.equals("")){
                     Toast.makeText(mContext, "Please Enter Remark", Toast.LENGTH_SHORT).show();
                 }else {
+                    List<model_tag_db> contactsSelected = (List<model_tag_db>) holder.chipsInput.getSelectedChipList();
+//                    String Tags[]=new String[50];
+                    List<String> Tags = new ArrayList<String>();
+                    if(contactsSelected.size()>0) {
+                        for (int i = 0; i <= contactsSelected.size() - 1; i++) {
+                            Tags.add(contactsSelected.get(i).getLabel());
+                        }
+                    }
                     loader = new ProgressDialog(mContext);
                     loader.setCancelable(false);
                     loader.setMessage(mContext.getString(R.string.wait_msg));
                     loader.show();
-                    Update(timeLineModel, position, newPosition, Selected_Nature, Selected_Status, Remark, Value);
+                    if(Value.equals("")){
+                        Value="0";
+                    }
+                    Update(timeLineModel, position, newPosition, Selected_Nature, Selected_Status, Remark, Value,Tags);
                 }
             }
         });
@@ -316,7 +342,12 @@ public class pending_order_adapter extends RecyclerView.Adapter<pending_order_vi
 
     }
 
-    private void Update(final model_pending timeLineModel, final int position, final int newPosition,final String Selected_Nature,final String Selected_Status,final String Remark,final String Value){
+    private void Update(final model_pending timeLineModel, final int position, final int newPosition,final String Selected_Nature,final String Selected_Status,final String Remark,final String Value, List<String> Tags){
+
+        String tag= Joiner.on("','").join(Tags);
+
+        //JSONArray jsArray = new JSONArray(Tags);
+
         JsonObject json = new JsonObject();
         json.addProperty("tntype", Selected_Nature);
         json.addProperty("tstype", Selected_Status);
@@ -324,6 +355,7 @@ public class pending_order_adapter extends RecyclerView.Adapter<pending_order_vi
         json.addProperty("remark", Remark);
         json.addProperty("cuid", Global.loginusr.getDriverid()+ "");
         json.addProperty("tskid", timeLineModel.tskid+ "");
+        json.addProperty("tag","{'" + tag + "'}");
 
 
         Ion.with(mContext)
@@ -333,7 +365,6 @@ public class pending_order_adapter extends RecyclerView.Adapter<pending_order_vi
                 .setCallback(new FutureCallback<JsonObject>() {
                     @Override
                     public void onCompleted(Exception e, JsonObject result) {
-
                         try {
                             if (result != null) Log.v("result", result.toString());
 //                            if(result.get("data").getAsJsonObject().get("status").getAsBoolean()){
