@@ -267,6 +267,7 @@ public class all_order extends AppCompatActivity {
                     json.addProperty("remark3", d.get(i).get(Tables.tbltags.Tag_remark_3));
                     json.addProperty("cuid", d.get(i).get(Tables.tbltags.Tag_Creat_On));
                     json.addProperty("enttid", Global.loginusr.getEnttid()+"");
+                   json.addProperty("tagtype","m");
                     Ion.with(this)
                             .load(Global.urls.saveTagInfo.value)
                             .setJsonObjectBody(json)

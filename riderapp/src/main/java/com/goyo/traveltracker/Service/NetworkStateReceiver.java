@@ -8,6 +8,7 @@ import android.net.NetworkInfo;
 import android.util.Log;
 
 import com.goyo.traveltracker.forms.all_order;
+import com.goyo.traveltracker.forms.dashboard;
 
 /**
  * Created by mis on 14-Jul-17.
@@ -32,6 +33,14 @@ public class NetworkStateReceiver extends BroadcastReceiver {
 
         if (isWiFi) {
             if (isConnected) {
+                //sending tags to server on network changes
+                all_order all_order=new all_order();
+                all_order.SendOfflineTagstoServer();
+
+                //sending stops to server on network changes
+                dashboard dashboard=new dashboard();
+                dashboard.SendOfflineStopstoServer();
+
                 Log.i("APP_TAG", "Wi-Fi - CONNECTED");
                 IsWifiConnected=true;
             } else {
@@ -40,8 +49,15 @@ public class NetworkStateReceiver extends BroadcastReceiver {
             }
         } else if (isMobile) {
             if (isConnected) {
+
+                //sending tags to server on network changes
                 all_order all_order=new all_order();
                 all_order.SendOfflineTagstoServer();
+
+                //sending stops to server on network changes
+                dashboard dashboard=new dashboard();
+                dashboard.SendOfflineStopstoServer();
+
                 Log.i("APP_TAG", "Mobile - CONNECTED");
                 IsMobailConnected=true;
             } else {

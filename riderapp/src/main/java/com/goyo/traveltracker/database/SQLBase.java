@@ -3,6 +3,7 @@ package com.goyo.traveltracker.database;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteStatement;
@@ -331,28 +332,31 @@ public class SQLBase  {
             values.put(Tables.tblofflinetask.Task_Tags, Task.get_tags());
             values.put(Tables.tblofflinetask.Task_Creat_On, Task.get_creat_on());
             values.put(Tables.tblofflinetask.Is_Server_Send, Task.get_is_server_send());
+            values.put(Tables.tblofflinetask.Task_Time, Task.get_time());
 
             // Inserting Row
             sqLiteDB.insert(Tables.tblofflinetask.name, null, values);
-            sqLiteDB.close(); // Closing database connection
+//            sqLiteDB.close(); // Closing database connection
         }
 
 
 
-        public List<HashMap<String, String>> OFFLINE_TASK_GETTOP10(){
+        public List<HashMap<String, String>> Get_TASK(){
             List<HashMap<String, String>> data = new ArrayList<HashMap<String, String>>();
-            String selectEvents = "SELECT "
-                    + Tables.tblofflinetask.Task_Id
-                    + Tables.tblofflinetask.Task_Title +","
-                    + Tables.tblofflinetask.Task_Body +","
-                    + Tables.tblofflinetask.Task_Lat +","
-                    + Tables.tblofflinetask.Task_Lon +","
-                    + Tables.tblofflinetask.Task_Tags +","
-                    + Tables.tblofflinetask.Task_Creat_On+","
-                    + Tables.tblofflinetask.Is_Server_Send
-                    + " FROM " + Tables.tblnotification.name +" WHERE "
-                    + Tables.tblofflinetask.Is_Server_Send + " = '0'";
-            Cursor cursor = sqLiteDB.rawQuery(selectEvents, null);
+//            String selectEvents = "SELECT "
+//                    + Tables.tblofflinetask.Task_Id
+//                    + Tables.tblofflinetask.Task_Title +","
+//                    + Tables.tblofflinetask.Task_Body +","
+//                    + Tables.tblofflinetask.Task_Lat +","
+//                    + Tables.tblofflinetask.Task_Lon +","
+//                    + Tables.tblofflinetask.Task_Tags +","
+//                    + Tables.tblofflinetask.Task_Creat_On+","
+//                    + Tables.tblofflinetask.Is_Server_Send+","
+//                    + Tables.tblofflinetask.Task_Time
+//                    + " FROM " + Tables.tblnotification.name +" WHERE "
+//                    + Tables.tblofflinetask.Is_Server_Send + " = '0'";
+            Cursor cursor = sqLiteDB.rawQuery("SELECT * FROM "+ Tables.tblofflinetask.name, null);
+//            Cursor cursor = sqLiteDB.rawQuery(selectEvents, null);
             // looping through all rows and adding to list
             if (cursor.moveToFirst()) {
                 do {
@@ -365,6 +369,7 @@ public class SQLBase  {
                     map.put(Tables.tblofflinetask.Task_Tags, cursor.getString(5));
                     map.put(Tables.tblofflinetask.Task_Creat_On, cursor.getString(6));
                     map.put(Tables.tblofflinetask.Is_Server_Send, cursor.getString(7));
+                    map.put(Tables.tblofflinetask.Task_Time, cursor.getString(8));
                     data.add(map);
                 } while (cursor.moveToNext());
             }
@@ -374,12 +379,79 @@ public class SQLBase  {
             return data;
         }
 
+    public Boolean ISTASK_ALREDY_EXIST(String Tag_Name){
+
+        String Query = "SELECT "
+                + Tables.tblofflinetask.Task_Id+","
+                +Tables.tblofflinetask.Task_Title+","
+                + Tables.tblofflinetask.Task_Body +","
+                + Tables.tblofflinetask.Task_Lat +","
+                + Tables.tblofflinetask.Task_Lon +","
+                + Tables.tblofflinetask.Task_Tags +","
+                + Tables.tblofflinetask.Task_Creat_On +","
+                + Tables.tblofflinetask.Is_Server_Send+","
+                + Tables.tblofflinetask.Task_Time
+                + " FROM " + Tables.tblofflinetask.name +" WHERE "
+                + Tables.tblofflinetask.Task_Title + " = '" + Tag_Name+ "'";
+        Cursor cursor = sqLiteDB.rawQuery(Query, null);
+        if(cursor.getCount() <= 0){
+            cursor.close();
+            return false;
+        }
+        cursor.close();
+        return true;
+    }
+
+
+    public List<HashMap<String, String>> Get_Tasks_Offline(){
+        List<HashMap<String, String>> data = new ArrayList<HashMap<String, String>>();
+        String selectEvents = "SELECT "
+                + Tables.tblofflinetask.Task_Id+","
+                +Tables.tblofflinetask.Task_Title+","
+                + Tables.tblofflinetask.Task_Body +","
+                + Tables.tblofflinetask.Task_Lat +","
+                + Tables.tblofflinetask.Task_Lon +","
+                + Tables.tblofflinetask.Task_Tags +","
+                + Tables.tblofflinetask.Task_Creat_On +","
+                + Tables.tblofflinetask.Is_Server_Send+","
+                + Tables.tblofflinetask.Task_Time
+                + " FROM " + Tables.tblofflinetask.name +" WHERE "
+                + Tables.tblofflinetask.Is_Server_Send+ " = '1'";
+        Cursor cursor = sqLiteDB.rawQuery(selectEvents, null);
+//        Cursor cursor = sqLiteDB.rawQuery("SELECT * FROM "+ Tables.tbltags.name, null);
+        // looping through all rows and adding to list
+        if (cursor.moveToFirst()) {
+            do {
+                HashMap<String, String> map = new HashMap<String, String>();
+                map.put(Tables.tblofflinetask.Task_Id, cursor.getString(0));
+                map.put(Tables.tblofflinetask.Task_Title, cursor.getString(1));
+                map.put(Tables.tblofflinetask.Task_Body, cursor.getString(2));
+                map.put(Tables.tblofflinetask.Task_Lat, cursor.getString(3));
+                map.put(Tables.tblofflinetask.Task_Lon, cursor.getString(4));
+                map.put(Tables.tblofflinetask.Task_Tags, cursor.getString(5));
+                map.put(Tables.tblofflinetask.Task_Creat_On, cursor.getString(6));
+                map.put(Tables.tblofflinetask.Is_Server_Send, cursor.getString(7));
+                map.put(Tables.tblofflinetask.Task_Time, cursor.getString(8));
+                data.add(map);
+            } while (cursor.moveToNext());
+        }
+        if (cursor != null) {
+            cursor.close();
+        }
+        return data ;
+    }
 
     //update offline
-    public void OFFLINE_TASK_UPDATE(String _uniqueid, String sendtoserver){
+    public void OFFLINE_TASK_UPDATE(String _taskName, String sendtoserver){
         sqLiteDB.execSQL("UPDATE " + Tables.tblofflinetask.name + " SET "
-                +  Tables.tblofflinetask.Is_Server_Send + "=" + sendtoserver
-                + " WHERE " + Tables.tblofflinetask.Task_Id + "=" + _uniqueid);
+                +  Tables.tblofflinetask.Is_Server_Send + "='" + sendtoserver+ "'"
+                + " WHERE " + Tables.tblofflinetask.Task_Title + " = '" + _taskName+ "'");
+    }
+
+    public long getProfilesCount() {
+        sqLiteDB = openHelper.getReadableDatabase();
+        long cnt  = DatabaseUtils.queryNumEntries(sqLiteDB, Tables.tblofflinetask.name);
+        return cnt;
     }
 
     //update offline
@@ -509,6 +581,7 @@ public class SQLBase  {
                 + " WHERE " + Tables.tbltags.Tag_Title + " = '" + _tagName+ "'");
     }
 
+
     //update offline
     public void TAG_DELETE(String _uniqueid){
         sqLiteDB.execSQL("DELETE FROM " + Tables.tbltags.name
@@ -528,6 +601,7 @@ public class SQLBase  {
             //db.execSQL(Procedures.tbl_driver_info.CREATE);
             db.execSQL(Procedures.tblnotification.CREATE);
             db.execSQL(Procedures.tbltag.CREATE);
+            db.execSQL(Procedures.tblofflinetask.CREATE);
         }
 
         @Override

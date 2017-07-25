@@ -88,6 +88,21 @@
                         android:layout_width="match_parent"
                         android:layout_below="@+id/remark_form"
                         android:layout_height="wrap_content">
+
+                        <co.lujun.androidtagview.TagContainerLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="0dp"
+                            android:padding="10dp"
+                            android:id="@+id/Tags"
+                            android:visibility="gone"
+                            app:container_enable_drag="false"
+                            app:horizontal_interval="10dp"
+                            app:tag_background_color="@color/blue_light"
+                            app:tag_text_color="@color/white"
+                            app:vertical_interval="10dp"
+                            app:tag_clickable="false"
+                            app:tag_theme="pure_teal" />
                         <com.pchmn.materialchips.ChipsInput
                             android:layout_margin="4dp"
                             android:layout_width="match_parent"

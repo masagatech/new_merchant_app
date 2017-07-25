@@ -95,6 +95,21 @@
                         android:orientation="vertical"
                         android:visibility="gone">
 
+                        <co.lujun.androidtagview.TagContainerLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="0dp"
+                            android:padding="10dp"
+                            android:id="@+id/Tags"
+                            android:visibility="gone"
+                            app:container_enable_drag="false"
+                            app:horizontal_interval="10dp"
+                            app:tag_background_color="@color/blue_light"
+                            app:tag_text_color="@color/white"
+                            app:vertical_interval="10dp"
+                            app:tag_clickable="false"
+                            app:tag_theme="pure_teal" />
+
                         <android.support.v7.widget.AppCompatTextView
                             android:id="@+id/Custmer_name"
                             android:layout_width="match_parent"

@@ -1,5 +1,7 @@
 package com.goyo.traveltracker.model;
 
+import com.goyo.traveltracker.forms.OrderStatus;
+
 /**
  * Created by mis on 14-Jul-17.
  */
@@ -13,6 +15,15 @@ public class model_task {
     String _lon;
     String _tags;
     String _creat_on;
+    String _time;
+
+    public String get_time() {
+        return _time;
+    }
+
+    public void set_time(String _time) {
+        this._time = _time;
+    }
 
     public String get_tags() {
         return _tags;
@@ -81,23 +92,12 @@ public class model_task {
     }
 
     // Empty constructor
-    public model_task(){
+    public model_task(String s, String title, String body, String lat, String lon, String tags, String creat_on, String is_server_send, String time){
 
-    }
-    // constructor
-    public model_task(int id, String title, String body, String lat,String lon,String tags,String creat_on,String is_server_send){
-        this._id = id;
-        this._title = title;
-        this._body = body;
-        this._lat = lat;
-        this._lon = lon;
-        this._tags = tags;
-        this._creat_on = creat_on;
-        this._is_server_send = is_server_send;
     }
 
     // constructor
-    public model_task(String _title, String _body, String _lat,String _lon,String tags,String _creat_on,String _is_server_send){
+    public model_task(String _title, String _body, String _lat,String _lon,String tags,String _creat_on,String _is_server_send,String _time_){
         this._title = _title;
         this._body = _body;
         this._lat = _lat;
@@ -105,5 +105,9 @@ public class model_task {
         this._tags = tags;
         this._creat_on = _creat_on;
         this._is_server_send = _is_server_send;
+        this._time = _time_;
     }
+
+    public OrderStatus status = OrderStatus.ACTIVE;
+    public boolean isEnabled = false;
 }

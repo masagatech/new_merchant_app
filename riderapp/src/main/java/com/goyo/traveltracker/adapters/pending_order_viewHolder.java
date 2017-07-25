@@ -17,6 +17,7 @@ import com.pchmn.materialchips.ChipsInput;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import co.lujun.androidtagview.TagContainerLayout;
 
 /**
  * Created by fajar on 22-May-17.
@@ -70,6 +71,8 @@ public class pending_order_viewHolder extends RecyclerView.ViewHolder {
     EditText nature_value;
     @BindView(R.id.chip)
     ChipsInput chipsInput;
+    @BindView(R.id.Tags)
+    TagContainerLayout Tags;
 
     public pending_order_viewHolder(View itemView, int viewType) {
         super(itemView);

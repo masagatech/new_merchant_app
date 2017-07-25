@@ -65,6 +65,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -90,7 +91,7 @@ public class NewStops extends AAH_FabulousFragment implements LocationListener{
     public Criteria criteria;
     private  Location location;
     public String bestProvider, currentDateTimeString,Empl_Id;
-    String Body,Title,Lat,Lon;
+    String Body,Title,Lat,Lon,time;
     private Button Btn_Add_Task;
     private ImageView imageView1,imageView2,imageView3;
     private TextView textView1;
@@ -197,12 +198,41 @@ public class NewStops extends AAH_FabulousFragment implements LocationListener{
                             Tags.add(contactsSelected.get(i).getLabel());
                         }
                     }
-                    SQLBase db = new SQLBase(getActivity());
-                SendToServer(Empl_Id,Title,Body,Lat,Lon,currentDateTimeString,Tags);
+                    SQLBase db2 = new SQLBase(getActivity());
+                    if (!db2.ISTASK_ALREDY_EXIST(Title)) {
+                        SendToServer(Empl_Id, Title, Body, Lat, Lon, currentDateTimeString, Tags);
+                    }
 
+                    //save to db
+
+                    //time
+                    DateFormat dateFormat = new SimpleDateFormat("hh:mm a");
+                    time = dateFormat.format(new Date()).toString();
+
+                    //date
+                    Calendar c = Calendar.getInstance();
+                    SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
+                    String formattedDate = df.format(c.getTime());
+
+                    SQLBase db = new SQLBase(getActivity());
                     Gson gson = new Gson();
                     String TagString= gson.toJson(Tags);
-                db.OFFLINE_TASK_ADDTASK(new model_task(Title,Body,Lat,Lon,TagString,currentDateTimeString,"0"));
+//                db.OFFLINE_TASK_ADDTASK(new model_task(Title,Body,Lat,Lon,TagString,formattedDate,"0",time));
+                    if(IsMobailConnected){
+                        if (!db.ISTASK_ALREDY_EXIST(Title)) {
+                            db.OFFLINE_TASK_ADDTASK(new model_task(Title,Body,Lat,Lon,TagString,formattedDate,"0",time));
+                        }else {
+                            Toast.makeText(getActivity(), "This Stops Already Exist!", Toast.LENGTH_SHORT).show();
+                        }
+                    }else {
+                        if (!db.ISTASK_ALREDY_EXIST(Title)) {
+                            db.OFFLINE_TASK_ADDTASK(new model_task(Title,Body,Lat,Lon,TagString,formattedDate,"1",time));
+                            closeFilter("closed");
+                            Toast.makeText(getActivity(), "Saved successfully", Toast.LENGTH_SHORT).show();
+                        }else {
+                            Toast.makeText(getActivity(), "This Stops Already Exist!", Toast.LENGTH_SHORT).show();
+                        }
+                    }
 
                 }
 
@@ -220,6 +250,10 @@ public class NewStops extends AAH_FabulousFragment implements LocationListener{
         setMainContentView(contentView); // necessary; call at end before super
         super.setupDialog(dialog, style); //call super at last
     }
+
+
+
+
 private void SendToServer(String Empl_Id,String Title,String Body,String Lat,String Lon,String currentDateTimeString,List<String> Tags) {
     String tag= Joiner.on("','").join(Tags);
     JsonObject json = new JsonObject();

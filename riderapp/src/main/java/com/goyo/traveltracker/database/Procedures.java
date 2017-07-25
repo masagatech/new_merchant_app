@@ -109,7 +109,8 @@ public final class Procedures {
                 +  Tables.tblofflinetask.Task_Lon  + " VARCHAR, "
                 +  Tables.tblofflinetask.Task_Tags + " VARCHAR, "
                 +  Tables.tblofflinetask.Task_Creat_On  + " VARCHAR, "
-                +  Tables.tblofflinetask.Is_Server_Send  + " VARCHAR "
+                +  Tables.tblofflinetask.Is_Server_Send  + " VARCHAR, "
+                +  Tables.tblofflinetask.Task_Time  + " VARCHAR "
                 +")";
 
 

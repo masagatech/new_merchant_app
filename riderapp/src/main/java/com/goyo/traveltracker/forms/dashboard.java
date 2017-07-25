@@ -56,11 +56,14 @@ import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStates;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
+import com.google.api.client.repackaged.com.google.common.base.Joiner;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.goyo.traveltracker.R;
 import com.goyo.traveltracker.Service.RiderStatus;
+import com.goyo.traveltracker.database.SQLBase;
+import com.goyo.traveltracker.database.Tables;
 import com.goyo.traveltracker.gloabls.Global;
 import com.goyo.traveltracker.initials.splash_screen;
 import com.goyo.traveltracker.model.model_loginusr;
@@ -69,6 +72,8 @@ import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -119,7 +124,7 @@ public class dashboard extends AppCompatActivity implements LocationListener,
    private int Pending_element;
     final Popup_Counter CountTimer = new Popup_Counter(180000, 1000);
     private NotificationManager notificationManager;
-    TextView Count_Pending;
+    TextView Count_Pending,Count_TodayVisits;
     private Boolean isCallLogout=false;
     private LinearLayout PushOrderTL;
 
@@ -133,7 +138,10 @@ public class dashboard extends AppCompatActivity implements LocationListener,
 
         //checking app version
         AppVerCheck();
+
+        //counts
         Count_Pending=(TextView)findViewById(R.id.Count);
+        Count_TodayVisits=(TextView)findViewById(R.id.Count_Todayvisit);
         ButterKnife.bind(this);
 
         //setting cutom actionbar
@@ -559,6 +567,52 @@ public class dashboard extends AppCompatActivity implements LocationListener,
 //                });
     }
 
+    public void SendOfflineStopstoServer() {
+        SQLBase db = new SQLBase(this);
+        final List<HashMap<String,String>> d = db. Get_Tasks_Offline();
+
+        if(d.size()>0) {
+            for (int i = 0; i <= d.size() - 1; i++) {
+                Gson gson = new Gson();
+                Type type = new TypeToken<ArrayList<String>>() {}.getType();
+                ArrayList<String> TagsArray = gson.fromJson(d.get(i).get(Tables.tblofflinetask.Task_Tags), type);
+                String tag= Joiner.on("','").join(TagsArray);
+                final int pos=i;
+                JsonObject json = new JsonObject();
+                json.addProperty("stpnm", d.get(i).get(Tables.tblofflinetask.Task_Title));
+                json.addProperty("stpdesc", d.get(i).get(Tables.tblofflinetask.Task_Body));
+                json.addProperty("lat", d.get(i).get(Tables.tblofflinetask.Task_Lat));
+                json.addProperty("lng", d.get(i).get(Tables.tblofflinetask.Task_Lon));
+                json.addProperty("uid", Global.loginusr.getDriverid()+"");
+                json.addProperty("cuid",d.get(i).get(Tables.tblofflinetask.Task_Creat_On)+", "+d.get(i).get(Tables.tblofflinetask.Task_Time) );
+                json.addProperty("enttid", Global.loginusr.getEnttid()+"");
+                json.addProperty("trpid",TripId);
+                json.addProperty("tag","{'" + tag + "'}");
+                Ion.with(this)
+                        .load(Global.urls.saveTagInfo.value)
+                        .setJsonObjectBody(json)
+                        .asJsonObject()
+                        .setCallback(new FutureCallback<JsonObject>() {
+                            @Override
+                            public void onCompleted(Exception e, JsonObject result) {
+                                // do stuff with the result or error
+                                try {
+                                    SQLBase db = new SQLBase(dashboard.this);
+                                    db. OFFLINE_TASK_UPDATE(d.get(pos).get(Tables.tblofflinetask.Task_Title),"0");
+
+                                } catch (Exception ea) {
+                                    ea.printStackTrace();
+                                }
+
+
+                            }
+                        });
+            }
+        }
+
+//        return data;
+    }
+
     private boolean isMyServiceRunning(Class<?> serviceClass) {
         ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
         for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
@@ -841,6 +895,9 @@ public class dashboard extends AppCompatActivity implements LocationListener,
                         }
                     });
         }
+
+        SQLBase db = new SQLBase(this);
+        Count_TodayVisits.setText(db.getProfilesCount()+"");
     }
 
     @Override

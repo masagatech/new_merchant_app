@@ -30,7 +30,12 @@
         <RelativeLayout
             android:id="@+id/border"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:background="@drawable/cir"
+            android:paddingBottom="15dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="15dp"
+            android:paddingTop="15dp">
 
             <LinearLayout
                 android:id="@+id/pending_orders"
@@ -38,6 +43,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:orientation="horizontal">
+
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -52,14 +58,36 @@
                         android:layout_height="wrap_content"
                         android:textSize="12sp"
                         tools:text="24 JAN" />
-                    <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/text_timeline_title"
+
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <android.support.v7.widget.AppCompatTextView
+                            android:id="@+id/text_timeline_title"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:layout_weight="1"
+                            android:textSize="13dp"
+                            android:drawableLeft="@drawable/times"
+                            android:textColor="@android:color/black"
+                            tools:text="25-jul-2017" />
+
+
+                        <android.support.v7.widget.AppCompatTextView
+                            android:textSize="13dp"
+                        android:id="@+id/Time"
+                            android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableLeft="@drawable/esitmated_time"
                         android:gravity="center_vertical"
-                        android:layout_weight="1"
                         android:textColor="@android:color/black"
-                        tools:text=" #129" />
+                        tools:text=" 08.00 PM" />
+
+                    </LinearLayout>
+
 
                         <android.support.v7.widget.AppCompatTextView
                             android:id="@+id/text_marchent"
@@ -68,6 +96,7 @@
                             android:gravity="center_vertical"
                             android:textColor="@android:color/black"
                             android:textStyle="bold"
+                            android:drawableLeft="@drawable/pending_outlets"
                             tools:text="Pizza hut, Pralhad nagar" />
 
                     <LinearLayout
@@ -95,6 +124,24 @@
                             android:layout_marginLeft="31dp"
                             android:textColor="@android:color/black"
                             tools:text="Sector 15, Navi mumbai" />
+
+                        <co.lujun.androidtagview.TagContainerLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="0dp"
+                            android:padding="10dp"
+                            android:id="@+id/Tags"
+                            app:tag_border_color="@color/white"
+                            app:container_enable_drag="false"
+                            app:container_background_color="#00000000"
+                            app:container_border_color="#33666666"
+                            app:horizontal_interval="10dp"
+                            app:tag_text_color="@color/white"
+                            app:tag_background_color="@color/blue_light"
+                            app:vertical_interval="10dp"
+                            app:tag_clickable="false"
+                            app:tag_theme="none"
+                            />
                         <LinearLayout
                             android:visibility="gone"
                             android:layout_width="match_parent"
@@ -139,15 +186,7 @@
                                 android:visibility="gone" />
                         </LinearLayout>
 
-                    <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/Time"
-                        android:visibility="gone"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:drawableLeft="@drawable/esitmated_time"
-                        android:gravity="center_vertical"
-                        android:textColor="@android:color/black"
-                        tools:text=" 08.00 PM" />
+
 
                     <EditText
                         android:visibility="gone"

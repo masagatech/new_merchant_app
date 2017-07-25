@@ -52,6 +52,7 @@ import io.socket.emitter.Emitter;
 
 import static android.app.Notification.VISIBILITY_PUBLIC;
 import static com.goyo.traveltracker.forms.pending_order.TripId;
+import static com.goyo.traveltracker.gloabls.Global.urls.livebeats;
 
 
 /**
@@ -95,6 +96,7 @@ public class RiderStatus extends Service implements com.google.android.gms.locat
     public static NotificationManager notificationManager;
     private NotificationManager notificationManager2;
 
+    Integer VersionCode;
     Integer NotifyTimerResseter = NOTIFICATION_CHECKR_TIMER;
     Integer LocationTimerResseter = LOCATION_SENDER_TIMER;
 
@@ -238,21 +240,49 @@ public class RiderStatus extends Service implements com.google.android.gms.locat
     }
 
     private void sendingLocationToServer() {
+
+        try {
+            VersionCode = getApplicationContext().getPackageManager().getPackageInfo(getApplicationContext().getPackageName(), 0).versionCode;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
+
+        JsonObject json = new JsonObject();
+        json.addProperty("loc", "["+ Rider_Lat+","+Rider_Long+"]");
+        json.addProperty("enttid", Global.loginusr.getEnttid()+"");
+        json.addProperty("tripid", TripId + "");
+        json.addProperty("flag", "start");
+        json.addProperty("drvid",  riderid + "");
+        json.addProperty("uid", riderid + "");
+        json.addProperty("btr", getBatteryLevel() + "");
+        json.addProperty("appvr",VersionCode + "");
         Ion.with(this)
-                .load("GET", Global.urls.saveLiveBeat.value)
-                .addQuery("rdid", riderid)
-                .addQuery("lat", Rider_Lat)
-                .addQuery("lon", Rider_Long)
-                .addQuery("tripid", TripId)
-                .addQuery("hs_id", hsid)
-                .addQuery("flag", "updt")
-                .addQuery("btr", getBatteryLevel() + "")
+                .load(livebeats.value)
+                .setJsonObjectBody(json)
                 .asJsonObject()
                 .setCallback(new FutureCallback<JsonObject>() {
                     @Override
                     public void onCompleted(Exception e, JsonObject result) {
-
+                        // do stuff with the result or error
                         try {
+//        Ion.with(this)
+//                .load("GET", Global.urls.livebeats.value)
+////                .addQuery("rdid", riderid)
+//                .addQuery("loc", "["+ Rider_Lat+","+Rider_Long+"]")
+//                .addQuery("enttid", Global.loginusr.getEnttid()+"")
+//                .addQuery("tripid", TripId + "")
+//                .addQuery("flag", "start")
+//                .addQuery("drvid", riderid + "")
+//                .addQuery("uid", riderid + "")
+//                .addQuery("btr", getBatteryLevel() + "")
+//                .addQuery("appvr", VersionCode + "")
+//                .asJsonObject()
+//                .setCallback(new FutureCallback<JsonObject>() {
+//                    @Override
+//                    public void onCompleted(Exception e, JsonObject result) {
+//
+//                        try {
                             if (result != null) Log.v("result", result.toString());
 
                         } catch (Exception ea) {

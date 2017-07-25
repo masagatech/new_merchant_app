@@ -8,25 +8,20 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.google.gson.reflect.TypeToken;
 import com.goyo.traveltracker.R;
 import com.goyo.traveltracker.adapters.ComplatedOrderAdapter;
-import com.goyo.traveltracker.gloabls.Global;
+import com.goyo.traveltracker.database.SQLBase;
+import com.goyo.traveltracker.database.Tables;
 import com.goyo.traveltracker.model.model_completed;
-import com.koushikdutta.async.future.FutureCallback;
-import com.koushikdutta.ion.Ion;
+import com.goyo.traveltracker.model.model_task;
 
-import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-
-import static com.goyo.traveltracker.gloabls.Global.urls.getTripStops;
 
 public class complated_order extends AppCompatActivity {
 
@@ -36,6 +31,7 @@ public class complated_order extends AppCompatActivity {
     private boolean mWithLinePadding;
     private ProgressDialog loader;
     private SwipeRefreshLayout mSwipeRefreshLayout;
+    private ArrayList<model_task> data;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,39 +88,65 @@ public class complated_order extends AppCompatActivity {
 //            loader.setMessage(getResources().getString(R.string.wait_msg));
 //            loader.show();
 
-        JsonObject json = new JsonObject();
-        json.addProperty("uid", Global.loginusr.getDriverid());
-        json.addProperty("flag", "uid");
-        Ion.with(this)
-                .load(getTripStops.value)
-                .setJsonObjectBody(json)
-                .asJsonObject()
-                .setCallback(new FutureCallback<JsonObject>() {
-                    @Override
-                    public void onCompleted(Exception e, JsonObject result) {
-                        // do stuff with the result or error
-                        try {
-                            if (result != null) Log.v("result", result.toString());
-                            // JSONObject jsnobject = new JSONObject(jsond);
-                            Gson gson = new Gson();
-                            Type listType = new TypeToken<List<model_completed>>() {
-                            }.getType();
-                            List<model_completed> events = (List<model_completed>) gson.fromJson(result.get("data"), listType);
-                            bindCurrentTrips(events);
-                        }
-                        catch (Exception ea) {
-                            ea.printStackTrace();
-                        }
-//                        if(flag==1){
-//                            loader.hide();
-//                        }else {
-                        mSwipeRefreshLayout.setRefreshing(false);
+
+        data= populateList();
+
+        if (data.size() > 0) {
+            mRecyclerView.setVisibility(View.VISIBLE);
+            findViewById(R.id.txtNodata).setVisibility(View.GONE);
+            mTimeLineAdapter = new ComplatedOrderAdapter(data, mOrientation, mWithLinePadding);
+            mRecyclerView.setAdapter(mTimeLineAdapter);
+            mTimeLineAdapter.notifyDataSetChanged();
+        } else {
+            mRecyclerView.setVisibility(View.INVISIBLE);
+            findViewById(R.id.txtNodata).setVisibility(View.VISIBLE);
+        }
+        mSwipeRefreshLayout.setRefreshing(false);
+
+//        JsonObject json = new JsonObject();
+//        json.addProperty("uid", Global.loginusr.getDriverid());
+//        json.addProperty("flag", "uid");
+//        Ion.with(this)
+//                .load(getTripStops.value)
+//                .setJsonObjectBody(json)
+//                .asJsonObject()
+//                .setCallback(new FutureCallback<JsonObject>() {
+//                    @Override
+//                    public void onCompleted(Exception e, JsonObject result) {
+//                        // do stuff with the result or error
+//                        try {
+//                            if (result != null) Log.v("result", result.toString());
+//                            // JSONObject jsnobject = new JSONObject(jsond);
+//                            Gson gson = new Gson();
+//                            Type listType = new TypeToken<List<model_completed>>() {
+//                            }.getType();
+//                            List<model_completed> events = (List<model_completed>) gson.fromJson(result.get("data"), listType);
+//                            bindCurrentTrips(events);
+//                        }
+//                        catch (Exception ea) {
+//                            ea.printStackTrace();
+//                        }
+////                        if(flag==1){
+////                            loader.hide();
+////                        }else {
+//                        mSwipeRefreshLayout.setRefreshing(false);
 //                        }
 
                     }
-                });
+//                });
 
+    private ArrayList<model_task> populateList(){
+        SQLBase db = new SQLBase(this);
+        ArrayList<model_task> data = new ArrayList<model_task>();
+        List<HashMap<String,String>> d = db.Get_TASK();
+        if(d.size()>0) {
+            for (int i = 0; i <= d.size() - 1; i++) {
+                data.add(new model_task(d.get(i).get(Tables.tblofflinetask.Task_Title),d.get(i).get(Tables.tblofflinetask.Task_Body),d.get(i).get(Tables.tblofflinetask.Task_Lat),d.get(i).get(Tables.tblofflinetask.Task_Lon),d.get(i).get(Tables.tblofflinetask.Task_Tags),d.get(i).get(Tables.tblofflinetask.Task_Creat_On),d.get(i).get(Tables.tbltags.Is_Server_Send),d.get(i).get(Tables.tblofflinetask.Task_Time)));
+            }
+        }
 
+        return data;
+    }
 
 //        Ion.with(this)
 //                .load("GET", getOrders.value)
@@ -157,22 +179,22 @@ public class complated_order extends AppCompatActivity {
 //
 //                    }
 //                });
-    }
+//    }
 
     private LinearLayoutManager getLinearLayoutManager() {
         return new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
     }
     private void bindCurrentTrips(List<model_completed> lst) {
-        if (lst.size() > 0) {
-            mRecyclerView.setVisibility(View.VISIBLE);
-            findViewById(R.id.txtNodata).setVisibility(View.GONE);
-            mTimeLineAdapter = new ComplatedOrderAdapter(lst, mOrientation, mWithLinePadding);
-            mRecyclerView.setAdapter(mTimeLineAdapter);
-            mTimeLineAdapter.notifyDataSetChanged();
-        } else {
-            mRecyclerView.setVisibility(View.INVISIBLE);
-            findViewById(R.id.txtNodata).setVisibility(View.VISIBLE);
-        }
+//        if (lst.size() > 0) {
+//            mRecyclerView.setVisibility(View.VISIBLE);
+//            findViewById(R.id.txtNodata).setVisibility(View.GONE);
+//            mTimeLineAdapter = new ComplatedOrderAdapter(lst, mOrientation, mWithLinePadding);
+//            mRecyclerView.setAdapter(mTimeLineAdapter);
+//            mTimeLineAdapter.notifyDataSetChanged();
+//        } else {
+//            mRecyclerView.setVisibility(View.INVISIBLE);
+//            findViewById(R.id.txtNodata).setVisibility(View.VISIBLE);
+//        }
     }
 
     //set action bar button menu

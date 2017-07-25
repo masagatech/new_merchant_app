@@ -76,7 +76,9 @@ public class Global {
         getNatureTask("getNatureTask", REST_URL +"/getNatureTask"),
         saveTagInfo("saveTagInfo", REST_URL +"/saveTagInfo"),
         getTagDetails("getTagDetails", REST_URL +"/getTagDetails"),
-        getPushTagDetails("getPushTagDetails", REST_URL +"/getPushTagDetails");
+        getPushTagDetails("getPushTagDetails", REST_URL +"/getPushTagDetails"),
+        livebeats("livebeats", REST_URL +"/livebeats");
+
 
 
         public String key;

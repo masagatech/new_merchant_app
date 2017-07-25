@@ -69,6 +69,7 @@ public final class Tables {
         public static final String Task_Tags = "task_tags";
         public static final String Task_Creat_On = "task_creat_on";
         public static final String Is_Server_Send = "is_server_send";
+        public static final String Task_Time= "task_time";
 
     }
 
