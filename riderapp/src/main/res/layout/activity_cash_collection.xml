@@ -4,9 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#d9d8d8"
+
     android:fitsSystemWindows="true"
     tools:context="com.goyo.traveltracker.forms.cash_collection">
+
+    <!--android:background="#d9d8d8"-->
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -21,6 +23,21 @@
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
     </android.support.design.widget.AppBarLayout>
+
+    <TextView
+        android:layout_marginTop="120dp"
+        android:id="@+id/txtNodata"
+        android:drawableTop="@drawable/noexpense"
+        android:layout_width="match_parent"
+        android:gravity="center"
+        android:fontFamily="sans-serif-light"
+        android:textColor="@color/blue_light"
+        android:layout_height="wrap_content"
+        android:text="@string/returned_empthy_msg"
+        android:textSize="15sp"
+
+        android:layout_centerInParent="true"
+        />
 
     <include layout="@layout/content_cash_collection" />
 

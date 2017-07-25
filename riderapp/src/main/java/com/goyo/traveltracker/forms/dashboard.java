@@ -152,7 +152,7 @@ public class dashboard extends AppCompatActivity implements LocationListener,
         //Push Order visible only to TL
         PushOrderTL=(LinearLayout)findViewById(R.id.PushOrderTL);
 //        if(Global.loginusr.getType().equals("TL")){
-            PushOrderTL.setVisibility(View.VISIBLE);
+//            PushOrderTL.setVisibility(View.VISIBLE);
 //        }
 
         //sending info for first time when app  is opened

@@ -6,16 +6,15 @@ android:layout_height="match_parent"
 tools:context="com.goyo.traveltracker.forms.AllOrderDetails" >
 
     <TextView
-        android:layout_marginTop="60dp"
         android:id="@+id/txtNodata"
-        android:drawableTop="@drawable/no_pending_data"
+        android:drawableTop="@drawable/nosummery"
         android:layout_width="match_parent"
         android:gravity="center"
+        android:visibility="gone"
         android:textColor="@color/blue_light"
         android:layout_height="wrap_content"
         android:text="@string/allorder_empthy_msg"
-        android:textSize="20sp"
-        android:visibility="gone"
+        android:textSize="16sp"
         android:fontFamily="sans-serif-light"
         android:layout_centerInParent="true"
         />

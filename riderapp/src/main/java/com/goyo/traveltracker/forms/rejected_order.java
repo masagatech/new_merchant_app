@@ -1,30 +1,19 @@
 package com.goyo.traveltracker.forms;
 
 import android.app.ProgressDialog;
+import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.google.gson.reflect.TypeToken;
-import com.koushikdutta.async.future.FutureCallback;
-import com.koushikdutta.ion.Ion;
 import com.goyo.traveltracker.R;
-import com.goyo.traveltracker.adapters.RejectedOrderAdapter;
-import com.goyo.traveltracker.gloabls.Global;
 import com.goyo.traveltracker.model.model_completed;
 
-import java.lang.reflect.Type;
 import java.util.List;
-
-import static com.goyo.traveltracker.gloabls.Global.urls.getOrders;
 
 public class rejected_order extends AppCompatActivity {
     private com.goyo.traveltracker.adapters.RejectedOrderAdapter mTimeLineAdapter;
@@ -55,6 +44,9 @@ public class rejected_order extends AppCompatActivity {
 
         mSwipeRefreshLayout=(SwipeRefreshLayout) findViewById(R.id.Refresh);
 
+        mRecyclerView.setVisibility(View.INVISIBLE);
+        findViewById(R.id.txtNodata).setVisibility(View.VISIBLE);
+
         //refresh data at first time
         mSwipeRefreshLayout.post(new Runnable() {
             @Override
@@ -82,34 +74,34 @@ public class rejected_order extends AppCompatActivity {
 //        loader.setCancelable(false);
 //        loader.setMessage(getResources().getString(R.string.wait_msg));
 //        loader.show();
-        Ion.with(this)
-                .load("GET", getOrders.value)
-                .addQuery("flag", "completed")
-                .addQuery("subflag", "smry")
-                .addQuery("rdid", Global.loginusr.getDriverid() + "")
-                .addQuery("stat","2")
-
-                .asJsonObject()
-                .setCallback(new FutureCallback<JsonObject>() {
-                    @Override
-                    public void onCompleted(Exception e, JsonObject result) {
-
-                        try {
-                            if (result != null) Log.v("result", result.toString());
-                            Gson gson = new Gson();
-                            Type listType = new TypeToken<List<model_completed>>() {
-                            }.getType();
-                            List<model_completed> events = (List<model_completed>) gson.fromJson(result.get("data"), listType);
-                            bindCurrentTrips(events);
-
-                        }
-                        catch (Exception ea) {
-                            ea.printStackTrace();
-                        }
-//                        loader.hide();
+//        Ion.with(this)
+//                .load("GET", getOrders.value)
+//                .addQuery("flag", "completed")
+//                .addQuery("subflag", "smry")
+//                .addQuery("rdid", Global.loginusr.getDriverid() + "")
+//                .addQuery("stat","2")
+//
+//                .asJsonObject()
+//                .setCallback(new FutureCallback<JsonObject>() {
+//                    @Override
+//                    public void onCompleted(Exception e, JsonObject result) {
+//
+//                        try {
+//                            if (result != null) Log.v("result", result.toString());
+//                            Gson gson = new Gson();
+//                            Type listType = new TypeToken<List<model_completed>>() {
+//                            }.getType();
+//                            List<model_completed> events = (List<model_completed>) gson.fromJson(result.get("data"), listType);
+//                            bindCurrentTrips(events);
+//
+//                        }
+//                        catch (Exception ea) {
+//                            ea.printStackTrace();
+//                        }
+////                        loader.hide();
                         mSwipeRefreshLayout.setRefreshing(false);
-                    }
-                });
+//                    }
+//                });
 
     }
 
@@ -118,17 +110,16 @@ public class rejected_order extends AppCompatActivity {
     }
 
     private void bindCurrentTrips(List<model_completed> lst) {
-        if (lst.size() > 0) {
-            mRecyclerView.setVisibility(View.VISIBLE);
-            findViewById(R.id.txtNodata).setVisibility(View.GONE);
-            mTimeLineAdapter = new RejectedOrderAdapter(lst, mOrientation, mWithLinePadding);
-            mRecyclerView.setAdapter(mTimeLineAdapter);
-            mTimeLineAdapter.notifyDataSetChanged();
-
-        } else {
+//        if (lst.size() > 0) {
+//            mRecyclerView.setVisibility(View.VISIBLE);
+//            findViewById(R.id.txtNodata).setVisibility(View.GONE);
+//            mTimeLineAdapter = new RejectedOrderAdapter(lst, mOrientation, mWithLinePadding);
+//            mRecyclerView.setAdapter(mTimeLineAdapter);
+//            mTimeLineAdapter.notifyDataSetChanged();
+//
+//        } else {
             mRecyclerView.setVisibility(View.INVISIBLE);
             findViewById(R.id.txtNodata).setVisibility(View.VISIBLE);
-        }
     }
 
     @Override

@@ -5,8 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    android:background="@color/colorBackground"
+
     tools:context="com.goyo.traveltracker.forms.rejected_order">
+
+    <!--android:background="@color/colorBackground"-->
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -23,16 +25,16 @@
     </android.support.design.widget.AppBarLayout>
 
     <TextView
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="70dp"
         android:id="@+id/txtNodata"
-        android:drawableTop="@drawable/no_pending_data"
+        android:drawableTop="@drawable/noleave"
         android:layout_width="match_parent"
         android:gravity="center"
         android:fontFamily="sans-serif-light"
         android:textColor="@color/blue_light"
         android:layout_height="wrap_content"
         android:text="@string/returned_empthy_msg"
-        android:textSize="20sp"
+        android:textSize="15sp"
         android:visibility="gone"
         android:layout_centerInParent="true"
         />

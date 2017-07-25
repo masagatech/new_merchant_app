@@ -9,16 +9,16 @@
     tools:context="com.goyo.traveltracker.forms.pending_order">
 
     <TextView
-        android:layout_marginTop="60dp"
+        android:visibility="gone"
+        android:layout_marginTop="20dp"
         android:id="@+id/txtNodata"
-        android:drawableTop="@drawable/no_pending_data"
+        android:drawableTop="@drawable/notask"
         android:layout_width="match_parent"
         android:gravity="center"
         android:textColor="@color/blue_light"
         android:layout_height="wrap_content"
         android:text="@string/pending_empthy_msg"
-        android:textSize="20sp"
-        android:visibility="gone"
+        android:textSize="15sp"
         android:layout_centerInParent="true"
         />
 
