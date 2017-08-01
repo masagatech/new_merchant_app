@@ -4,6 +4,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -73,6 +74,8 @@ public class pending_order_viewHolder extends RecyclerView.ViewHolder {
     ChipsInput chipsInput;
     @BindView(R.id.Tags)
     TagContainerLayout Tags;
+    @BindView(R.id.Expense)
+    FrameLayout Expense;
 
     public pending_order_viewHolder(View itemView, int viewType) {
         super(itemView);

@@ -16,6 +16,42 @@ public class model_task {
     String _tags;
     String _creat_on;
     String _time;
+    String _image_paths;
+    String _exp_id;
+    String _exp_value;
+    String _exp_disc;
+
+    public String get_exp_id() {
+        return _exp_id;
+    }
+
+    public void set_exp_id(String _exp_id) {
+        this._exp_id = _exp_id;
+    }
+
+    public String get_exp_value() {
+        return _exp_value;
+    }
+
+    public void set_exp_value(String _exp_value) {
+        this._exp_value = _exp_value;
+    }
+
+    public String get_exp_disc() {
+        return _exp_disc;
+    }
+
+    public void set_exp_disc(String _exp_disc) {
+        this._exp_disc = _exp_disc;
+    }
+
+    public String get_image_paths() {
+        return _image_paths;
+    }
+
+    public void set_image_paths(String _image_paths) {
+        this._image_paths = _image_paths;
+    }
 
     public String get_time() {
         return _time;
@@ -91,13 +127,9 @@ public class model_task {
         this._lon = _lon;
     }
 
-    // Empty constructor
-    public model_task(String s, String title, String body, String lat, String lon, String tags, String creat_on, String is_server_send, String time){
-
-    }
 
     // constructor
-    public model_task(String _title, String _body, String _lat,String _lon,String tags,String _creat_on,String _is_server_send,String _time_){
+    public model_task(String _title, String _body, String _lat,String _lon,String tags,String _creat_on,String _is_server_send,String _time_, String _image_paths_,String _exp_id,String _exp_value,String _exp_disc){
         this._title = _title;
         this._body = _body;
         this._lat = _lat;
@@ -106,6 +138,10 @@ public class model_task {
         this._creat_on = _creat_on;
         this._is_server_send = _is_server_send;
         this._time = _time_;
+        this._image_paths = _image_paths_;
+        this._exp_id = _exp_id;
+        this._exp_value = _exp_value;
+        this._exp_disc = _exp_disc;
     }
 
     public OrderStatus status = OrderStatus.ACTIVE;

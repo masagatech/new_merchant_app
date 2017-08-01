@@ -50,20 +50,20 @@
     <string name="alert_yes_text">YES</string>
 
 
-    <string name="slide_1_title">How This Works?</string>
-    <string name="slide_1_desc">App will give you Real time tracking without annoying ads!!</string>
+    <string name="slide_1_title" translatable="false">How This Works?</string>
+    <string name="slide_1_desc" translatable="false">App will give you Real time tracking without annoying ads!!</string>
 
-    <string name="slide_2_title">Tracking</string>
-    <string name="slide_2_desc">Track your users anywhere in the world!</string>
+    <string name="slide_2_title" translatable="false">Tracking</string>
+    <string name="slide_2_desc" translatable="false">Track your users anywhere in the world!</string>
 
-    <string name="slide_3_title">Detailed Info</string>
-    <string name="slide_3_desc">We will give you detailed info about your traveling</string>
+    <string name="slide_3_title" translatable="false">Detailed Info</string>
+    <string name="slide_3_desc" translatable="false">We will give you detailed info about your traveling</string>
 
-    <string name="slide_4_title">Easy to use</string>
-    <string name="slide_4_desc">few taps away for your tracking</string>
+    <string name="slide_4_title" translatable="false">Easy to use</string>
+    <string name="slide_4_desc" translatable="false">few taps away for your tracking</string>
 
-    <string name="play_again_desc">To see the welcome slider again, goto Settings -> apps -> welcome slider -> clear data</string>
-    <string name="play_again">Play Again</string>
+    <string name="play_again_desc" translatable="false">To see the welcome slider again, goto Settings -> apps -> welcome slider -> clear data</string>
+    <string name="play_again" translatable="false">Play Again</string>
 
     <string name="Pending_Order" translatable="false">My Tasks</string>
     <string name="Complated_Order" translatable="false">Today Visits</string>
@@ -71,68 +71,68 @@
     <string name="All_Order" translatable="false">Tags</string>
     <string name="New_Order" translatable="false">Notifications</string>
     <string name="Rejected_Order" translatable="false">Leave</string>
-    <string name="Push_Order" translatable="false">Push</string>
-    <string name="order_details">Report</string>
+    <string name="Push_Order" translatable="false">Expense \n Type</string>
+    <string name="order_details" translatable="false">Report</string>
     <string name="title_activity_custemer_maps" translatable="false">Map</string>
-    <string name="exp">Expired !!!</string>
-    <string name="notification_accept">ACCEPTED</string>
-    <string name="notification_reject">REJECTED</string>
-    <string name="notification_alredyassign">Already Assigned</string>
-    <string name="reject_reason_body">Are you sure you want Reject this order?   Tell us why!</string>
-    <string name="reject_reason_head">Reject</string>
-    <string name="yes">Yes!</string>
-    <string name="acceptorder_notifi">You Have Aceepted This Order!</string>
-    <string name="msg_delivered">Delivered</string>
-    <string name="msg_returned">Returned</string>
-    <string name="wait_msg">Please wait..</string>
-    <string name="msg_stoptrip">No Pending Delivery. Are you want Stop Trip?</string>
-    <string name="head_stoptrip">Stop Trip</string>
-    <string name="select_rider_msg">Please select a Rider first!</string>
-    <string name="select_rider">Select Rider..</string>
-    <string name="returned_at">Returned At  </string>
-    <string name="dilvered_at">Deliverd At  </string>
-    <string name="logout_msg_with_online">Logging out will makes you Time-Out, Are you sure want do so?</string>
-    <string name="logout_msg_normal">Are you sure want Logout?</string>
-    <string name="online_head">Time-In</string>
-    <string name="online_body">You sure want to register Time-In?</string>
-    <string name="online_yes">Yes</string>
-    <string name="offline_head">Time-Out</string>
-    <string name="offline_body">Are you sure you want register Time-Out?</string>
-    <string name="switch_online_text">Time-In</string>
-    <string name="offline_switch_text">Time-Out</string>
-    <string name="update_head">Update</string>
-    <string name="update_body">Your using older version of the app,  \nPlease Update to continue..</string>
-    <string name="update_yes">Take me to app store!</string>
-    <string name="update_no">Not now</string>
-    <string name="starttrip_head">Start Trip</string>
-    <string name="starttrip_body">Are you want Start Trip?</string>
-    <string name="stoptrip_head">Stop Trip</string>
-    <string name="stoptrip_body">Are you sure you want Stop Trip?</string>
-    <string name="stoptrip_msg">You have Deliverd all food.   \nPress Stop to continue..</string>
-    <string name="allorder_empthy_msg">Oops! No tracking summery!</string>
-    <string name="complated_empthy_msg">You dont visited any places today!</string>
-    <string name="exit_map">exit</string>
-    <string name="notification_emthy_msg">You dont any notification!</string>
-    <string name="pending_empthy_msg">You dont have any Task right now!</string>
-    <string name="push_empthy_msg">No orders right now :(</string>
-    <string name="returned_empthy_msg">Sit Tight! More futures coming just for you!</string>
-    <string name="orderdetails_date">DATE</string>
-    <string name="orderdetails_total">TOTAL</string>
-    <string name="return_msg">Are you sure you want return delivery? Tell us why!</string>
-    <string name="return_button">Return</string>
-    <string name="no_rider_avalble_msg">Oops there were no riders available right now!!</string>
-    <string name="reject_notification">Reject</string>
-    <string name="accept_notification">Accept</string>
-    <string name="rejectorder_notifi">You have rejected this order!</string>
-    <string name="offline_rider_head">Offline</string>
-    <string name="offline_rider_body">Selected Rider is offline. You still wants to push this order?</string>
-    <string name="slider_login">Login</string>
-    <string name="slider_contact_us">Contact us</string>
-    <string name="add_tasks">Add Stops</string>
+    <string name="exp" translatable="false">Expired !!!</string>
+    <string name="notification_accept" translatable="false">ACCEPTED</string>
+    <string name="notification_reject" translatable="false">REJECTED</string>
+    <string name="notification_alredyassign" translatable="false">Already Assigned</string>
+    <string name="reject_reason_body" translatable="false">Are you sure you want Reject this order?   Tell us why!</string>
+    <string name="reject_reason_head" translatable="false">Reject</string>
+    <string name="yes" translatable="false">Yes!</string>
+    <string name="acceptorder_notifi" translatable="false">You Have Aceepted This Order!</string>
+    <string name="msg_delivered" translatable="false">Delivered</string>
+    <string name="msg_returned" translatable="false">Returned</string>
+    <string name="wait_msg" translatable="false">Please wait..</string>
+    <string name="msg_stoptrip" translatable="false">No Pending Delivery. Are you want Stop Trip?</string>
+    <string name="head_stoptrip" translatable="false">Stop Trip</string>
+    <string name="select_rider_msg" translatable="false">Please select a Rider first!</string>
+    <string name="select_rider" translatable="false">Select Rider..</string>
+    <string name="returned_at" translatable="false">Returned At  </string>
+    <string name="dilvered_at" translatable="false">Deliverd At  </string>
+    <string name="logout_msg_with_online" translatable="false">Logging out will makes you Time-Out, Are you sure want do so?</string>
+    <string name="logout_msg_normal" translatable="false">Are you sure want Logout?</string>
+    <string name="online_head" translatable="false">Time-In</string>
+    <string name="online_body" translatable="false">You sure want to register Time-In?</string>
+    <string name="online_yes" translatable="false">Yes</string>
+    <string name="offline_head" translatable="false">Time-Out</string>
+    <string name="offline_body" translatable="false">Are you sure you want register Time-Out?</string>
+    <string name="switch_online_text" translatable="false">Time-In</string>
+    <string name="offline_switch_text" translatable="false">Time-Out</string>
+    <string name="update_head" translatable="false">Update</string>
+    <string name="update_body" translatable="false">Your using older version of the app,  \nPlease Update to continue..</string>
+    <string name="update_yes" translatable="false">Take me to app store!</string>
+    <string name="update_no" translatable="false">Not now</string>
+    <string name="starttrip_head" translatable="false">Start Trip</string>
+    <string name="starttrip_body" translatable="false">Are you want Start Trip?</string>
+    <string name="stoptrip_head" translatable="false">Stop Trip</string>
+    <string name="stoptrip_body" translatable="false">Are you sure you want Stop Trip?</string>
+    <string name="stoptrip_msg" translatable="false">You have Deliverd all food.   \nPress Stop to continue..</string>
+    <string name="allorder_empthy_msg" translatable="false">Oops! No tracking summery!</string>
+    <string name="complated_empthy_msg" translatable="false">You dont visited any places today!</string>
+    <string name="exit_map" translatable="false">exit</string>
+    <string name="notification_emthy_msg" translatable="false">You dont have any notification!</string>
+    <string name="pending_empthy_msg" translatable="false">You dont have any Task right now!</string>
+<string name="push_empthy_msg" translatable="false">No Expense Data!</string>
+    <string name="returned_empthy_msg" translatable="false">Sit Tight! More futures coming just for you!</string>
+    <string name="orderdetails_date" translatable="false">DATE</string>
+    <string name="orderdetails_total" translatable="false">TOTAL</string>
+    <string name="return_msg" translatable="false">Are you sure you want return delivery? Tell us why!</string>
+    <string name="return_button" translatable="false">Return</string>
+    <string name="no_rider_avalble_msg" translatable="false">Oops there were no riders available right now!!</string>
+    <string name="reject_notification" translatable="false">Reject</string>
+    <string name="accept_notification" translatable="false">Accept</string>
+    <string name="rejectorder_notifi" translatable="false">You have rejected this order!</string>
+    <string name="offline_rider_head" translatable="false">Offline</string>
+    <string name="offline_rider_body" translatable="false">Selected Rider is offline. You still wants to push this order?</string>
+    <string name="slider_login" translatable="false">Login</string>
+    <string name="slider_contact_us" translatable="false">Contact us</string>
+    <string name="add_tasks" translatable="false">Add Stops</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="title_activity_today_visits_maps">Map</string>
+    <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
+    <string name="title_activity_today_visits_maps" translatable="false">Map</string>
 
 
 </resources>

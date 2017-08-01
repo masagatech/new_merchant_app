@@ -11,20 +11,21 @@
 
 
 
-    <com.roughike.bottombar.BottomBar
-        android:id="@+id/bottomBars"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_alignParentBottom="true"
-        app:bb_inActiveTabColor="#3b3b3b"
-        app:bb_activeTabColor="#FFFFFF"
-        app:bb_showShadow="true"
-        app:bb_tabXmlResource="@xml/pushorder_bottombar" />
+
+
+    <!--<com.roughike.bottombar.BottomBar-->
+        <!--android:id="@+id/bottomBars"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="60dp"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--app:bb_inActiveTabColor="#3b3b3b"-->
+        <!--app:bb_activeTabColor="#FFFFFF"-->
+        <!--app:bb_showShadow="true"-->
+        <!--app:bb_tabXmlResource="@xml/pushorder_bottombar" />-->
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:layout_width="match_parent"
         android:id="@+id/Refresh"
-        android:layout_marginBottom="60dp"
         android:layout_height="wrap_content">
 
         <android.support.v7.widget.RecyclerView

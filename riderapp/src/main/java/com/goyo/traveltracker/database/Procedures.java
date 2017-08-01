@@ -110,7 +110,11 @@ public final class Procedures {
                 +  Tables.tblofflinetask.Task_Tags + " VARCHAR, "
                 +  Tables.tblofflinetask.Task_Creat_On  + " VARCHAR, "
                 +  Tables.tblofflinetask.Is_Server_Send  + " VARCHAR, "
-                +  Tables.tblofflinetask.Task_Time  + " VARCHAR "
+                +  Tables.tblofflinetask.Task_Time  + " VARCHAR, "
+                +  Tables.tblofflinetask.Task_Images_Paths + " VARCHAR, "
+                +  Tables.tblofflinetask.EXP_ID + " VARCHAR, "
+                +  Tables.tblofflinetask.EXP_Value + " VARCHAR, "
+                +  Tables.tblofflinetask.EXP_Disc + " VARCHAR "
                 +")";
 
 
@@ -152,5 +156,66 @@ public final class Procedures {
         public static final String UPGRADE_2 = "ALTER TABLE " + Tables.tblnotification.name + " ADD COLUMN " +  Tables.tblnotification.exp +" INTEGER";
 
     }
+
+
+    public static class tbltask{
+
+        public static final String CREATE = "CREATE TABLE  IF NOT EXISTS "
+                + Tables.tbltasks.name +
+                "("
+                +  Tables.tbltasks.Task_Id + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                +  Tables.tbltasks.Tks_id  + " VARCHAR, "
+                +  Tables.tbltasks.Task_Nature  + " VARCHAR, "
+                +  Tables.tbltasks.Task_Value  + " VARCHAR, "
+                +  Tables.tbltasks.Task_Remark  + " VARCHAR, "
+                +  Tables.tbltasks.Task_Tags + " VARCHAR, "
+                +  Tables.tbltasks.Task_Status + " VARCHAR, "
+                +  Tables.tbltasks.Task_Creat_On  + " VARCHAR, "
+                +  Tables.tbltasks.Is_Server_Send  + " VARCHAR, "
+                +  Tables.tblofflinetask.EXP_ID + " VARCHAR, "
+                +  Tables.tblofflinetask.EXP_Value + " VARCHAR, "
+                +  Tables.tblofflinetask.EXP_Disc + " VARCHAR "
+                +")";
+
+
+        public static final String INSERT = "INSERT INTO " + Tables.tblnotification.name
+                + " ("
+                + Tables.tbl_driver_info.createon +  "," + Tables.tblnotification.data
+                +  "," + Tables.tblnotification.exp
+                + ")"
+                + " VALUES (?,?,?)";
+
+        public static final String UPGRADE_2 = "ALTER TABLE " + Tables.tblnotification.name + " ADD COLUMN " +  Tables.tblnotification.exp +" INTEGER";
+
+    }
+
+
+    public static class tblexpense{
+
+        public static final String CREATE = "CREATE TABLE  IF NOT EXISTS "
+                + Tables.tblexpense.name +
+                "("
+                +  Tables.tblexpense.Expense_Id + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                +  Tables.tblexpense.Exp_ID  + " VARCHAR, "
+                +  Tables.tblexpense.Expense_Name  + " VARCHAR, "
+                +  Tables.tblexpense.Expense_Disc  + " VARCHAR, "
+                +  Tables.tblexpense.Expense_Value + " VARCHAR, "
+                +  Tables.tblexpense.Expense_Code  + " VARCHAR, "
+                +  Tables.tblexpense.Expense_Is_Active  + " VARCHAR, "
+                +  Tables.tblexpense.Expense_Server  + " VARCHAR "
+                +")";
+
+
+        public static final String INSERT = "INSERT INTO " + Tables.tblnotification.name
+                + " ("
+                + Tables.tbl_driver_info.createon +  "," + Tables.tblnotification.data
+                +  "," + Tables.tblnotification.exp
+                + ")"
+                + " VALUES (?,?,?)";
+
+        public static final String UPGRADE_2 = "ALTER TABLE " + Tables.tblnotification.name + " ADD COLUMN " +  Tables.tblnotification.exp +" INTEGER";
+
+    }
+
 
 }

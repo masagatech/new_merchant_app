@@ -65,6 +65,7 @@ public class AddTags extends AppCompatActivity {
         json.addProperty("remark3", tag_remark_3);
         json.addProperty("cuid", currentDateTimeString);
         json.addProperty("enttid", Global.loginusr.getEnttid()+"");
+        json.addProperty("tagtype","m");
         Ion.with(this)
                 .load(Global.urls.saveTagInfo.value)
                 .setJsonObjectBody(json)

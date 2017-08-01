@@ -5,15 +5,12 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.Color;
 import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
 import android.widget.AdapterView;
 import android.widget.Filter;
 import android.widget.ListView;
@@ -22,20 +19,19 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
-import com.koushikdutta.async.future.FutureCallback;
-import com.koushikdutta.ion.Ion;
 import com.goyo.traveltracker.R;
 import com.goyo.traveltracker.forms.Orientation;
 import com.goyo.traveltracker.forms.PendingOrdersView;
 import com.goyo.traveltracker.gloabls.Global;
+import com.goyo.traveltracker.model.model_expense;
 import com.goyo.traveltracker.model.model_push_order;
 import com.goyo.traveltracker.model.model_rider_list;
+import com.koushikdutta.async.future.FutureCallback;
+import com.koushikdutta.ion.Ion;
 
 import java.lang.reflect.Type;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -51,7 +47,7 @@ import static com.goyo.traveltracker.gloabls.Global.urls.setStatus;
 
 public class PushOrderAdapter extends RecyclerView.Adapter<PushOrderViewHolder>{
 
-    private List<model_push_order> mFeedList;
+    private List<model_expense> mFeedList;
     private List<model_push_order> mMainList;
     private Context mContext;
    private String PushLat,PushLon;
@@ -71,8 +67,7 @@ public class PushOrderAdapter extends RecyclerView.Adapter<PushOrderViewHolder>{
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm a");
 
 
-    public PushOrderAdapter(List<model_push_order> feedList, Orientation orientation, boolean withLinePadding) {
-        mMainList=feedList;
+    public PushOrderAdapter(List<model_expense> feedList, Orientation orientation, boolean withLinePadding) {
         mFeedList = feedList;
         mOrientation = orientation;
         mWithLinePadding = withLinePadding;
@@ -98,66 +93,74 @@ public class PushOrderAdapter extends RecyclerView.Adapter<PushOrderViewHolder>{
     @Override
     public void onBindViewHolder(final PushOrderViewHolder holder, final int position) {
 
-        final model_push_order timeLineModel = mFeedList.get(position);
+        final model_expense timeLineModel = mFeedList.get(position);
 
-        OrderNo=timeLineModel.ordno.size();
+//        OrderNo=timeLineModel.ordno.size();
 
-        holder.mOrderID.setText(timeLineModel.ordid+" ("+OrderNo+")");
-        holder.mMarchant.setText(timeLineModel.olnm);
-        holder.mAddr.setText(timeLineModel.area+", "+timeLineModel.city);
-        holder.mTime.setText(timeLineModel.pchtm);
-        holder.mCash.setText("₹ "+timeLineModel.totamt+"");
-        PushLat=timeLineModel.geoloc.lat;
-        PushLon=timeLineModel.geoloc.lon;
+        holder.mOrderID.setText(timeLineModel._exp_id);
+        holder.mMarchant.setText(timeLineModel._name);
+        holder.mAddr.setText(timeLineModel._disc);
+        holder.mTime.setText(timeLineModel._code);
 
-        if(timeLineModel.nm != null){
-            holder.mRider.setText(timeLineModel.nm);
-        }
+
+       if(timeLineModel._is_active.equals("true")){
+            holder.Cardview.setVisibility(View.VISIBLE);
+       }else {
+           holder.Cardview.setVisibility(View.GONE);
+       }
+    }
+//        holder.mCash.setText("₹ "+timeLineModel.totamt+"");
+//        PushLat=timeLineModel.geoloc.lat;
+//        PushLon=timeLineModel.geoloc.lon;
+//
+//        if(timeLineModel.nm != null){
+//            holder.mRider.setText(timeLineModel.nm);
+//        }
 
         //selecting rider
-        holder.mRider.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-               onClickRider(holder,timeLineModel );
-
-            }
-        });
+//        holder.mRider.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//               onClickRider(holder,timeLineModel );
+//
+//            }
+//        });
 
         //Including a timer for to show alert
 //        updateTimerMethod = new Runnable() {
 //
 //
 //            public void run() {
-                Date date2 = null;
-                Date date1 = null;
-
-                try {
-                    date2 = simpleDateFormat.parse(timeLineModel.pchtm);
-                    date1 = simpleDateFormat.parse(simpleDateFormat.format((new Date()).getTime()));
-                    long difference = date1.getTime() - date2.getTime();
-                    Integer minutes = (int) (difference / (1000 * 60));
-
-//                    times[position]=minutes;
-
-                    // If time diffrence is greater than alert time text will blink and turn to red color
-
-                    if (minutes > Global.RedAlert) {
-                        holder.mAlertTime.setTextColor(Color.RED);
-                        Animation anim = new AlphaAnimation(0.4f, 1.0f);
-                        anim.setDuration(1000); //You can manage the time of the blink with this parameter
-                        anim.setStartOffset(20);
-                        anim.setRepeatMode(Animation.REVERSE);
-                        anim.setRepeatCount(Animation.INFINITE);
-                        holder.mAlertTime.startAnimation(anim);
-                    }else {
-                        holder.mAlertTime.setTextColor(Color.BLACK);
-                    }
-
-                    Log.v("minuts", minutes + "");
-                    holder.mAlertTime.setText("( " + minutes + " )");
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
+//                Date date2 = null;
+//                Date date1 = null;
+//
+//                try {
+//                    date2 = simpleDateFormat.parse(timeLineModel.pchtm);
+//                    date1 = simpleDateFormat.parse(simpleDateFormat.format((new Date()).getTime()));
+//                    long difference = date1.getTime() - date2.getTime();
+//                    Integer minutes = (int) (difference / (1000 * 60));
+//
+////                    times[position]=minutes;
+//
+//                    // If time diffrence is greater than alert time text will blink and turn to red color
+//
+//                    if (minutes > Global.RedAlert) {
+//                        holder.mAlertTime.setTextColor(Color.RED);
+//                        Animation anim = new AlphaAnimation(0.4f, 1.0f);
+//                        anim.setDuration(1000); //You can manage the time of the blink with this parameter
+//                        anim.setStartOffset(20);
+//                        anim.setRepeatMode(Animation.REVERSE);
+//                        anim.setRepeatCount(Animation.INFINITE);
+//                        holder.mAlertTime.startAnimation(anim);
+//                    }else {
+//                        holder.mAlertTime.setTextColor(Color.BLACK);
+//                    }
+//
+//                    Log.v("minuts", minutes + "");
+//                    holder.mAlertTime.setText("( " + minutes + " )");
+//                } catch (ParseException e) {
+//                    e.printStackTrace();
+//                }
 
 
 //                if (!stopFlag)
@@ -168,24 +171,24 @@ public class PushOrderAdapter extends RecyclerView.Adapter<PushOrderViewHolder>{
 //        }
 
 
-        ;
+//        ;
 //        threads.put(position + "", updateTimerMethod);
 //        myHandler.postDelayed(updateTimerMethod, 0);
 
 
-        holder.Btn_Push.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View m) {
-                if( holder.mRider.getText().toString().equals(mContext.getString(R.string.select_rider))){
-                    //if not selected any rider from lisst
-                    Toast.makeText(mContext, mContext.getString(R.string.select_rider_msg), Toast.LENGTH_SHORT).show();
-                }else {
-                    //calling api
-                    setStatus(timeLineModel.ordid,holder.mRider_Id.getText().toString(),holder);
-                }
-            }
-        });
-    }
+//        holder.Btn_Push.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(final View m) {
+//                if( holder.mRider.getText().toString().equals(mContext.getString(R.string.select_rider))){
+//                    //if not selected any rider from lisst
+//                    Toast.makeText(mContext, mContext.getString(R.string.select_rider_msg), Toast.LENGTH_SHORT).show();
+//                }else {
+//                    //calling api
+//                    setStatus(timeLineModel.ordid,holder.mRider_Id.getText().toString(),holder);
+//                }
+//            }
+//        });
+//    }
 //
 //    @Override
 //    public Filter getFilter() {

@@ -38,7 +38,6 @@
                 android:id="@+id/pending_orders"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/text_marchent"
                 android:layout_gravity="center"
                 android:orientation="horizontal">
 
@@ -130,6 +129,38 @@
                                 android:layout_weight="1"
                                 android:padding="10dp" />
                         </LinearLayout>
+
+                        <EditText
+                            android:drawableLeft="@drawable/det"
+                            android:id="@+id/Collected_Cash"
+                            android:layout_width="match_parent"
+                            android:layout_height="70dp"
+                            android:layout_marginTop="5dp"
+                            android:background="@drawable/border_cash_collection"
+                            android:hint="Enter Remark"
+                            android:imeOptions="actionDone"
+                            android:maxLines="1"
+                            android:padding="10dp"
+                            android:textColor="@android:color/black"
+                            android:textSize="15dp" />
+
+                        <LinearLayout
+                            android:id="@+id/cover"
+                            android:layout_marginTop="5dp"
+                            android:background="@drawable/border_cash_collection"
+                            android:layout_width="match_parent"
+                            android:layout_below="@+id/remark_form"
+                            android:layout_height="wrap_content">
+                            <com.pchmn.materialchips.ChipsInput
+                                android:layout_margin="4dp"
+                                android:layout_width="match_parent"
+                                android:layout_below="@+id/remark_form"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/chip"
+                                app:deletable="true"
+                                app:hint="  Select Tags" />
+                        </LinearLayout>
+
                         <EditText
                             android:drawableLeft="@drawable/cash_amount"
                             android:id="@+id/nature_value"
@@ -137,7 +168,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="5dp"
                             android:background="@drawable/border_cash_collection"
-                            android:hint="Enter value"
+                            android:hint="Enter Value/Number; if any"
                             android:imeOptions="actionDone"
                             android:inputType="number"
                             android:maxLines="1"
@@ -172,6 +203,39 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal">
+
+                            <FrameLayout
+                                android:layout_marginTop="10dp"
+                                android:id="@+id/Expense"
+                                android:layout_weight="1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="45dp">
+                            <ImageView
+                                android:src="@drawable/expense"
+                                android:id="@+id/imageView2"
+                                android:scaleType="fitCenter"
+                                android:layout_width="match_parent"
+                                android:layout_height="30dp" />
+
+                            <TextView
+                                android:layout_marginTop="25dp"
+                                android:layout_gravity="center_horizontal"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Expense" />
+                            </FrameLayout>
+
+
+                            <Spinner
+                                android:layout_gravity="end"
+                                android:layout_weight="4"
+                                android:id="@+id/status"
+                                android:layout_margin="5dp"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:padding="10dp">
+
+                            </Spinner>
 
                             <android.support.v7.widget.AppCompatTextView
                                 android:id="@+id/Remark"
@@ -219,46 +283,6 @@
                                 android:layout_gravity="center_vertical"
                                 android:background="@drawable/messages_default"/>
 
-                        <EditText
-                            android:drawableLeft="@drawable/det"
-                            android:id="@+id/Collected_Cash"
-                            android:layout_width="match_parent"
-                            android:layout_height="70dp"
-                            android:layout_marginTop="5dp"
-                            android:background="@drawable/border_cash_collection"
-                            android:hint="Enter Remark"
-                            android:imeOptions="actionDone"
-                            android:maxLines="1"
-                            android:padding="10dp"
-                            android:textColor="@android:color/black"
-                            android:textSize="15dp" />
-
-                            <LinearLayout
-                                android:id="@+id/cover"
-                                android:background="@drawable/border_cash_collection"
-                                android:layout_width="match_parent"
-                                android:layout_below="@+id/remark_form"
-                                android:layout_height="wrap_content">
-                                <com.pchmn.materialchips.ChipsInput
-                                    android:layout_margin="4dp"
-                                    android:layout_width="match_parent"
-                                    android:layout_below="@+id/remark_form"
-                                    android:layout_height="wrap_content"
-                                      android:id="@+id/chip"
-                                    app:deletable="true"
-                                    app:hint="  Enter Tags" />
-                            </LinearLayout>
-
-                            <Spinner
-                                android:layout_gravity="end"
-                                android:layout_weight="1"
-                                android:id="@+id/status"
-                                android:layout_margin="5dp"
-                                android:layout_width="200dp"
-                                android:layout_height="wrap_content"
-                                android:padding="10dp">
-
-                            </Spinner>
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>

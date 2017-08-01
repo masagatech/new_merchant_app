@@ -91,6 +91,7 @@ public class AllOrderDetails extends AppCompatActivity {
 
         JsonObject json = new JsonObject();
         json.addProperty("uid", Global.loginusr.getDriverid());
+        json.addProperty("enttid", Global.loginusr.getEnttid());
         Ion.with(this)
                 .load(getTripReports.value)
                 .setJsonObjectBody(json)

@@ -14,10 +14,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.api.client.repackaged.com.google.common.base.Joiner;
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.goyo.traveltracker.R;
 import com.goyo.traveltracker.database.SQLBase;
@@ -29,18 +31,24 @@ import com.goyo.traveltracker.forms.dashboard;
 import com.goyo.traveltracker.gloabls.Global;
 import com.goyo.traveltracker.model.model_pending;
 import com.goyo.traveltracker.model.model_tag_db;
+import com.goyo.traveltracker.model.model_tasks_pending;
 import com.goyo.traveltracker.utils.VectorDrawableUtils;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import static com.goyo.traveltracker.Service.NetworkStateReceiver.IsMobailConnected;
 import static com.goyo.traveltracker.Service.RiderStatus.Rider_Lat;
 import static com.goyo.traveltracker.Service.RiderStatus.Rider_Long;
 import static com.goyo.traveltracker.forms.pending_order.TripId;
-import static com.goyo.traveltracker.gloabls.Global.urls.saveNatureTask;
+import static com.goyo.traveltracker.gloabls.Global.urls.saveTaskNature;
 import static com.goyo.traveltracker.gloabls.Global.urls.setTripAction;
 
 /**
@@ -64,6 +72,10 @@ public class pending_order_adapter extends RecyclerView.Adapter<pending_order_vi
     List<String> Ntr_Work;
     List<String> Status_Work;
     String SelectedReason;
+    private Spinner Expense_Type;
+    List<String> Exp;
+    List<String> Exp_Id;
+    String Selected_Exp,Selected_Value,Selected_Disc;
 
 
     public pending_order_adapter(List<model_pending> feedList, Orientation orientation, boolean withLinePadding) {
@@ -92,11 +104,11 @@ public class pending_order_adapter extends RecyclerView.Adapter<pending_order_vi
     }
 
 
-
     @Override
     public void onBindViewHolder(final pending_order_viewHolder holder, final int position) {
 
         final model_pending timeLineModel = mFeedList.get(position);
+
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
 
@@ -170,6 +182,13 @@ public class pending_order_adapter extends RecyclerView.Adapter<pending_order_vi
             }
         });
 
+        holder.Expense.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ExpenseClicked(v);
+            }
+        });
+
         holder.Btn_Delivery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -177,6 +196,18 @@ public class pending_order_adapter extends RecyclerView.Adapter<pending_order_vi
                 Value = holder.nature_value.getText().toString();
                 Selected_Nature = holder.nature_of_work.getSelectedItem().toString();
                 Selected_Status = holder.status.getSelectedItem().toString();
+
+                //time
+                DateFormat dateFormat = new SimpleDateFormat("hh:mm a");
+                String time = dateFormat.format(new Date()).toString();
+
+                //date
+                Calendar c = Calendar.getInstance();
+                SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
+                String formattedDate = df.format(c.getTime());
+                String TimenDate=formattedDate+", "+time;
+
+
                 if(Remark.equals("")){
                     Toast.makeText(mContext, "Please Enter Remark", Toast.LENGTH_SHORT).show();
                 }else {
@@ -188,14 +219,35 @@ public class pending_order_adapter extends RecyclerView.Adapter<pending_order_vi
                             Tags.add(contactsSelected.get(i).getLabel());
                         }
                     }
-                    loader = new ProgressDialog(mContext);
-                    loader.setCancelable(false);
-                    loader.setMessage(mContext.getString(R.string.wait_msg));
-                    loader.show();
-                    if(Value.equals("")){
-                        Value="0";
+                    SQLBase db = new SQLBase(mContext);
+                    if(IsMobailConnected){
+                        loader = new ProgressDialog(mContext);
+                        loader.setCancelable(false);
+                        loader.setMessage(mContext.getString(R.string.wait_msg));
+                        loader.show();
+                        if(Value.equals("")){
+                            Value="0";
+                        }
+                        Update(timeLineModel, position, newPosition, Selected_Nature, Selected_Status, Remark, Value,Tags,TimenDate);
+
+                        //tags
+                        Gson gson = new Gson();
+                        String TagString= gson.toJson(Tags);
+
+                        db.TASK_ADDTASK(new model_tasks_pending(timeLineModel.tskid, Selected_Nature, Value, Remark, Selected_Status, TagString,TimenDate,"0",Selected_Exp,Selected_Value,Selected_Disc));
+
+                    }else {
+
+                        //tags
+                        Gson gson = new Gson();
+                        String TagString= gson.toJson(Tags);
+
+
+
+                        //storing in db
+                            db.TASK_ADDTASK(new model_tasks_pending(timeLineModel.tskid, Selected_Nature, Value, Remark, Selected_Status, TagString,TimenDate,"1",Selected_Exp,Selected_Value,Selected_Disc));
                     }
-                    Update(timeLineModel, position, newPosition, Selected_Nature, Selected_Status, Remark, Value,Tags);
+
                 }
             }
         });
@@ -291,12 +343,81 @@ public class pending_order_adapter extends RecyclerView.Adapter<pending_order_vi
     }
 
 
+    public void ExpenseClicked(View view) {
+        View alertLayout = mLayoutInflater.inflate(R.layout.popup_exp, null);
+        Expense_Type = (Spinner) alertLayout.findViewById(R.id.expense_name);
+
+        //getting spinner data if any
+        GetfromDb();
+
+
+        final EditText Expense_Value = (EditText) alertLayout.findViewById(R.id.exp_value);
+        final EditText Expense_Disc = (EditText) alertLayout.findViewById(R.id.exp_disc);
+
+        AlertDialog.Builder alert = new AlertDialog.Builder(mContext);
+        alert.setTitle("Expense");
+        // this is set the view from XML inside AlertDialog
+        alert.setView(alertLayout);
+        // disallow cancel of AlertDialog on click of back button and outside touch
+        alert.setCancelable(false);
+        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+
+        alert.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                int Pos = Expense_Type.getSelectedItemPosition();
+                if(Exp_Id.size()>0) {
+                   Selected_Exp = Exp_Id.get(Pos);
+                }
+                Selected_Value = Expense_Value.getText().toString();
+                Selected_Disc = Expense_Disc.getText().toString();
+            }
+        });
+        AlertDialog dialog = alert.create();
+        dialog.show();
+    }
+
+
+    private void GetfromDb(){
+        //getting expense name from db and setting in spinner
+        SQLBase db = new SQLBase(mContext);
+
+        Exp = new ArrayList<String>();
+        Exp_Id = new ArrayList<String>();
+        List<HashMap<String,String>> d = db.Get_Expenses_Display();
+        if(d.size()>0) {
+            for (int i = 0; i <= d.size() - 1; i++) {
+                Exp.add(d.get(i).get(Tables.tblexpense.Expense_Name));
+                Exp_Id.add(d.get(i).get(Tables.tblexpense.Exp_ID));
+            }
+            bindCurrentTrips3(Exp);
+        }
+    }
+
+
+    private void bindCurrentTrips3(List<String> Expense) {
+        if (Expense.size() > 0) {
+
+            ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(mContext, android.R.layout.simple_spinner_item, Expense);
+            dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            Expense_Type.setAdapter(dataAdapter);
+        }
+    }
+
+
+
     private void GetCurrentStatus(final int position,final pending_order_viewHolder holder){
         JsonObject json = new JsonObject();
         json.addProperty("flag", "byemp");
         json.addProperty("empid",Global.loginusr.getDriverid() + "");
         Ion.with(mContext)
-                .load(Global.urls.getAllocateTask.value)
+                .load(Global.urls.getTaskAllocate.value)
                 .setJsonObjectBody(json)
                 .asJsonObject()
                 .setCallback(new FutureCallback<JsonObject>() {
@@ -342,9 +463,9 @@ public class pending_order_adapter extends RecyclerView.Adapter<pending_order_vi
 
     }
 
-    private void Update(final model_pending timeLineModel, final int position, final int newPosition,final String Selected_Nature,final String Selected_Status,final String Remark,final String Value, List<String> Tags){
+    private void Update(final model_pending timeLineModel, final int position, final int newPosition,final String Selected_Nature,final String Selected_Status,final String Remark,final String Value, List<String> Tags,String TimenDate){
 
-        String tag= Joiner.on("','").join(Tags);
+        String tag= Joiner.on(",").join(Tags);
 
         //JSONArray jsArray = new JSONArray(Tags);
 
@@ -353,13 +474,17 @@ public class pending_order_adapter extends RecyclerView.Adapter<pending_order_vi
         json.addProperty("tstype", Selected_Status);
         json.addProperty("value", Value);
         json.addProperty("remark", Remark);
-        json.addProperty("cuid", Global.loginusr.getDriverid()+ "");
+        json.addProperty("cuid", TimenDate);
         json.addProperty("tskid", timeLineModel.tskid+ "");
-        json.addProperty("tag","{'" + tag + "'}");
+        json.addProperty("trpid", TripId);
+        json.addProperty("tag","{" + tag + "}");
+        json.addProperty("expid", Selected_Exp);
+        json.addProperty("expval", Selected_Value);
+        json.addProperty("expdesc", Selected_Disc);
 
 
         Ion.with(mContext)
-                .load(saveNatureTask.value)
+                .load(saveTaskNature.value)
                 .setJsonObjectBody(json)
                 .asJsonObject()
                 .setCallback(new FutureCallback<JsonObject>() {
@@ -374,14 +499,14 @@ public class pending_order_adapter extends RecyclerView.Adapter<pending_order_vi
 //                                //promt message to stop trip if its last order
 //                                AutoStop();
 
-                                if(Status_Work != null && !Status_Work.isEmpty()) {
-                                    if (Status_Work.get(Status_Work.size() - 1).equals(Selected_Status)) {
-                                        //removing order from list
-                                        mFeedList.remove(newPosition);
-                                        notifyItemRemoved(newPosition);
-                                        notifyItemRangeChanged(newPosition, mFeedList.size());
-                                    }
-                                }
+//                                if(Status_Work != null && !Status_Work.isEmpty()) {
+//                                if (Status_Work.get(Status_Work.size() - 1).equals(Selected_Status)) {
+//                                    //removing order from list
+//                                    mFeedList.remove(newPosition);
+//                                    notifyItemRemoved(newPosition);
+//                                    notifyItemRangeChanged(newPosition, mFeedList.size());
+//                                }
+//                            }
                             JsonObject o= result.get("data").getAsJsonArray().get(0).getAsJsonObject().get("funsave_tasknature").getAsJsonObject();
                             Toast.makeText(mContext, o.get("msg").toString(), Toast.LENGTH_SHORT).show();
 //                                Toast.makeText(mContext, result.get("data").getAsJsonObject().get("msg").toString()
@@ -430,7 +555,6 @@ public class pending_order_adapter extends RecyclerView.Adapter<pending_order_vi
         JsonObject json = new JsonObject();
         json.addProperty("flag", "all");
         json.addProperty("group", "taskstatus");
-        json.addProperty("enttid", Global.loginusr.getEnttid()+"");
         Ion.with(mContext)
                 .load(Global.urls.getMOM2.value)
                 .setJsonObjectBody(json)
@@ -472,7 +596,7 @@ public class pending_order_adapter extends RecyclerView.Adapter<pending_order_vi
         JsonObject json = new JsonObject();
         json.addProperty("flag", "dropdown");
         Ion.with(mContext)
-                .load(Global.urls.getAllocateTask.value)
+                .load(Global.urls.getTaskAllocate.value)
                 .setJsonObjectBody(json)
                 .asJsonObject()
                 .setCallback(new FutureCallback<JsonObject>() {

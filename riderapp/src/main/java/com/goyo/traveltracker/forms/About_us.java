@@ -1,5 +1,6 @@
 package com.goyo.traveltracker.forms;
 
+import android.content.pm.PackageManager;
 import android.icu.util.Calendar;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -14,29 +15,33 @@ import mehdi.sakout.aboutpage.AboutPage;
 import mehdi.sakout.aboutpage.Element;
 
 public class About_us extends AppCompatActivity {
+    Integer VersionCode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Element adsElement = new Element();
         adsElement.setTitle("Travel Tracker");
+        try {
+            VersionCode = getApplicationContext().getPackageManager().getPackageInfo(getApplicationContext().getPackageName(), 0).versionCode;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
 
         View aboutPage = new AboutPage(this)
                 .isRTL(false)
                 .setImage(R.drawable.goyologo)
                 .setDescription("We are Technology Enthusiast having broad range of experience in Vehicles Tracking, rides bookings & deliveries")
                 .addItem(adsElement)
-                .addItem(new Element().setTitle("Version 6.2"))
+                .addItem(new Element().setTitle("Version : "+VersionCode))
                 .addGroup("Discover what all the buzz is about!")
                 .addEmail("info@goyo.in")
                 .addWebsite("http://goyo.in/")
-                .addFacebook("the.medy")
-                .addTwitter("medyo80")
-                .addYoutube("UCdPQtdWIsg7_pi4mrRu46vA")
-                .addPlayStore("com.crest.goyo")
-                .addInstagram("medyo80")
-                .addGitHub("medyo")
-                .addItem(getCopyRightsElement())
+//                .addFacebook("the.medy")
+//                .addTwitter("medyo80")
+//                .addYoutube("UCdPQtdWIsg7_pi4mrRu46vA")
+                .addPlayStore("com.goyo.traveltracker")
+//                .addItem(getCopyRightsElement())
                 .create();
 
         setContentView(aboutPage);

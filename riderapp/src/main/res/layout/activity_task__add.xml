@@ -88,7 +88,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/chip"
             app:deletable="true"
-            app:hint="  Enter Tags" />
+            app:hint="  Select Tags" />
         </LinearLayout>
         <!--<com.pchmn.materialchips.ChipView-->
             <!--android:layout_marginTop="10dp"-->
@@ -131,66 +131,68 @@
     android:layout_width="match_parent"
     android:layout_height="120dp">
     <FrameLayout
-        android:layout_margin="5dp"
-        android:layout_weight="1"
-        android:background="@drawable/image_selector"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent">
+        android:id="@+id/ChooseImage"
+        android:layout_margin="10dp"
+          android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="45dp">
         <ImageView
-            android:id="@+id/imageView"
-            android:scaleType="fitXY"
+             android:src="@drawable/im"
+            android:id="@+id/imag"
+           android:layout_weight="1"
+            android:scaleType="fitCenter"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="30dp"/>
 
         <TextView
-        android:id="@+id/textView11"
+            android:id="@+id/tex"
+            android:layout_marginTop="25dp"
+            android:layout_gravity="center_horizontal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="Choose Image!" />
+            android:text="Select Image!" />
     </FrameLayout>
     <FrameLayout
-        android:layout_margin="5dp"
+        android:id="@+id/Expense"
+        android:layout_margin="10dp"
         android:layout_weight="1"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent">
+        android:layout_width="0dp"
+        android:layout_height="45dp">
         <ImageView
+            android:src="@drawable/expense"
             android:id="@+id/imageView2"
+            android:scaleType="fitCenter"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_above="@+id/txImageSelects"
-            android:background="@drawable/image_selector"
-            android:contentDescription="@string/app_name"
-            android:scaleType="centerCrop"
-            android:textColor="@color/colorPrimary" />
+            android:layout_height="30dp" />
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="Choose Image!" />
+            android:layout_marginTop="25dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Expense" />
     </FrameLayout>
-    <FrameLayout
-        android:layout_margin="5dp"
-        android:layout_weight="1"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent">
-        <ImageView
-            android:id="@+id/imageView3"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_above="@+id/txImageSelects"
-            android:background="@drawable/image_selector"
-            android:contentDescription="@string/app_name"
-            android:scaleType="centerCrop"
-            android:textColor="@color/colorPrimary" />
+    <!--<FrameLayout-->
+        <!--android:layout_margin="5dp"-->
+        <!--android:layout_weight="1"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="match_parent">-->
+        <!--<ImageView-->
+            <!--android:id="@+id/imageView3"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:layout_above="@+id/txImageSelects"-->
+            <!--android:background="@drawable/image_selector"-->
+            <!--android:contentDescription="@string/app_name"-->
+            <!--android:scaleType="centerCrop"-->
+            <!--android:textColor="@color/colorPrimary" />-->
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="Choose Image!" />
-    </FrameLayout>
+        <!--<TextView-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:gravity="center"-->
+            <!--android:text="Choose Image!" />-->
+    <!--</FrameLayout>-->
 
 </LinearLayout>
 

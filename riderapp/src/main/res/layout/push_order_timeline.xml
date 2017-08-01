@@ -15,7 +15,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         app:cardElevation="1dp"
-        app:contentPadding="0dp">
+        android:id="@+id/Cardview"
+        app:contentPadding="10dp">
 
         <LinearLayout
             android:id="@+id/PushOrders"
@@ -46,13 +47,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:drawableLeft="@drawable/esitmated_time"
+                        android:drawableLeft="@drawable/pending_outlets"
                         android:gravity="center_vertical"
                         android:textColor="@android:color/black"
                         tools:text=" 08.00" />
 
                     <android.support.v7.widget.AppCompatTextView
                         android:id="@+id/Alert"
+                        android:visibility="gone"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:gravity="right"
@@ -78,7 +80,7 @@
                     android:gravity="center_vertical"
                     android:textColor="@android:color/black"
                     android:textStyle="bold"
-                    tools:text="Pizza hut, Pralhad nagar" />
+                    tools:text="Expense 1" />
 
 
                 <android.support.v7.widget.AppCompatTextView
@@ -88,9 +90,11 @@
                     android:paddingLeft="30dp"
                     android:textColor="@android:color/black"
                     android:textSize="13sp"
+                    android:layout_marginBottom="10dp"
                     tools:text="Sector 15, Navi mumbai,lbs road,raj legacy socity" />
             </LinearLayout>
             <TextView
+                android:visibility="gone"
                 android:id="@+id/Cash"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -111,6 +115,7 @@
                 android:gravity="center"
                 android:textColor="#fff"/>
             <LinearLayout
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/Hide"

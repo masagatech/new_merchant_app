@@ -70,6 +70,10 @@ public final class Tables {
         public static final String Task_Creat_On = "task_creat_on";
         public static final String Is_Server_Send = "is_server_send";
         public static final String Task_Time= "task_time";
+        public static final String Task_Images_Paths= "task_image_paths";
+        public static final String EXP_ID= "exp_id";
+        public static final String EXP_Value= "exp_value";
+        public static final String EXP_Disc= "exp_disc";
 
     }
 
@@ -88,6 +92,38 @@ public final class Tables {
         public static final String Tag_Creat_On = "tag_creat_on";
         public static final String Is_Server_Send = "is_server_send";
 
+    }
+
+    public static class tbltasks{
+
+        public static final String name = "tbl_task";
+
+        public static final String Task_Id = "id";
+        public static final String Task_Nature = "task_nature";
+        public static final String Task_Status = "task_status";
+        public static final String Task_Value = "task_value";
+        public static final String Task_Remark = "task_remark";
+        public static final String Task_Tags = "task_tags";
+        public static final String Task_Creat_On = "task_creat_on";
+        public static final String Is_Server_Send = "is_server_send";
+        public static final String Tks_id = "tks_id";
+        public static final String EXP_ID= "exp_id";
+        public static final String EXP_Value= "exp_value";
+        public static final String EXP_Disc= "exp_disc";
+    }
+
+    public static class tblexpense{
+
+        public static final String name = "tbl_expense";
+
+        public static final String Expense_Id = "id";
+        public static final String Expense_Name = "expense_name";
+        public static final String Expense_Value = "expense_value";
+        public static final String Expense_Code= "expense_code";
+        public static final String Expense_Disc = "expense_disc";
+        public static final String Expense_Server = "expense_server";
+        public static final String Exp_ID = "exp_id";
+        public static final String Expense_Is_Active = "expense_is_active";
     }
 
 

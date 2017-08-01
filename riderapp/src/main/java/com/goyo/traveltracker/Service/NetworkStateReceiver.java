@@ -9,6 +9,8 @@ import android.util.Log;
 
 import com.goyo.traveltracker.forms.all_order;
 import com.goyo.traveltracker.forms.dashboard;
+import com.goyo.traveltracker.forms.expense;
+import com.goyo.traveltracker.forms.pending_order;
 
 /**
  * Created by mis on 14-Jul-17.
@@ -33,6 +35,15 @@ public class NetworkStateReceiver extends BroadcastReceiver {
 
         if (isWiFi) {
             if (isConnected) {
+
+                //sending expense update to server
+                expense expense=new expense();
+                expense.SendOfflineExpensstoServer();
+
+                //sending task update to server
+                pending_order pending_order=new pending_order();
+                pending_order.SendOfflineTaskstoServer();
+
                 //sending tags to server on network changes
                 all_order all_order=new all_order();
                 all_order.SendOfflineTagstoServer();
@@ -49,6 +60,10 @@ public class NetworkStateReceiver extends BroadcastReceiver {
             }
         } else if (isMobile) {
             if (isConnected) {
+
+                //sending task update to server
+                pending_order pending_order=new pending_order();
+                pending_order.SendOfflineTaskstoServer();
 
                 //sending tags to server on network changes
                 all_order all_order=new all_order();

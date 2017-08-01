@@ -18,11 +18,11 @@ import java.lang.reflect.Type;
  */
 public class Global {
 
-//      public final static String REST_URL = "http://order.goyo.in:8082/goyoapi";
-//      public static final String SOCKET_URL = "http://13.126.2.220:8083/";
+      public final static String REST_URL = "http://traveltrack.goyo.in:8080/goyoapi";
+      public static final String SOCKET_URL = "http://traveltrack.goyo.in:8080/";
 
-    public final static String REST_URL = "http://192.168.1.105:8092/goyoapi";
-    public static final String SOCKET_URL = "http://192.168.1.105:8091/";
+//    public final static String REST_URL = "http://192.168.1.101:8092/goyoapi";
+//    public static final String SOCKET_URL = "http://192.168.1.101:8091/";
 
 //    public final static String REST_URL = "http://192.168.43.10:8092/goyoapi";
 //    public static final String SOCKET_URL = "http://192.168.43.10:8083/";
@@ -64,20 +64,23 @@ public class Global {
         getAvailRider("getNotify", REST_URL + APIName+"/getAvailRider"),
         getMOM("getMOM", REST_URL +"/getMOM"),
         getOrdersCount("getOrdersCount", REST_URL + APIName+"/getOrdersCount"),
-        getAllocateTask("getAllocateTask", REST_URL +"/getAllocateTask"),
+        getTaskAllocate("getTaskAllocate", REST_URL +"/getTaskAllocate"),
         starttripswitch("starttrip", REST_URL + "/tripapi/start"),
         stoptripswitch("stoptrip", REST_URL + "/tripapi/stop"),
         getEmpStatus("getEmpStatus", REST_URL +"/getEmpStatus"),
         saveTripStops("saveTripStops", REST_URL +"/saveTripStops"),
         getTripStops("getTripStops", REST_URL +"/getTripStops"),
         getMOM2("getMOM", REST_URL +"/getMOM"),
-        saveNatureTask("saveNatureTask", REST_URL +"/saveNatureTask"),
+        saveTaskNature("saveTaskNature", REST_URL +"/saveTaskNature"),
         getTripReports("getTripReports", REST_URL +"/getTripReports"),
-        getNatureTask("getNatureTask", REST_URL +"/getNatureTask"),
+        getNatureTask("getTaskNature", REST_URL +"/getTaskNature"),
         saveTagInfo("saveTagInfo", REST_URL +"/saveTagInfo"),
         getTagDetails("getTagDetails", REST_URL +"/getTagDetails"),
         getPushTagDetails("getPushTagDetails", REST_URL +"/getPushTagDetails"),
-        livebeats("livebeats", REST_URL +"/livebeats");
+        livebeats("livebeats", REST_URL +"/livebeats"),
+        mobileupload("mobileupload", REST_URL +"/mobileupload"),
+        getExpenseDetails("getExpenseDetails", REST_URL +"/getExpenseDetails"),
+        saveExpenseDetails("saveExpenseDetails", REST_URL +"/saveExpenseDetails");
 
 
 

@@ -18,7 +18,7 @@ public class model_order_details {
     @SerializedName("ret")
     public int ret;
 
-    @SerializedName("strtm")
+    @SerializedName("trpdate")
     public String strtm;
 
     @SerializedName("chkin")

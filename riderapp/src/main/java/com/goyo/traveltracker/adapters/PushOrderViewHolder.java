@@ -1,5 +1,6 @@
 package com.goyo.traveltracker.adapters;
 
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
@@ -39,6 +40,8 @@ public class PushOrderViewHolder extends RecyclerView.ViewHolder {
     LinearLayout mHide;
     @BindView(R.id.Rider_Assign)
     TextView mRider_Assign;
+    @BindView(R.id.Cardview)
+    CardView Cardview;
 
     public PushOrderViewHolder(View itemView, int viewType) {
         super(itemView);

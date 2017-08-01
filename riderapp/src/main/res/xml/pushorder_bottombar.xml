@@ -1,23 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <tabs>
     <tab
-        id="@+id/tab_new"
-        icon="@drawable/ic_relesenew"
-        title="New"
-        barColorWhenSelected="#ffffbb33"/>
-    <tab
         id="@+id/tab_waiting"
         icon="@drawable/ic_action_wait"
-        title="Waiting"
+        title="Pending"
         barColorWhenSelected="#ffff4444"/>
     <tab
         id="@+id/tab_allocated"
         icon="@drawable/ic_action_done"
-        title="Allocated"
+        title="Completed"
         barColorWhenSelected="#ff99cc00"/>
-    <tab
-        id="@+id/tab_all"
-        icon="@drawable/ic_action_all"
-        title="All"
-        barColorWhenSelected="#ff33b5e5"/>
 </tabs>

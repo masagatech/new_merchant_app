@@ -15,6 +15,8 @@ import android.content.IntentFilter;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
@@ -71,6 +73,11 @@ import com.goyo.traveltracker.utils.SHP;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -85,6 +92,7 @@ import static com.goyo.traveltracker.Service.RiderStatus.handler;
 import static com.goyo.traveltracker.forms.pending_order.TripId;
 import static com.goyo.traveltracker.gloabls.Global.urls.getEmpStatus;
 import static com.goyo.traveltracker.gloabls.Global.urls.getOrders;
+import static com.goyo.traveltracker.gloabls.Global.urls.mobileupload;
 
 public class dashboard extends AppCompatActivity implements LocationListener,
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
@@ -167,6 +175,24 @@ public class dashboard extends AppCompatActivity implements LocationListener,
 
         //Check if GPS on in user phone, If not prompt them on
         settingsrequest();
+
+
+        //custem image
+        Bitmap bm = BitmapFactory.decodeResource( getResources(), R.drawable.custum);
+        String extStorageDirectory = this.getApplicationInfo().dataDir.toString();
+        File file = new File(extStorageDirectory, "default_image.PNG");
+        OutputStream outStream = null;
+        try {
+            outStream = new FileOutputStream(file);
+            bm.compress(Bitmap.CompressFormat.PNG, 100, outStream);
+            outStream.flush();
+            outStream.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
 
 
         //cgetting current location
@@ -576,27 +602,49 @@ public class dashboard extends AppCompatActivity implements LocationListener,
                 Gson gson = new Gson();
                 Type type = new TypeToken<ArrayList<String>>() {}.getType();
                 ArrayList<String> TagsArray = gson.fromJson(d.get(i).get(Tables.tblofflinetask.Task_Tags), type);
-                String tag= Joiner.on("','").join(TagsArray);
+
+
+                String tag= Joiner.on(",").join(TagsArray);
                 final int pos=i;
-                JsonObject json = new JsonObject();
-                json.addProperty("stpnm", d.get(i).get(Tables.tblofflinetask.Task_Title));
-                json.addProperty("stpdesc", d.get(i).get(Tables.tblofflinetask.Task_Body));
-                json.addProperty("lat", d.get(i).get(Tables.tblofflinetask.Task_Lat));
-                json.addProperty("lng", d.get(i).get(Tables.tblofflinetask.Task_Lon));
-                json.addProperty("uid", Global.loginusr.getDriverid()+"");
-                json.addProperty("cuid",d.get(i).get(Tables.tblofflinetask.Task_Creat_On)+", "+d.get(i).get(Tables.tblofflinetask.Task_Time) );
-                json.addProperty("enttid", Global.loginusr.getEnttid()+"");
-                json.addProperty("trpid",TripId);
-                json.addProperty("tag","{'" + tag + "'}");
+
                 Ion.with(this)
-                        .load(Global.urls.saveTagInfo.value)
-                        .setJsonObjectBody(json)
+                        .load(mobileupload.value)
+                        .setMultipartParameter("enttid", Global.loginusr.getEnttid()+"")
+                        .setMultipartParameter("uid",  Global.loginusr.getDriverid()+"")
+                        .setMultipartParameter("stpnm",  d.get(i).get(Tables.tblofflinetask.Task_Title))
+                        .setMultipartParameter("stpdesc", d.get(i).get(Tables.tblofflinetask.Task_Body))
+                        .setMultipartParameter("lat", d.get(i).get(Tables.tblofflinetask.Task_Lat))
+                        .setMultipartParameter("lng", d.get(i).get(Tables.tblofflinetask.Task_Lon))
+                        .setMultipartParameter("trpid", TripId)
+                        .setMultipartParameter("cuid", d.get(i).get(Tables.tblofflinetask.Task_Creat_On)+", "+d.get(i).get(Tables.tblofflinetask.Task_Time))
+                        .setMultipartParameter("tag","{" + tag + "}")
+                        .setMultipartParameter("expid", d.get(i).get(Tables.tblofflinetask.EXP_ID))
+                        .setMultipartParameter("expval",  d.get(i).get(Tables.tblofflinetask.EXP_Value))
+                        .setMultipartParameter("expdesc",  d.get(i).get(Tables.tblofflinetask.EXP_Disc))
+                        .setMultipartFile("uploadimg", new File( d.get(i).get(Tables.tblofflinetask.Task_Images_Paths)))
                         .asJsonObject()
                         .setCallback(new FutureCallback<JsonObject>() {
+//               String tag= Joiner.on("','").join(TagsArray);
+//                JsonObject json = new JsonObject();
+//                json.addProperty("stpnm", d.get(i).get(Tables.tblofflinetask.Task_Title));
+//                json.addProperty("stpdesc", d.get(i).get(Tables.tblofflinetask.Task_Body));
+//                json.addProperty("lat", d.get(i).get(Tables.tblofflinetask.Task_Lat));
+//                json.addProperty("lng", d.get(i).get(Tables.tblofflinetask.Task_Lon));
+//                json.addProperty("uid", Global.loginusr.getDriverid()+"");
+//                json.addProperty("cuid",d.get(i).get(Tables.tblofflinetask.Task_Creat_On)+", "+d.get(i).get(Tables.tblofflinetask.Task_Time) );
+//                json.addProperty("enttid", Global.loginusr.getEnttid()+"");
+//                json.addProperty("trpid",TripId);
+//                json.addProperty("tag","{'" + tag + "'}");
+//                Ion.with(this)
+//                        .load(Global.urls.saveTagInfo.value)
+//                        .setJsonObjectBody(json)
+//                        .asJsonObject()
+//                        .setCallback(new FutureCallback<JsonObject>() {
                             @Override
                             public void onCompleted(Exception e, JsonObject result) {
                                 // do stuff with the result or error
                                 try {
+//                                    Toast.makeText(dashboard.this,"Success!", Toast.LENGTH_SHORT).show();
                                     SQLBase db = new SQLBase(dashboard.this);
                                     db. OFFLINE_TASK_UPDATE(d.get(pos).get(Tables.tblofflinetask.Task_Title),"0");
 
@@ -722,7 +770,7 @@ public class dashboard extends AppCompatActivity implements LocationListener,
 
     @OnClick(R.id.Cash_Collection)
     void click2() {
-        Intent intent = new Intent(this, cash_collection.class);
+        Intent intent = new Intent(this, expense.class);
         startActivity(intent);
 
     }

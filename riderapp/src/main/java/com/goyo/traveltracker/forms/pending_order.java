@@ -1,8 +1,8 @@
 package com.goyo.traveltracker.forms;
 
 import android.app.ProgressDialog;
-import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.IdRes;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,45 +10,44 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.google.api.client.repackaged.com.google.common.base.Joiner;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.goyo.traveltracker.R;
 import com.goyo.traveltracker.adapters.pending_order_adapter;
+import com.goyo.traveltracker.database.SQLBase;
+import com.goyo.traveltracker.database.Tables;
 import com.goyo.traveltracker.gloabls.Global;
 import com.goyo.traveltracker.model.model_pending;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
+import com.roughike.bottombar.BottomBar;
+import com.roughike.bottombar.OnTabSelectListener;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 
 import static com.goyo.traveltracker.R.id.txtNodata;
 import static com.goyo.traveltracker.Service.RiderStatus.Rider_Lat;
 import static com.goyo.traveltracker.Service.RiderStatus.Rider_Long;
-import static com.goyo.traveltracker.gloabls.Global.urls.getAllocateTask;
+import static com.goyo.traveltracker.gloabls.Global.urls.getTaskAllocate;
 import static com.goyo.traveltracker.gloabls.Global.urls.setTripAction;
 
 
 public class pending_order extends AppCompatActivity {
 
-    @BindView(R.id.Btn_Call)
-    ImageButton Btn_Call;
-    @BindView(R.id.Btn_Delivery)
-    Button Btn_Delivery;
-    @BindView(R.id.Btn_map)
-    ImageButton Btn_Map;
-    @BindView(R.id.Btn_Return)
-    Button Btn_Return;
-    @BindView(R.id.Collected_Cash)
-    EditText collected_cash;
+    @BindView(R.id.bottomBars)
+    BottomBar bottomBar;
+
 
     private RecyclerView mRecyclerView;
     private ImageButton StartRide,BackButton;
@@ -57,29 +56,102 @@ public class pending_order extends AppCompatActivity {
     private boolean mWithLinePadding;
     public static String TripId = "0";
     private ProgressDialog loader;
+    private  String Status = "0";
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pending_order);
+        ButterKnife.bind(this);
 
 //        ActionBar actionBar = getSupportActionBar();
 //        actionBar.setCustomView(R.layout.pending_order_item);
 //        actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME | ActionBar.DISPLAY_SHOW_CUSTOM);
 
+
+
+
+//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+//        setSupportActionBar(toolbar);
+
         mOrientation = Orientation.VERTICAL;
         mWithLinePadding = true;
+
 
         setTitle(getResources().getString(R.string.Pending_Order));
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        bottomBar.setDefaultTab(R.id.tab_waiting);
+
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
-        mRecyclerView.setLayoutManager(getLinearLayoutManager());
-        mRecyclerView.setHasFixedSize(true);
+//        mRecyclerView.setLayoutManager(getLinearLayoutManager());
+//        mRecyclerView.setHasFixedSize(true);
 
         mSwipeRefreshLayout=(SwipeRefreshLayout) findViewById(R.id.Refresh);
+
+
+
+        //tab list
+        bottomBar.setOnTabSelectListener(new OnTabSelectListener() {
+            @Override
+            public void onTabSelected(@IdRes int tabId) {
+                if (tabId == R.id.tab_waiting) {
+
+                    Status="0";
+
+                    //refresh data at first time
+                    mSwipeRefreshLayout.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            mSwipeRefreshLayout.setRefreshing(true);
+                            //api call
+                            DataFromServer();
+//                            SetPush(Status);
+                        }
+                    });
+
+                    mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                        @Override
+                        public void onRefresh() {
+                            // Refresh items and get data from server
+                            DataFromServer();
+                        }
+                    });
+//                    mRecyclerView.setLayoutManager(getLinearLayoutManager());
+//                    mRecyclerView.setHasFixedSize(true);
+
+                }else if(tabId == R.id.tab_allocated)
+                {
+                    Status="1";
+//                    mRecyclerView.invalidate();
+                    //refresh data at first time
+                    mSwipeRefreshLayout.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            mSwipeRefreshLayout.setRefreshing(true);
+                            //api call
+                            mRecyclerView.setVisibility(View.INVISIBLE);
+                            findViewById(txtNodata).setVisibility(View.VISIBLE);
+                            mSwipeRefreshLayout.setRefreshing(false);
+                        }
+                    });
+
+                    mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                        @Override
+                        public void onRefresh() {
+                            // Refresh items and get data from server
+                            mRecyclerView.setVisibility(View.INVISIBLE);
+//                            StartRide.setVisibility(View.GONE);
+                            findViewById(txtNodata).setVisibility(View.VISIBLE);
+                            mSwipeRefreshLayout.setRefreshing(false);
+                        }
+                    });
+                }
+
+            }
+        });
 
         //refresh data at first time
         mSwipeRefreshLayout.post(new Runnable() {
@@ -195,10 +267,10 @@ public class pending_order extends AppCompatActivity {
 
         JsonObject json = new JsonObject();
         json.addProperty("flag", "byemp");
-        json.addProperty("empid","1");
+        json.addProperty("empid",Global.loginusr.getDriverid());
 
         Ion.with(this)
-                .load(getAllocateTask.value)
+                .load(getTaskAllocate.value)
                 .setJsonObjectBody(json)
                 .asJsonObject()
                 .setCallback(new FutureCallback<JsonObject>() {
@@ -227,46 +299,100 @@ public class pending_order extends AppCompatActivity {
         return new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
     }
 
-    private void startTrip(){
+//    private void startTrip(){
+//
+//        JsonObject json = new JsonObject();
+//        json.addProperty("flag", "start");
+//        json.addProperty("loc", Rider_Lat+","+Rider_Long);
+//        json.addProperty("tripid", TripId);
+//        json.addProperty("rdid", Global.loginusr.getDriverid() + "");
+//
+//        Ion.with(this)
+//                .load(setTripAction.value)
+//                .setJsonObjectBody(json)
+//                .asJsonObject()
+//                .setCallback(new FutureCallback<JsonObject>() {
+//                    @Override
+//                    public void onCompleted(Exception e, JsonObject result) {
+//
+//                        try {
+//                            if (result != null) Log.v("result", result.toString());
+//                          JsonObject Data=  result.get("data").getAsJsonObject();
+//                            if(Data.get("status").getAsBoolean()){
+//                                TripId=Data.get("tripid").toString();
+//                                StartRide.setBackgroundColor(Color.RED);
+//                                Toast.makeText(getApplicationContext(),"Your Ride Has started"
+//                                        ,Toast.LENGTH_SHORT).show();
+//                                StartRide.setBackgroundColor(Color.parseColor("#ffff4444"));
+//                                StartRide.setImageResource(R.drawable.end_trip);
+//                                mTimeLineAdapter.tripid = TripId;
+//                            }
+//                            else{
+//                                Toast.makeText(getApplicationContext(),result.get("data").getAsJsonObject().get("msg").toString()
+//                                        ,Toast.LENGTH_SHORT).show();
+//                            }
+//                        }
+//                        catch (Exception ea) {
+//                            ea.printStackTrace();
+//                        }
+//                    }
+//                });
+//
+//    }
 
-        JsonObject json = new JsonObject();
-        json.addProperty("flag", "start");
-        json.addProperty("loc", Rider_Lat+","+Rider_Long);
-        json.addProperty("tripid", TripId);
-        json.addProperty("rdid", Global.loginusr.getDriverid() + "");
 
-        Ion.with(this)
-                .load(setTripAction.value)
-                .setJsonObjectBody(json)
-                .asJsonObject()
-                .setCallback(new FutureCallback<JsonObject>() {
-                    @Override
-                    public void onCompleted(Exception e, JsonObject result) {
+    public void SendOfflineTaskstoServer() {
+        SQLBase db = new SQLBase(this);
+        final List<HashMap<String,String>> d = db. Get_Tasks_Offline_Pending();
+        if(d.size()>0) {
+            for (int i = 0; i <= d.size() - 1; i++) {
+                final int pos=i;
+                Gson gson = new Gson();
+                Type type = new TypeToken<ArrayList<String>>() {}.getType();
+                ArrayList<String> TagsArray = gson.fromJson(d.get(i).get(Tables.tbltasks.Task_Tags), type);
+                String tag= Joiner.on(",").join(TagsArray);
 
-                        try {
-                            if (result != null) Log.v("result", result.toString());
-                          JsonObject Data=  result.get("data").getAsJsonObject();
-                            if(Data.get("status").getAsBoolean()){
-                                TripId=Data.get("tripid").toString();
-                                StartRide.setBackgroundColor(Color.RED);
-                                Toast.makeText(getApplicationContext(),"Your Ride Has started"
-                                        ,Toast.LENGTH_SHORT).show();
-                                StartRide.setBackgroundColor(Color.parseColor("#ffff4444"));
-                                StartRide.setImageResource(R.drawable.end_trip);
-                                mTimeLineAdapter.tripid = TripId;
+
+                JsonObject json = new JsonObject();
+
+                json.addProperty("tntype", d.get(i).get(Tables.tbltasks.Task_Nature));
+                json.addProperty("tstype", d.get(i).get(Tables.tbltasks.Task_Status));
+                json.addProperty("value", d.get(i).get(Tables.tbltasks.Task_Value));
+                json.addProperty("remark", d.get(i).get(Tables.tbltasks.Task_Remark));
+                json.addProperty("cuid", d.get(i).get(Tables.tbltasks.Task_Creat_On));
+                json.addProperty("tskid", d.get(i).get(Tables.tbltasks.Tks_id));
+                json.addProperty("trpid", TripId);
+                json.addProperty("tag","{" + tag + "}");
+                json.addProperty("expid", d.get(i).get(Tables.tbltasks.EXP_ID));
+                json.addProperty("expval", d.get(i).get(Tables.tbltasks.EXP_Value));
+                json.addProperty("expdesc",d.get(i).get(Tables.tbltasks.EXP_Disc));
+
+                Ion.with(this)
+                        .load(Global.urls.saveTaskNature.value)
+                        .setJsonObjectBody(json)
+                        .asJsonObject()
+                        .setCallback(new FutureCallback<JsonObject>() {
+                            @Override
+                            public void onCompleted(Exception e, JsonObject result) {
+                                // do stuff with the result or error
+                                try {
+                                    SQLBase db = new SQLBase(pending_order.this);
+                                    db. TASK_UPDATE(d.get(pos).get(Tables.tbltasks.Tks_id),"1");
+
+                                } catch (Exception ea) {
+                                    ea.printStackTrace();
+                                }
+
+
                             }
-                            else{
-                                Toast.makeText(getApplicationContext(),result.get("data").getAsJsonObject().get("msg").toString()
-                                        ,Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                        catch (Exception ea) {
-                            ea.printStackTrace();
-                        }
-                    }
-                });
+                        });
+            }
+        }
 
+//        return data;
     }
+
+
 
     public void stopTrip(){
 
@@ -320,7 +446,7 @@ public class pending_order extends AppCompatActivity {
 //
 //
 //            StartRide.setVisibility(View.VISIBLE);
-//            findViewById(txtNodata).setVisibility(View.GONE);
+
 //            for (int i =0; i<=lst.size()-1 ;i ++){
 //                if(!lst.get(i).stats.equals("0")){
 //                    lst.remove(i);
@@ -335,14 +461,18 @@ public class pending_order extends AppCompatActivity {
 //                Text.setText(R.string.stoptrip_msg);
 //            }
             mRecyclerView.setVisibility(View.VISIBLE);
+            findViewById(txtNodata).setVisibility(View.GONE);
             mTimeLineAdapter = new pending_order_adapter(lst, mOrientation, mWithLinePadding);
             mTimeLineAdapter.tripid = TripId;
             mRecyclerView.setAdapter(mTimeLineAdapter);
             mTimeLineAdapter.notifyDataSetChanged();
 
+            mRecyclerView.setLayoutManager(getLinearLayoutManager());
+            mRecyclerView.setHasFixedSize(true);
+
         } else {
             mRecyclerView.setVisibility(View.INVISIBLE);
-            StartRide.setVisibility(View.GONE);
+//            StartRide.setVisibility(View.GONE);
             findViewById(txtNodata).setVisibility(View.VISIBLE);
         }
     }

@@ -24,14 +24,14 @@
     <TextView
         android:layout_marginTop="60dp"
         android:id="@+id/txtNodata"
-        android:drawableTop="@drawable/no_pending_data"
+        android:drawableTop="@drawable/novis"
         android:layout_width="match_parent"
         android:gravity="center"
         android:fontFamily="sans-serif-light"
         android:textColor="@color/blue_light"
         android:layout_height="wrap_content"
         android:text="@string/push_empthy_msg"
-        android:textSize="20sp"
+        android:textSize="14sp"
         android:visibility="gone"
         android:layout_centerInParent="true"
         />
