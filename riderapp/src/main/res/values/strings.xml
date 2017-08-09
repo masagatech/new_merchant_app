@@ -7,7 +7,7 @@
     <string name="del_schoolnm">Dhiru Bhai Ambani School</string>
     <string name="mytrp_title">Today\'s Trips</string>
     <string name="login_title">LOGIN</string>
-    <string name="login_usrnamehint">MOBILE NUMBER</string>
+    <string name="login_usrnamehint">MOBILE NUMBER/USERNAME</string>
     <string name="login_passwordhint">PASSWORD</string>
     <string name="login_loginbtntext">Sign In</string>
     <string name="dashboard_mytrips">Trips</string>
@@ -114,7 +114,7 @@
     <string name="exit_map" translatable="false">exit</string>
     <string name="notification_emthy_msg" translatable="false">You dont have any notification!</string>
     <string name="pending_empthy_msg" translatable="false">You dont have any Task right now!</string>
-<string name="push_empthy_msg" translatable="false">No Expense Data!</string>
+    <string name="push_empthy_msg" translatable="false">No Expense Data!</string>
     <string name="returned_empthy_msg" translatable="false">Sit Tight! More futures coming just for you!</string>
     <string name="orderdetails_date" translatable="false">DATE</string>
     <string name="orderdetails_total" translatable="false">TOTAL</string>
@@ -133,6 +133,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
     <string name="title_activity_today_visits_maps" translatable="false">Map</string>
+    <string name="MAPBOX_ACCESS_TOKEN">pk.eyJ1IjoidHJhdmVsdHJhY2tlciIsImEiOiJjajV3NXN0aXYwOWY4MndsdWo1cWZraDg1In0.Reg5xC0MqZwHb0fBIY3Tnw</string>
 
 
 </resources>

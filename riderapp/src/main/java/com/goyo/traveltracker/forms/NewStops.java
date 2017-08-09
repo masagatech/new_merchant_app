@@ -26,8 +26,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.allattentionhere.fabulousfilter.AAH_FabulousFragment;
@@ -104,8 +105,8 @@ public class NewStops extends AAH_FabulousFragment implements LocationListener{
     private static final int REQUEST_CODE_PICKER = 20;
     private static final int RC_CAMERA = 3000;
     private Button Btn_Add_Task;
-//    private ImageView imageView1,imageView2,imageView3;
-//    private TextView textView1;
+    private ImageView Count_Expense;
+    private TextView Count_Image;
     private FrameLayout ChooseImage,Expense;
     private static final String IMAGE_DIRECTORY = "/demonuts";
     private ChipsInput chipsInput;
@@ -115,7 +116,7 @@ public class NewStops extends AAH_FabulousFragment implements LocationListener{
         List<String> Exp;
     List<String> Exp_Id;
     private Spinner Expense_Type;
-    String Selected_Exp,Selected_Value,Selected_Disc;
+    String Selected_Exp,Selected_Value,Selected_Disc,Selected_EXP_Type;
 
 
     public static  NewStops newInstance() {
@@ -130,7 +131,7 @@ public class NewStops extends AAH_FabulousFragment implements LocationListener{
 
         settingsrequest();
         View contentView = View.inflate(getContext(), R.layout.activity_task__add, null);
-        RelativeLayout rl_content = (RelativeLayout) contentView.findViewById(R.id.rl_content);
+        LinearLayout rl_content = (LinearLayout) contentView.findViewById(R.id.rl_content);
 
 
         SQLBase db = new SQLBase(getActivity());
@@ -158,11 +159,12 @@ public class NewStops extends AAH_FabulousFragment implements LocationListener{
         remark = (EditText) contentView.findViewById(R.id.Task_Body);
         remark_title = (EditText) contentView.findViewById(R.id.Task_Title);
 
-        //image
-//        imageView1=(ImageView)contentView.findViewById(R.id.imag);
-//        textView1=(TextView) contentView.findViewById(R.id.tex);
+        //image and expense
+
         ChooseImage=(FrameLayout) contentView.findViewById(R.id.ChooseImage);
         Expense=(FrameLayout) contentView.findViewById(R.id.Expense);
+        Count_Expense=(ImageView) contentView.findViewById(R.id.Count_Expense);
+        Count_Image=(TextView) contentView.findViewById(R.id.Count_Image);
 
         ChooseImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -252,13 +254,13 @@ public class NewStops extends AAH_FabulousFragment implements LocationListener{
                     //checking if there is internet
                     if(IsMobailConnected){
                         if (!db.ISTASK_ALREDY_EXIST(Title)) {
-                            db.OFFLINE_TASK_ADDTASK(new model_task(Title,Body,Lat,Lon,TagString,formattedDate,"0",time,zipPath,Selected_Exp,Selected_Value,Selected_Disc));
+                            db.OFFLINE_TASK_ADDTASK(new model_task(Title,Body,Lat,Lon,TagString,formattedDate,"0",time,zipPath,Selected_Exp,Selected_EXP_Type,Selected_Value,Selected_Disc));
                         }else {
                             Toast.makeText(getActivity(), "This Stops Already Exist!", Toast.LENGTH_SHORT).show();
                         }
                     }else {
                         if (!db.ISTASK_ALREDY_EXIST(Title)) {
-                            db.OFFLINE_TASK_ADDTASK(new model_task(Title,Body,Lat,Lon,TagString,formattedDate,"1",time,zipPath,Selected_Exp,Selected_Value,Selected_Disc));
+                            db.OFFLINE_TASK_ADDTASK(new model_task(Title,Body,Lat,Lon,TagString,formattedDate,"1",time,zipPath,Selected_Exp,Selected_EXP_Type,Selected_Value,Selected_Disc));
                             closeFilter("closed");
                             Toast.makeText(getActivity(), "Saved successfully", Toast.LENGTH_SHORT).show();
                         }else {
@@ -300,22 +302,27 @@ public class NewStops extends AAH_FabulousFragment implements LocationListener{
         // disallow cancel of AlertDialog on click of back button and outside touch
         alert.setCancelable(false);
         alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                //icon
+                Count_Expense.setVisibility(View.GONE);
             }
         });
 
         alert.setPositiveButton("Save", new DialogInterface.OnClickListener() {
-
             @Override
             public void onClick(DialogInterface dialog, int which) {
+
                 int Pos = Expense_Type.getSelectedItemPosition();
                 if(Exp_Id.size()>0) {
                     Selected_Exp = Exp_Id.get(Pos);
                 }
+                Selected_EXP_Type=Expense_Type.getSelectedItem().toString();
                 Selected_Value = Expense_Value.getText().toString();
                 Selected_Disc = Expense_Disc.getText().toString();
+
+                //icon
+                Count_Expense.setVisibility(View.VISIBLE);
             }
         });
         AlertDialog dialog = alert.create();
@@ -379,6 +386,7 @@ public class NewStops extends AAH_FabulousFragment implements LocationListener{
                             try {
                                 Toast.makeText(getActivity(),"Success!", Toast.LENGTH_SHORT).show();
                                 closeFilter("closed");
+//                                ((dashboard)getActivity()).refreshMyData();
                             } catch (Exception ea) {
                                 ea.printStackTrace();
                             }
@@ -487,9 +495,12 @@ public class NewStops extends AAH_FabulousFragment implements LocationListener{
                         }
                     });
 
+            int count =CompressedImage.size();
             //showing custem image icon
-//            textView1.setVisibility(View.GONE);
-//            imageView1.setVisibility(View.VISIBLE);
+            if(count>0){
+              Count_Image.setVisibility(View.VISIBLE);
+              Count_Image.setText(count+"");
+            }
 
 
         }
@@ -497,9 +508,9 @@ public class NewStops extends AAH_FabulousFragment implements LocationListener{
         @Override
         public void onCancel() {
             Toast.makeText(getActivity(), "There was an Error", Toast.LENGTH_SHORT).show();
-//            textView1.setVisibility(View.VISIBLE);
-//            imageView1.setVisibility(View.GONE);
+
             //User canceled the pick activity
+            Count_Image.setVisibility(View.GONE);
         }
     }
 
@@ -509,7 +520,7 @@ public class NewStops extends AAH_FabulousFragment implements LocationListener{
         //You can change many settings in builder like limit , Pick mode and colors
         new Picker.Builder(getActivity(),new MyPickListener(),R.style.MIP_theme)
                 .setPickMode(Picker.PickMode.MULTIPLE_IMAGES)
-                .setLimit(5)
+                .setLimit(4)
                 .build()
                 .startActivity();
 

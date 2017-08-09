@@ -141,7 +141,7 @@ public class complated_order extends AppCompatActivity {
         List<HashMap<String,String>> d = db.Get_TASK();
         if(d.size()>0) {
             for (int i = 0; i <= d.size() - 1; i++) {
-                data.add(new model_task(d.get(i).get(Tables.tblofflinetask.Task_Title),d.get(i).get(Tables.tblofflinetask.Task_Body),d.get(i).get(Tables.tblofflinetask.Task_Lat),d.get(i).get(Tables.tblofflinetask.Task_Lon),d.get(i).get(Tables.tblofflinetask.Task_Tags),d.get(i).get(Tables.tblofflinetask.Task_Creat_On),d.get(i).get(Tables.tbltags.Is_Server_Send),d.get(i).get(Tables.tblofflinetask.Task_Time),d.get(i).get(Tables.tblofflinetask.Task_Images_Paths),d.get(i).get(Tables.tblofflinetask.EXP_ID),d.get(i).get(Tables.tblofflinetask.EXP_Value),d.get(i).get(Tables.tblofflinetask.EXP_Disc)));
+                data.add(new model_task(d.get(i).get(Tables.tblofflinetask.Task_Title),d.get(i).get(Tables.tblofflinetask.Task_Body),d.get(i).get(Tables.tblofflinetask.Task_Lat),d.get(i).get(Tables.tblofflinetask.Task_Lon),d.get(i).get(Tables.tblofflinetask.Task_Tags),d.get(i).get(Tables.tblofflinetask.Task_Creat_On),d.get(i).get(Tables.tblofflinetask.Is_Server_Send),d.get(i).get(Tables.tblofflinetask.Task_Time),d.get(i).get(Tables.tblofflinetask.Task_Images_Paths),d.get(i).get(Tables.tblofflinetask.EXP_ID),d.get(i).get(Tables.tblofflinetask.EXP_Type),d.get(i).get(Tables.tblofflinetask.EXP_Value),d.get(i).get(Tables.tblofflinetask.EXP_Disc)));
             }
         }
 

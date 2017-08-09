@@ -71,6 +71,7 @@ public final class Tables {
         public static final String Is_Server_Send = "is_server_send";
         public static final String Task_Time= "task_time";
         public static final String Task_Images_Paths= "task_image_paths";
+        public static final String EXP_Type= "exp_type";
         public static final String EXP_ID= "exp_id";
         public static final String EXP_Value= "exp_value";
         public static final String EXP_Disc= "exp_disc";
@@ -110,6 +111,22 @@ public final class Tables {
         public static final String EXP_ID= "exp_id";
         public static final String EXP_Value= "exp_value";
         public static final String EXP_Disc= "exp_disc";
+        public static final String LAT= "lat";
+        public static final String LON= "lon";
+        public static final String TIME= "time";
+    }
+
+    public static class tblActivitySumm{
+
+
+        public static final String Creat_On = "creat_on";
+        public static final String LAT= "lat";
+        public static final String LON= "lon";
+        public static final String TIME= "time";
+         public static final String TITLE= "title";
+        public static final String TYPE= "type";
+
+
     }
 
     public static class tblexpense{
@@ -124,6 +141,19 @@ public final class Tables {
         public static final String Expense_Server = "expense_server";
         public static final String Exp_ID = "exp_id";
         public static final String Expense_Is_Active = "expense_is_active";
+    }
+
+    public static class tblleave{
+
+        public static final String name = "tbl_leave";
+
+        public static final String Leave_Id = "id";
+        public static final String Leave_From = "leave_from";
+        public static final String Leave_To= "leave_to";
+        public static final String Leave_Type= "leave_type";
+        public static final String Leave_Server = "leave_server";
+        public static final String Leave_Details = "leave_details";
+        public static final String Leave_Created_By = "leave_created_by";
     }
 
 

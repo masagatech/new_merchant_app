@@ -116,7 +116,7 @@ public class dashboard extends AppCompatActivity implements LocationListener,
 
     private PopupWindow OrderPopup;
     private Button Btn_Accept, Btn_Reject;
-    private FloatingActionButton Flot_add_Task;
+    private FloatingActionButton Flot_add_Task,Map;
     private TextView Deliver_at_Text;
     private TextView PopUp_CountText;
     private TextView Online, RiderName;
@@ -240,6 +240,19 @@ public class dashboard extends AppCompatActivity implements LocationListener,
 
             }
         });
+
+
+        //map
+        Map=(FloatingActionButton) findViewById(R.id.Map);
+        Map.setOnClickListener(new View.OnClickListener() {
+                                   @Override
+                                   public void onClick(View v) {
+                                       Intent i = new Intent(dashboard.this, TodayVisitsMapsActivity.class);
+                                       startActivity(i);
+                                   }
+                               });
+
+
 
 
         //showing rider name in actionbar
@@ -917,6 +930,16 @@ public class dashboard extends AppCompatActivity implements LocationListener,
             } catch(PackageManager.NameNotFoundException e){
                 e.printStackTrace();
             }
+    }
+
+    public void refreshMyData(){
+        // do your operations here.
+        Intent intent = getIntent();
+        overridePendingTransition(0, 0);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        finish();
+        overridePendingTransition(0, 0);
+        startActivity(intent);
     }
 
     private void PendingCountOnCheck() {

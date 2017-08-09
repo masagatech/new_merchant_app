@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:float="http://schemas.android.com/apk/res-auto"
+    tools:context="com.goyo.traveltracker.forms.AddLeave"
+android:orientation="vertical">
+
+    <TextView
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_width="match_parent"
+        android:text="Leave From"
+        android:textStyle="bold"
+        android:textColor="@color/blue_light"
+        android:layout_height="wrap_content" />
+
+    <EditText
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/border_cash_collection"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:padding="10dp"
+        android:clickable="true"
+        android:focusable="false"
+        android:longClickable="false"
+        android:id="@+id/leave_from"
+        android:hint="Leave From" />
+
+<TextView
+    android:layout_marginRight="20dp"
+    android:layout_marginLeft="20dp"
+    android:layout_width="match_parent"
+    android:text="Leave to"
+    android:textStyle="bold"
+    android:textColor="@color/blue_light"
+    android:layout_height="wrap_content" />
+    <EditText
+        android:background="@drawable/border_cash_collection"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:padding="10dp"
+        android:layout_marginTop="5dp"
+       android:layout_marginRight="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginBottom="20dp"
+        android:id="@+id/leave_to"
+        android:clickable="true"
+        android:focusable="false"
+        android:longClickable="false"
+        android:hint="Leave to" />
+
+
+    <TextView
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_width="match_parent"
+        android:text="Leave Type"
+        android:textStyle="bold"
+        android:textColor="@color/blue_light"
+        android:layout_height="wrap_content" />
+    <Spinner
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:padding="10dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginBottom="20dp"
+        android:id="@+id/leave_type" />
+
+    <TextView
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_width="match_parent"
+        android:text="Details"
+        android:textStyle="bold"
+        android:textColor="@color/blue_light"
+        android:layout_height="wrap_content" />
+
+    <EditText
+            android:background="@drawable/border_cash_collection"
+            android:layout_height="100dp"
+            android:layout_width="match_parent"
+            android:padding="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="20dp"
+            android:id="@+id/leave_details"
+            android:inputType="textMultiLine"
+            android:gravity="top" />
+    <Button
+        android:id="@+id/leave_apply"
+        android:layout_margin="20dp"
+        android:background="@color/orange_light"
+        android:textColor="@color/white"
+        android:text="Apply"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+</LinearLayout>

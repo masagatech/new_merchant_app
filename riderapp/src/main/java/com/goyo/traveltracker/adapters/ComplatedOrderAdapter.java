@@ -1,7 +1,11 @@
 package com.goyo.traveltracker.adapters;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.support.v4.content.ContextCompat;
@@ -11,6 +15,8 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -25,9 +31,17 @@ import com.goyo.traveltracker.utils.VectorDrawableUtils;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 import static com.goyo.traveltracker.gloabls.Global.urls.getTripStops;
 
@@ -43,6 +57,8 @@ public class ComplatedOrderAdapter extends RecyclerView.Adapter<pending_order_vi
     private boolean mWithLinePadding;
     private LayoutInflater mLayoutInflater;
     private ProgressDialog loader;
+
+
 
 
 
@@ -86,7 +102,7 @@ public class ComplatedOrderAdapter extends RecyclerView.Adapter<pending_order_vi
             }
         }
 
-        Gson gson = new Gson();
+        final Gson gson = new Gson();
         Type type = new TypeToken<ArrayList<String>>() {}.getType();
 
         ArrayList<String> TagsArray = gson.fromJson(timeLineModel.get_tags(), type);
@@ -99,6 +115,10 @@ public class ComplatedOrderAdapter extends RecyclerView.Adapter<pending_order_vi
         holder.mTime.setText(timeLineModel.get_time());
         holder.mMarchant.setText(timeLineModel.get_title());
         holder.Tags.setTags(TagsArray);
+
+
+
+
 
 
         //showing border and text if order is delivered or retruned
@@ -139,6 +159,7 @@ public class ComplatedOrderAdapter extends RecyclerView.Adapter<pending_order_vi
 //        colors.add(color3);
 //        colors.add(color4);
 //        holder.Tags.setTags(TagsArray, colors);
+
 
 
 
@@ -201,6 +222,160 @@ public class ComplatedOrderAdapter extends RecyclerView.Adapter<pending_order_vi
 //            holder.mDate.setText("");
 
 
+        }
+        if(timeLineModel.get_exp_id()==null){
+            holder.ArrowRemark.setImageResource(R.drawable.cwac_cam2_ic_close_white);
+            holder.Btn_Map.setEnabled(false);
+        }else {
+            holder.ArrowRemark.setImageResource(R.drawable.ic_done);
+            holder.Btn_Map.setEnabled(true);
+            holder.Btn_Map.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    View alertLayout = mLayoutInflater.inflate(R.layout.expense_data, null);
+
+                    final TextView Expense_Type = (TextView) alertLayout.findViewById(R.id.Expense_Type);
+                    final TextView Expense_Value = (TextView) alertLayout.findViewById(R.id.Expense_Value);
+                    final TextView Expense_Disc = (TextView) alertLayout.findViewById(R.id.Expense_Disc);
+
+                    Expense_Type.setText(timeLineModel.get_exp_type());
+                    Expense_Value.setText(timeLineModel.get_exp_value());
+                    Expense_Disc.setText(timeLineModel.get_exp_disc());
+
+
+                    AlertDialog.Builder alert = new AlertDialog.Builder(mContext);
+                    alert.setTitle("Expense");
+                    // this is set the view from XML inside AlertDialog
+                    alert.setView(alertLayout);
+                    // disallow cancel of AlertDialog on click of back button and outside touch
+                    alert.setCancelable(false);
+                    alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                        }
+                    });
+                    AlertDialog dialog = alert.create();
+                    dialog.show();
+
+                }
+            });
+        }
+
+        String zipPath = mContext.getApplicationInfo().dataDir+"/default_image.PNG";
+
+        if(timeLineModel.get_image_paths().equals(zipPath)){
+            holder.Btn_AcceptReject.setImageResource(R.drawable.cwac_cam2_ic_close_white);
+            holder.Btn_Call.setEnabled(false);
+        }else {
+            holder.Btn_AcceptReject.setImageResource(R.drawable.ic_done);
+            holder.Btn_Call.setEnabled(true);
+            holder.Btn_Call.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    View alertLayout = mLayoutInflater.inflate(R.layout.image_data, null);
+
+                    final ImageView ImageView1 = (ImageView) alertLayout.findViewById(R.id.image1);
+                    final ImageView ImageView2 = (ImageView) alertLayout.findViewById(R.id.image2);
+                    final ImageView ImageView3 = (ImageView) alertLayout.findViewById(R.id.image3);
+                    final ImageView ImageView4 = (ImageView) alertLayout.findViewById(R.id.image4);
+
+                    ArrayList<String> f = new ArrayList<String>();// list of file paths
+
+                    //getting selected image
+                    File TargetLocation = new File(mContext.getApplicationInfo().dataDir+"/new"+timeLineModel.get_title());
+                    File ZipFile = new File(timeLineModel.get_image_paths());
+
+
+                    if(!TargetLocation.exists()) {
+                        try {
+                            //unzip
+                            unzip(ZipFile, TargetLocation);
+                            //get images from folders
+                            getFromSdcard(TargetLocation,f);
+
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }else {
+                        getFromSdcard(TargetLocation,f);
+                    }
+
+                    if(f.size()==1) {
+                        Bitmap myBitmap = BitmapFactory.decodeFile(f.get(0));
+                        ImageView1.setImageBitmap(myBitmap);
+
+                        ImageView2.setVisibility(View.GONE);
+                        ImageView3.setVisibility(View.GONE);
+                        ImageView4.setVisibility(View.GONE);
+                    }else if (f.size()==2){
+                        Bitmap myBitmap = BitmapFactory.decodeFile(f.get(0));
+                        ImageView1.setImageBitmap(myBitmap);
+
+                        Bitmap myBitmap2 = BitmapFactory.decodeFile(f.get(1));
+                        ImageView2.setImageBitmap(myBitmap2);
+
+                        ImageView3.setVisibility(View.GONE);
+                        ImageView4.setVisibility(View.GONE);
+                    }else if (f.size()==3){
+                        Bitmap myBitmap = BitmapFactory.decodeFile(f.get(0));
+                        ImageView1.setImageBitmap(myBitmap);
+
+                        Bitmap myBitmap2 = BitmapFactory.decodeFile(f.get(1));
+                        ImageView2.setImageBitmap(myBitmap2);
+
+                        Bitmap myBitmap3 = BitmapFactory.decodeFile(f.get(2));
+                        ImageView3.setImageBitmap(myBitmap3);
+
+                        ImageView4.setVisibility(View.GONE);
+                    }else if (f.size()==4){
+                        Bitmap myBitmap = BitmapFactory.decodeFile(f.get(0));
+                        ImageView1.setImageBitmap(myBitmap);
+
+                        Bitmap myBitmap2 = BitmapFactory.decodeFile(f.get(1));
+                        ImageView2.setImageBitmap(myBitmap2);
+
+                        Bitmap myBitmap3 = BitmapFactory.decodeFile(f.get(2));
+                        ImageView3.setImageBitmap(myBitmap3);
+
+                        Bitmap myBitmap4 = BitmapFactory.decodeFile(f.get(3));
+                        ImageView4.setImageBitmap(myBitmap4);
+                    }
+
+                    AlertDialog.Builder alert = new AlertDialog.Builder(mContext);
+                    alert.setTitle("Images");
+                    // this is set the view from XML inside AlertDialog
+                    alert.setView(alertLayout);
+                    // disallow cancel of AlertDialog on click of back button and outside touch
+                    alert.setCancelable(false);
+                    alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                        }
+                    });
+                    AlertDialog dialog = alert.create();
+                    dialog.show();
+                }
+            });
+
+        }
+
+
+    }
+
+    public void getFromSdcard(File file, ArrayList<String> f)
+    {
+        File[] listFile;
+        if (file.isDirectory())
+        {
+            listFile = file.listFiles();
+
+
+            for (int i = 0; i < listFile.length; i++)
+            {
+
+                f.add(listFile[i].getAbsolutePath());
+
+            }
         }
     }
 
@@ -271,6 +446,40 @@ public class ComplatedOrderAdapter extends RecyclerView.Adapter<pending_order_vi
                         loader.hide();
                     }
                 });
+    }
+
+
+    public static void unzip(File zipFile, File targetDirectory) throws IOException {
+        ZipInputStream zis = new ZipInputStream(
+                new BufferedInputStream(new FileInputStream(zipFile)));
+        try {
+            ZipEntry ze;
+            int count;
+            byte[] buffer = new byte[8192];
+            while ((ze = zis.getNextEntry()) != null) {
+                File file = new File(targetDirectory, ze.getName());
+                File dir = ze.isDirectory() ? file : file.getParentFile();
+                if (!dir.isDirectory() && !dir.mkdirs())
+                    throw new FileNotFoundException("Failed to ensure directory: " +
+                            dir.getAbsolutePath());
+                if (ze.isDirectory())
+                    continue;
+                FileOutputStream fout = new FileOutputStream(file);
+                try {
+                    while ((count = zis.read(buffer)) != -1)
+                        fout.write(buffer, 0, count);
+                } finally {
+                    fout.close();
+                }
+            /* if time should be restored as well
+            long time = ze.getTime();
+            if (time > 0)
+                file.setLastModified(time);
+            */
+            }
+        } finally {
+            zis.close();
+        }
     }
 
     @Override

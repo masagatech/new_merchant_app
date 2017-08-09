@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.AppCompatTextView
+        android:layout_marginTop="20dp"
+      android:layout_marginLeft="20dp"
+        android:id="@+id/Expense_Type"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:textStyle="bold"
+        android:drawableLeft="@drawable/exp_type"
+        android:textColor="@android:color/black"
+        tools:text="Dirubhai Expense 4" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:layout_marginLeft="20dp"
+        android:id="@+id/Expense_Value"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:drawableLeft="@drawable/order_id"
+        android:textColor="@android:color/black"
+        tools:text="55" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:layout_marginLeft="20dp"
+        android:id="@+id/Expense_Disc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:drawableLeft="@drawable/det"
+        android:textColor="@android:color/black"
+        tools:text="Expense for food" />
+
+</LinearLayout>

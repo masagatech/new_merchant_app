@@ -1,8 +1,77 @@
-<fragment xmlns:android="http://schemas.android.com/apk/res/android"
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:map="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/map"
-    android:name="com.google.android.gms.maps.SupportMapFragment"
     android:layout_width="match_parent"
+    xmlns:plainpie="http://schemas.android.com/apk/res-auto"
     android:layout_height="match_parent"
-    tools:context="com.goyo.traveltracker.forms.TodayVisitsMapsActivity" />
+    tools:context="com.goyo.traveltracker.forms.TodayVisitsMapsActivity" >
+    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:map="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="com.goyo.traveltracker.forms.TodayVisitsMapsActivity" />
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <az.plainpie.PieView
+        android:id="@+id/pieView"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        plainpie:inner_pie_padding="30"
+        plainpie:percentage_size="13"
+        android:layout_margin="10dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        plainpie:inner_text_visibility="true"
+        android:layout_alignParentRight="true" />
+
+    <az.plainpie.PieView
+        android:id="@+id/pieStops"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        plainpie:inner_pie_padding="30"
+        plainpie:percentage_size="13"
+        android:layout_marginRight="90dp"
+        android:layout_marginBottom="10dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        plainpie:inner_text_visibility="true"
+        android:layout_alignParentRight="true"/>
+
+    <az.plainpie.PieView
+
+        android:id="@+id/pieTasks"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        plainpie:inner_pie_padding="30"
+        plainpie:percentage_size="13"
+        android:layout_marginRight="170dp"
+        android:layout_marginBottom="10dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        plainpie:inner_text_visibility="true"
+        android:layout_alignParentRight="true" />
+
+</RelativeLayout>
+<Button
+    android:layout_margin="10dp"
+    android:id="@+id/Date"
+    android:padding="5dp"
+   android:drawableLeft="@drawable/date"
+    android:layout_width="wrap_content"
+    android:background="@color/about_instagram_color"
+    android:textColor="@color/white"
+    android:layout_height="wrap_content"
+    android:text="13-Jun-2017"/>
+    <TextView
+        android:text="gsshshshshsh"
+        android:textColor="#0000"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+
+    </FrameLayout>

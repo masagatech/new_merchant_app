@@ -17,7 +17,34 @@ public class model_tasks_pending {
     String _exp_id;
     String _exp_value;
     String _exp_disc;
+    String _lat;
+    String _lon;
+    String _time;
 
+
+    public String get_time() {
+        return _time;
+    }
+
+    public void set_time(String _time) {
+        this._time = _time;
+    }
+
+    public String get_lat() {
+        return _lat;
+    }
+
+    public void set_lat(String _lat) {
+        this._lat = _lat;
+    }
+
+    public String get_lon() {
+        return _lon;
+    }
+
+    public void set_lon(String _lon) {
+        this._lon = _lon;
+    }
 
     public String get_exp_id() {
         return _exp_id;
@@ -115,7 +142,7 @@ public class model_tasks_pending {
         this._tsk_id = _tsk_id;
     }
 
-    public model_tasks_pending(String tsk_id, String Nature_task, String value, String remark, String status_task, String tags, String creat_on, String is_server_send,String _exp_id,String _exp_value,String _exp_disc){
+    public model_tasks_pending(String tsk_id, String Nature_task, String value, String remark, String status_task, String tags, String creat_on, String is_server_send,String _exp_id,String _exp_value,String _exp_disc, String _lat, String _lon,String _time){
         this._tsk_id = tsk_id;
         this._Nature_task = Nature_task;
         this._value = value;
@@ -127,5 +154,8 @@ public class model_tasks_pending {
         this._exp_id = _exp_id;
         this._exp_value = _exp_value;
         this._exp_disc = _exp_disc;
+        this._lat = _lat;
+        this._lon = _lon;
+        this._time = _time;
     }
 }

@@ -1,12 +1,14 @@
 package com.goyo.traveltracker.forms;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -121,7 +123,15 @@ public class rejected_order extends AppCompatActivity {
             mRecyclerView.setVisibility(View.INVISIBLE);
             findViewById(R.id.txtNodata).setVisibility(View.VISIBLE);
     }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_driver_info_view_activity, menu);
+        return true;
+    }
 
+
+    //action bar menu button click
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         //Menu
@@ -130,7 +140,21 @@ public class rejected_order extends AppCompatActivity {
             case android.R.id.home:
                 onBackPressed();
                 return true;
+
+            case R.id.menu_driver_info_view_add:
+                Intent intent=new Intent(this,AddLeave.class);
+                startActivity(intent);
+                return true;
+
+            case R.id.Sync:
+//                mSwipeRefreshLayout.setRefreshing(true);
+////                SendOfflineTagstoServer();
+//                DatafromServer();
+//                DataFromServer();
+                return true;
+            default:
         }
         return super.onOptionsItemSelected(item);
     }
+
 }

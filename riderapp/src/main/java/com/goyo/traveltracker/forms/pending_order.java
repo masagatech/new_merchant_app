@@ -359,7 +359,7 @@ public class pending_order extends AppCompatActivity {
                 json.addProperty("tstype", d.get(i).get(Tables.tbltasks.Task_Status));
                 json.addProperty("value", d.get(i).get(Tables.tbltasks.Task_Value));
                 json.addProperty("remark", d.get(i).get(Tables.tbltasks.Task_Remark));
-                json.addProperty("cuid", d.get(i).get(Tables.tbltasks.Task_Creat_On));
+                json.addProperty("cuid", d.get(i).get(Tables.tbltasks.Task_Creat_On)+", "+d.get(i).get(Tables.tbltasks.TIME));
                 json.addProperty("tskid", d.get(i).get(Tables.tbltasks.Tks_id));
                 json.addProperty("trpid", TripId);
                 json.addProperty("tag","{" + tag + "}");

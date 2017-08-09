@@ -4,7 +4,7 @@
         id="@+id/tab_waiting"
         icon="@drawable/ic_action_wait"
         title="Pending"
-        barColorWhenSelected="#ffff4444"/>
+        barColorWhenSelected="#ffffbb33"/>
     <tab
         id="@+id/tab_allocated"
         icon="@drawable/ic_action_done"

@@ -234,7 +234,7 @@ public class pending_order_adapter extends RecyclerView.Adapter<pending_order_vi
                         Gson gson = new Gson();
                         String TagString= gson.toJson(Tags);
 
-                        db.TASK_ADDTASK(new model_tasks_pending(timeLineModel.tskid, Selected_Nature, Value, Remark, Selected_Status, TagString,TimenDate,"0",Selected_Exp,Selected_Value,Selected_Disc));
+                        db.TASK_ADDTASK(new model_tasks_pending(timeLineModel.tskid, Selected_Nature, Value, Remark, Selected_Status, TagString,formattedDate,"0",Selected_Exp,Selected_Value,Selected_Disc,Rider_Lat,Rider_Long,time));
 
                     }else {
 
@@ -245,7 +245,7 @@ public class pending_order_adapter extends RecyclerView.Adapter<pending_order_vi
 
 
                         //storing in db
-                            db.TASK_ADDTASK(new model_tasks_pending(timeLineModel.tskid, Selected_Nature, Value, Remark, Selected_Status, TagString,TimenDate,"1",Selected_Exp,Selected_Value,Selected_Disc));
+                            db.TASK_ADDTASK(new model_tasks_pending(timeLineModel.tskid, Selected_Nature, Value, Remark, Selected_Status, TagString,formattedDate,"1",Selected_Exp,Selected_Value,Selected_Disc,Rider_Lat,Rider_Long,time));
                     }
 
                 }
@@ -570,7 +570,6 @@ public class pending_order_adapter extends RecyclerView.Adapter<pending_order_vi
                                 Status_Work.add(result.get("data").getAsJsonArray().get(i).getAsJsonObject().get("val").getAsString());
                             }
                             bindCurrentTrips3(Status_Work,holder);
-
                         }
                         catch (Exception ea) {
                             ea.printStackTrace();
@@ -582,7 +581,6 @@ public class pending_order_adapter extends RecyclerView.Adapter<pending_order_vi
 
     private void bindCurrentTrips3(List<String> lst,final pending_order_viewHolder holder) {
         if (lst.size() > 0) {
-
             ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(mContext, android.R.layout.simple_spinner_item, lst);
             dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             holder.status.setAdapter(dataAdapter);

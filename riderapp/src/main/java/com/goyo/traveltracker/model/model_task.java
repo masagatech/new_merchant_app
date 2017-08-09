@@ -17,9 +17,18 @@ public class model_task {
     String _creat_on;
     String _time;
     String _image_paths;
+    String _exp_type;
     String _exp_id;
     String _exp_value;
     String _exp_disc;
+
+    public String get_exp_type() {
+        return _exp_type;
+    }
+
+    public void set_exp_type(String _exp_type) {
+        this._exp_type = _exp_type;
+    }
 
     public String get_exp_id() {
         return _exp_id;
@@ -129,7 +138,7 @@ public class model_task {
 
 
     // constructor
-    public model_task(String _title, String _body, String _lat,String _lon,String tags,String _creat_on,String _is_server_send,String _time_, String _image_paths_,String _exp_id,String _exp_value,String _exp_disc){
+    public model_task(String _title, String _body, String _lat,String _lon,String tags,String _creat_on,String _is_server_send,String _time_, String _image_paths_,String _exp_id,String _exp_type,String _exp_value,String _exp_disc){
         this._title = _title;
         this._body = _body;
         this._lat = _lat;
@@ -140,6 +149,7 @@ public class model_task {
         this._time = _time_;
         this._image_paths = _image_paths_;
         this._exp_id = _exp_id;
+        this._exp_type = _exp_type;
         this._exp_value = _exp_value;
         this._exp_disc = _exp_disc;
     }

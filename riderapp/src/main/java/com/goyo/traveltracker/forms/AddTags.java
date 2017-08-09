@@ -1,5 +1,6 @@
 package com.goyo.traveltracker.forms;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -77,7 +78,11 @@ public class AddTags extends AppCompatActivity {
                         try {
                             JsonObject o= result.get("data").getAsJsonArray().get(0).getAsJsonObject().get("funsave_taginfo").getAsJsonObject();
                             Toast.makeText(AddTags.this, o.get("msg").toString(), Toast.LENGTH_SHORT).show();
-                            onBackPressed();
+                            finish();
+                            Intent intent=new Intent(AddTags.this,all_order.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intent);
 
                         } catch (Exception ea) {
                             ea.printStackTrace();
@@ -107,7 +112,11 @@ public class AddTags extends AppCompatActivity {
             }else {
             if (!db.ISTAG_ALREDY_EXIST(tag_name)) {
                 db.TAG_ADDTAG(new model_tag(tag_name, tag_remark_1, tag_remark_2, tag_remark_3, Empl_Id, currentDateTimeString, "1"));
-                onBackPressed();
+                finish();
+                Intent intent=new Intent(AddTags.this,all_order.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
                 Toast.makeText(AddTags.this, "Saved successfully", Toast.LENGTH_SHORT).show();
             }else {
                 Toast.makeText(this, "This Tag Already Exist", Toast.LENGTH_SHORT).show();

@@ -80,7 +80,8 @@ public class Global {
         livebeats("livebeats", REST_URL +"/livebeats"),
         mobileupload("mobileupload", REST_URL +"/mobileupload"),
         getExpenseDetails("getExpenseDetails", REST_URL +"/getExpenseDetails"),
-        saveExpenseDetails("saveExpenseDetails", REST_URL +"/saveExpenseDetails");
+        saveExpenseDetails("saveExpenseDetails", REST_URL +"/saveExpenseDetails"),
+        saveLeaveEmployee("saveLeaveEmployee", REST_URL +"/saveLeaveEmployee");
 
 
 
