@@ -174,6 +174,7 @@ public final class Procedures {
                 +  Tables.tbltasks.Task_Creat_On  + " VARCHAR, "
                 +  Tables.tbltasks.Is_Server_Send  + " VARCHAR, "
                 +  Tables.tbltasks.EXP_ID + " VARCHAR, "
+                +  Tables.tbltasks.EXP_Type + " VARCHAR, "
                 +  Tables.tbltasks.EXP_Value + " VARCHAR, "
                 +  Tables.tbltasks.EXP_Disc + " VARCHAR, "
                 +  Tables.tbltasks.LAT + " VARCHAR, "
@@ -232,7 +233,35 @@ public final class Procedures {
                 +  Tables.tblleave.Leave_Type  + " VARCHAR, "
                 +  Tables.tblleave.Leave_Details  + " VARCHAR, "
                 +  Tables.tblleave.Leave_Server  + " VARCHAR, "
+                +  Tables.tblleave.Leave_Status  + " VARCHAR, "
                 +  Tables.tblleave.Leave_Created_By + " VARCHAR "
+                +")";
+
+
+        public static final String INSERT = "INSERT INTO " + Tables.tblnotification.name
+                + " ("
+                + Tables.tbl_driver_info.createon +  "," + Tables.tblnotification.data
+                +  "," + Tables.tblnotification.exp
+                + ")"
+                + " VALUES (?,?,?)";
+
+        public static final String UPGRADE_2 = "ALTER TABLE " + Tables.tblnotification.name + " ADD COLUMN " +  Tables.tblnotification.exp +" INTEGER";
+
+    }
+
+
+    public static class tblexpense_all{
+
+        public static final String CREATE = "CREATE TABLE  IF NOT EXISTS "
+                + Tables.tblexpense_all.name +
+                "("
+                +  Tables.tblexpense_all.Expense_Id+ " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                +  Tables.tblexpense_all.Expense_Type  + " VARCHAR, "
+                +  Tables.tblexpense_all.Expense_Value  + " VARCHAR, "
+                +  Tables.tblexpense_all.Expense_Tags  + " VARCHAR, "
+                +  Tables.tblexpense_all.Expense_Disc  + " VARCHAR, "
+                +  Tables.tblexpense_all.Exp_Created_By  + " VARCHAR, "
+                +  Tables.tblexpense_all.Expense_Server + " VARCHAR "
                 +")";
 
 

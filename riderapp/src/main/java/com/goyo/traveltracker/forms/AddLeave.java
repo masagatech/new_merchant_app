@@ -2,6 +2,7 @@ package com.goyo.traveltracker.forms;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.icu.text.DateFormat;
 import android.icu.text.SimpleDateFormat;
 import android.icu.util.Calendar;
 import android.os.Bundle;
@@ -23,7 +24,9 @@ import com.goyo.traveltracker.model.modal_leave;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -35,6 +38,8 @@ public class AddLeave extends AppCompatActivity {
     List<String> Leave_Type;
     Spinner LeaveType;
     Button ApplyLeave;
+    private  List<Date> Dates;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,8 +84,15 @@ public class AddLeave extends AppCompatActivity {
                 if (details.equals("")){
                     Toast.makeText(AddLeave.this, "Please Enter Details!", Toast.LENGTH_SHORT).show();
                 }else {
-                    SavetoDb();
-                    SentToServer();
+                   String leave_from=Leave_From.getText().toString();
+                  String  leave_to=Leave_To.getText().toString();
+                    Dates=getDates(leave_from,leave_to);
+                    if(Dates.size()==0){
+                        Toast.makeText(AddLeave.this, "Please Choose different date!", Toast.LENGTH_SHORT).show();
+                    }else {
+                        SavetoDb();
+                        SentToServer();
+                    }
                 }
             }
         });
@@ -153,6 +165,36 @@ public class AddLeave extends AppCompatActivity {
         Leave_To.setText(sdf.format(myCalendar1.getTime()));
     }
 
+    private static List<Date> getDates(String dateString1, String dateString2)
+    {
+        ArrayList<Date> dates = new ArrayList<Date>();
+        DateFormat df1 = new SimpleDateFormat("dd-MMM-yyyy");
+
+        Date date1 = null;
+        Date date2 = null;
+
+        try {
+            date1 = df1 .parse(dateString1);
+            date2 = df1 .parse(dateString2);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        Calendar cal1 = Calendar.getInstance();
+        cal1.setTime(date1);
+
+
+        Calendar cal2 = Calendar.getInstance();
+        cal2.setTime(date2);
+
+        while(!cal1.after(cal2))
+        {
+            dates.add(cal1.getTime());
+            cal1.add(Calendar.DATE, 1);
+        }
+        return dates;
+    }
+
 
     private void SentToServer(){
         String  details,leave_from,leave_to,selected_leave_type,currentDateTimeString;
@@ -171,7 +213,7 @@ public class AddLeave extends AppCompatActivity {
         json.addProperty("enttid", Global.loginusr.getEnttid()+"");
         json.addProperty("reason",details);
         Ion.with(this)
-                .load(Global.urls.saveLeaveEmployee.value)
+                .load(Global.urls.saveEmployeeLeave.value)
                 .setJsonObjectBody(json)
                 .asJsonObject()
                 .setCallback(new FutureCallback<JsonObject>() {
@@ -182,7 +224,7 @@ public class AddLeave extends AppCompatActivity {
                             JsonObject o= result.get("data").getAsJsonArray().get(0).getAsJsonObject().get("funsave_employeeleave").getAsJsonObject();
                             Toast.makeText(AddLeave.this, o.get("msg").toString(), Toast.LENGTH_SHORT).show();
                             finish();
-                            Intent intent=new Intent(AddLeave.this,rejected_order.class);
+                            Intent intent=new Intent(AddLeave.this,Leave.class);
                             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             startActivity(intent);
@@ -207,16 +249,19 @@ public class AddLeave extends AppCompatActivity {
 
         SQLBase db = new SQLBase(this);
         if(IsMobailConnected){
-                db.ADDLeave(new modal_leave(leave_from, leave_to, selected_leave_type, details, currentDateTimeString,"0"));
+            if (!db.ISLeave_ALREDY_EXIST(currentDateTimeString)) {
+                db.ADDLeave(new modal_leave(leave_from, leave_to, selected_leave_type, details, currentDateTimeString, "0", "Applied"));
+            }
         }else {
-
-              db.ADDLeave(new modal_leave(leave_from, leave_to, selected_leave_type, details, currentDateTimeString,"1"));
+            if (!db.ISLeave_ALREDY_EXIST(currentDateTimeString)) {
+                db.ADDLeave(new modal_leave(leave_from, leave_to, selected_leave_type, details, currentDateTimeString, "1", "Applied"));
                 finish();
-                Intent intent=new Intent(AddLeave.this,rejected_order.class);
+                Intent intent = new Intent(AddLeave.this, Leave.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
                 Toast.makeText(AddLeave.this, "Saved successfully", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 

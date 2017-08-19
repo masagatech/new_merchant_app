@@ -81,7 +81,10 @@ public class Global {
         mobileupload("mobileupload", REST_URL +"/mobileupload"),
         getExpenseDetails("getExpenseDetails", REST_URL +"/getExpenseDetails"),
         saveExpenseDetails("saveExpenseDetails", REST_URL +"/saveExpenseDetails"),
-        saveLeaveEmployee("saveLeaveEmployee", REST_URL +"/saveLeaveEmployee");
+        saveEmployeeLeave("saveEmployeeLeave", REST_URL +"/saveEmployeeLeave"),
+        getEmployeeLeave("getEmployeeLeave", REST_URL +"/getEmployeeLeave"),
+        getHoliday("getHoliday", REST_URL +"/getHoliday"),
+        getNotification("getNotification", REST_URL +"/getNotification");
 
 
 

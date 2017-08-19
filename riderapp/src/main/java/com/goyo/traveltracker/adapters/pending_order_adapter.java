@@ -66,16 +66,16 @@ public class pending_order_adapter extends RecyclerView.Adapter<pending_order_vi
     private ProgressDialog loader;
     private Spinner RejectSpinner;
     private Double CashCollected;
-    private  String Selected_Nature,Selected_Status,Value,Remark;
+    private  String Selected_Nature,Selected_Status,Value,Remark,Selected_OrNo;
     private String Status,Nature;
     List<String> RejectList;
     List<String> Ntr_Work;
-    List<String> Status_Work;
+    List<String> Status_Work,Status_No;
     String SelectedReason;
     private Spinner Expense_Type;
     List<String> Exp;
     List<String> Exp_Id;
-    String Selected_Exp,Selected_Value,Selected_Disc;
+    String Selected_Exp,Selected_Value,Selected_Disc,Selected_Type;
 
 
     public pending_order_adapter(List<model_pending> feedList, Orientation orientation, boolean withLinePadding) {
@@ -120,6 +120,19 @@ public class pending_order_adapter extends RecyclerView.Adapter<pending_order_vi
                 holder.mTimelineView.setMarker(ContextCompat.getDrawable(mContext, R.drawable.ic_marker), ContextCompat.getColor(mContext, R.color.colorAccent));
             }
         }
+
+//        if(Status_Task.equals("completed"){
+//            holder.mOrder.setText(timeLineModel.tskid +"");
+//            holder.mMarchant.setText(timeLineModel.task);
+////        holder.Custmer_name.setText(timeLineModel.custname);
+////        holder.mDeliver_at.setText(timeLineModel.custaddr+"\n");
+////        holder.Remark.setText("Remark: "+timeLineModel.remark);
+//            holder.mTime.setText(timeLineModel.todt);
+//            holder.mDate.setText(timeLineModel.frmdt);
+//
+//            yourSpinner.setEnabled(false);
+//            yourSpinner.setClickable(false);
+//        }
 
 
         holder.mOrder.setText(timeLineModel.tskid +"");
@@ -194,8 +207,15 @@ public class pending_order_adapter extends RecyclerView.Adapter<pending_order_vi
             public void onClick(View v) {
                 Remark= holder.collected_cash.getText().toString();
                 Value = holder.nature_value.getText().toString();
-                Selected_Nature = holder.nature_of_work.getSelectedItem().toString();
-                Selected_Status = holder.status.getSelectedItem().toString();
+               if (holder.nature_of_work.getSelectedItem()!=null) {
+                   Selected_Nature = holder.nature_of_work.getSelectedItem().toString();
+               }
+                if(holder.status.getSelectedItem()!=null) {
+                    Selected_Status = holder.status.getSelectedItem().toString();
+                    int pos=holder.status.getSelectedItemPosition();
+                    Selected_OrNo=Status_No.get(pos);
+                }
+
 
                 //time
                 DateFormat dateFormat = new SimpleDateFormat("hh:mm a");
@@ -228,13 +248,13 @@ public class pending_order_adapter extends RecyclerView.Adapter<pending_order_vi
                         if(Value.equals("")){
                             Value="0";
                         }
-                        Update(timeLineModel, position, newPosition, Selected_Nature, Selected_Status, Remark, Value,Tags,TimenDate);
+                        Update(timeLineModel, position, newPosition, Selected_Nature, Selected_Status, Remark, Value,Tags,TimenDate,Selected_OrNo);
 
                         //tags
                         Gson gson = new Gson();
                         String TagString= gson.toJson(Tags);
 
-                        db.TASK_ADDTASK(new model_tasks_pending(timeLineModel.tskid, Selected_Nature, Value, Remark, Selected_Status, TagString,formattedDate,"0",Selected_Exp,Selected_Value,Selected_Disc,Rider_Lat,Rider_Long,time));
+                        db.TASK_ADDTASK(new model_tasks_pending(timeLineModel.tskid, Selected_Nature, Value, Remark, Selected_Status, TagString,formattedDate,"0",Selected_Exp,Selected_Type,Selected_Value,Selected_Disc,Rider_Lat,Rider_Long,time));
 
                     }else {
 
@@ -242,10 +262,8 @@ public class pending_order_adapter extends RecyclerView.Adapter<pending_order_vi
                         Gson gson = new Gson();
                         String TagString= gson.toJson(Tags);
 
-
-
                         //storing in db
-                            db.TASK_ADDTASK(new model_tasks_pending(timeLineModel.tskid, Selected_Nature, Value, Remark, Selected_Status, TagString,formattedDate,"1",Selected_Exp,Selected_Value,Selected_Disc,Rider_Lat,Rider_Long,time));
+                            db.TASK_ADDTASK(new model_tasks_pending(timeLineModel.tskid, Selected_Nature, Value, Remark, Selected_Status, TagString,formattedDate,"1",Selected_Exp,Selected_Type,Selected_Value,Selected_Disc,Rider_Lat,Rider_Long,time));
                     }
 
                 }
@@ -375,6 +393,7 @@ public class pending_order_adapter extends RecyclerView.Adapter<pending_order_vi
                 if(Exp_Id.size()>0) {
                    Selected_Exp = Exp_Id.get(Pos);
                 }
+                Selected_Type=Expense_Type.getSelectedItem().toString();
                 Selected_Value = Expense_Value.getText().toString();
                 Selected_Disc = Expense_Disc.getText().toString();
             }
@@ -403,7 +422,6 @@ public class pending_order_adapter extends RecyclerView.Adapter<pending_order_vi
 
     private void bindCurrentTrips3(List<String> Expense) {
         if (Expense.size() > 0) {
-
             ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(mContext, android.R.layout.simple_spinner_item, Expense);
             dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             Expense_Type.setAdapter(dataAdapter);
@@ -463,7 +481,7 @@ public class pending_order_adapter extends RecyclerView.Adapter<pending_order_vi
 
     }
 
-    private void Update(final model_pending timeLineModel, final int position, final int newPosition,final String Selected_Nature,final String Selected_Status,final String Remark,final String Value, List<String> Tags,String TimenDate){
+    private void Update(final model_pending timeLineModel, final int position, final int newPosition,final String Selected_Nature,final String Selected_Status,final String Remark,final String Value, List<String> Tags,String TimenDate,String Selected_OrNo){
 
         String tag= Joiner.on(",").join(Tags);
 
@@ -472,6 +490,7 @@ public class pending_order_adapter extends RecyclerView.Adapter<pending_order_vi
         JsonObject json = new JsonObject();
         json.addProperty("tntype", Selected_Nature);
         json.addProperty("tstype", Selected_Status);
+        json.addProperty("ordno", Selected_OrNo);
         json.addProperty("value", Value);
         json.addProperty("remark", Remark);
         json.addProperty("cuid", TimenDate);
@@ -555,6 +574,7 @@ public class pending_order_adapter extends RecyclerView.Adapter<pending_order_vi
         JsonObject json = new JsonObject();
         json.addProperty("flag", "all");
         json.addProperty("group", "taskstatus");
+        json.addProperty("enttid",Global.loginusr.getEnttid());
         Ion.with(mContext)
                 .load(Global.urls.getMOM2.value)
                 .setJsonObjectBody(json)
@@ -566,8 +586,10 @@ public class pending_order_adapter extends RecyclerView.Adapter<pending_order_vi
                         try {
                             if (result != null) Log.v("result", result.toString());
                             Status_Work = new ArrayList<String>();
+                            Status_No= new ArrayList<String>();
                             for(int i=0;i<result.get("data").getAsJsonArray().size();i++){
                                 Status_Work.add(result.get("data").getAsJsonArray().get(i).getAsJsonObject().get("val").getAsString());
+                                Status_No.add(result.get("data").getAsJsonArray().get(i).getAsJsonObject().get("ordno").getAsString());
                             }
                             bindCurrentTrips3(Status_Work,holder);
                         }

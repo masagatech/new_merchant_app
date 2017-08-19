@@ -20,7 +20,15 @@ public class model_tasks_pending {
     String _lat;
     String _lon;
     String _time;
+    String _exp_type;
 
+    public String get_exp_type() {
+        return _exp_type;
+    }
+
+    public void set_exp_type(String _exp_type) {
+        this._exp_type = _exp_type;
+    }
 
     public String get_time() {
         return _time;
@@ -142,7 +150,7 @@ public class model_tasks_pending {
         this._tsk_id = _tsk_id;
     }
 
-    public model_tasks_pending(String tsk_id, String Nature_task, String value, String remark, String status_task, String tags, String creat_on, String is_server_send,String _exp_id,String _exp_value,String _exp_disc, String _lat, String _lon,String _time){
+    public model_tasks_pending(String tsk_id, String Nature_task, String value, String remark, String status_task, String tags, String creat_on, String is_server_send,String _exp_id,String _exp_type,String _exp_value,String _exp_disc, String _lat, String _lon,String _time){
         this._tsk_id = tsk_id;
         this._Nature_task = Nature_task;
         this._value = value;
@@ -153,6 +161,7 @@ public class model_tasks_pending {
         this._creat_on = creat_on;
         this._exp_id = _exp_id;
         this._exp_value = _exp_value;
+        this._exp_type = _exp_type;
         this._exp_disc = _exp_disc;
         this._lat = _lat;
         this._lon = _lon;

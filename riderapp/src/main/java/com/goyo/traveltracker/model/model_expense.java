@@ -1,6 +1,7 @@
 package com.goyo.traveltracker.model;
 
 import com.google.gson.annotations.SerializedName;
+import com.goyo.traveltracker.forms.OrderStatus;
 
 /**
  * Created by mis on 29-Jul-17.
@@ -110,4 +111,8 @@ public class model_expense {
         this._is_active = _is_active;
         this._is_server = _is_server;
     }
+
+
+    public OrderStatus status = OrderStatus.ACTIVE;
+    public boolean isEnabled = false;
 }

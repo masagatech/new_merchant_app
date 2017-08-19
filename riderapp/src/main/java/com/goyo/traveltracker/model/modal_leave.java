@@ -14,6 +14,15 @@ public class modal_leave {
     String _leave_type;
     String _leave_details;
     String _leave_created;
+    String _leave_status;
+
+    public String get_leave_status() {
+        return _leave_status;
+    }
+
+    public void set_leave_status(String _leave_status) {
+        this._leave_status = _leave_status;
+    }
 
     public int get_id() {
         return _id;
@@ -79,13 +88,14 @@ public class modal_leave {
         isEnabled = enabled;
     }
 
-    public modal_leave(String _leave_from, String _leave_to, String _leave_type, String _leave_details, String _leave_created, String _is_server_send){
+        public modal_leave(String _leave_from, String _leave_to, String _leave_type, String _leave_details, String _leave_created, String _is_server_send, String _leave_status){
         this._leave_from = _leave_from;
         this._leave_to = _leave_to;
         this._leave_type = _leave_type;
         this._leave_details = _leave_details;
         this._leave_created = _leave_created;
         this._is_server_send = _is_server_send;
+        this._leave_status = _leave_status;
     }
 
     public OrderStatus status = OrderStatus.ACTIVE;

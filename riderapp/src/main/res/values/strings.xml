@@ -115,7 +115,7 @@
     <string name="notification_emthy_msg" translatable="false">You dont have any notification!</string>
     <string name="pending_empthy_msg" translatable="false">You dont have any Task right now!</string>
     <string name="push_empthy_msg" translatable="false">No Expense Data!</string>
-    <string name="returned_empthy_msg" translatable="false">Sit Tight! More futures coming just for you!</string>
+    <string name="returned_empthy_msg" translatable="false">No Expense data!</string>
     <string name="orderdetails_date" translatable="false">DATE</string>
     <string name="orderdetails_total" translatable="false">TOTAL</string>
     <string name="return_msg" translatable="false">Are you sure you want return delivery? Tell us why!</string>
@@ -133,7 +133,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
     <string name="title_activity_today_visits_maps" translatable="false">Map</string>
-    <string name="MAPBOX_ACCESS_TOKEN">pk.eyJ1IjoidHJhdmVsdHJhY2tlciIsImEiOiJjajV3NXN0aXYwOWY4MndsdWo1cWZraDg1In0.Reg5xC0MqZwHb0fBIY3Tnw</string>
+    <string name="holidays" translatable="false">Holidays</string>
 
 
 </resources>

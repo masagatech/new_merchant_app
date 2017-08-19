@@ -1,5 +1,6 @@
 package com.goyo.traveltracker.forms;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -25,7 +26,11 @@ import com.koushikdutta.ion.Ion;
 import com.pchmn.materialchips.ChipsInput;
 
 import java.lang.reflect.Type;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -47,7 +52,7 @@ public class expense extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_expense);
 
-        this.setTitle("Expense");
+        this.setTitle("Add Expense");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Exp_Disc=(EditText)findViewById(R.id.exp_disc);
@@ -105,7 +110,11 @@ public class expense extends AppCompatActivity {
 
                             JsonObject o = result.get("data").getAsJsonArray().get(0).getAsJsonObject().get("funsave_expensedetails").getAsJsonObject();
                             Toast.makeText(expense.this, o.get("msg").toString(), Toast.LENGTH_SHORT).show();
-                            onBackPressed();
+                            finish();
+                            Intent intent=new Intent(expense.this,rejected_order.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intent);
                         }
                         catch (Exception ea) {
                             ea.printStackTrace();
@@ -178,7 +187,7 @@ public class expense extends AppCompatActivity {
                                 // do stuff with the result or error
                                 try {
                                     SQLBase db = new SQLBase(expense.this);
-                                    db. EXPENSE_UPDATE(d.get(pos).get(Tables.tblexpense.Exp_ID),"2");
+                                    db. EXPENSE_UPDATE(d.get(pos).get(Tables.tblexpense.Expense_Id),"2");
 
                                 } catch (Exception ea) {
                                     ea.printStackTrace();
@@ -234,8 +243,25 @@ public class expense extends AppCompatActivity {
 //                    SavetoDb();
 //                    SentToServer();
 
+                    //time
+                    DateFormat dateFormat = new SimpleDateFormat("hh:mm a");
+                   String time = dateFormat.format(new Date()).toString();
+
+                    //date
+                    Calendar c = Calendar.getInstance();
+                    SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
+                    String formattedDate = df.format(c.getTime());
+//                    String TimenDate=formattedDate+", "+time;
+
 
                     if(IsMobailConnected){
+                        SQLBase db = new SQLBase(this);
+
+                        //tags
+                        Gson gson = new Gson();
+                        String TagString= gson.toJson(Tags);
+
+                        db.ADDEXPENSE(new model_expense(time,selectedExpense,Selected_Disc, Selected_Value, formattedDate,TagString,"2"));
                         Update(Selected_Exp,Selected_Value,Selected_Disc,Tags);
                     }else {
                             SQLBase db = new SQLBase(this);
@@ -244,9 +270,13 @@ public class expense extends AppCompatActivity {
                         Gson gson = new Gson();
                         String TagString= gson.toJson(Tags);
 
-                            db.ADDEXPENSE(new model_expense(Selected_Exp,"",Selected_Disc, Selected_Value, "",TagString,"1"));
-                            onBackPressed();
+                            db.ADDEXPENSE(new model_expense(time,selectedExpense,Selected_Disc, Selected_Value, formattedDate,TagString,"1"));
                             Toast.makeText(this, "Saved successfully", Toast.LENGTH_SHORT).show();
+                           finish();
+                        Intent intent=new Intent(expense.this,rejected_order.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
 
                     }
 

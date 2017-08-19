@@ -7,11 +7,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
 
-import com.goyo.traveltracker.forms.all_order;
-import com.goyo.traveltracker.forms.dashboard;
-import com.goyo.traveltracker.forms.expense;
-import com.goyo.traveltracker.forms.pending_order;
-
 /**
  * Created by mis on 14-Jul-17.
  */
@@ -35,22 +30,35 @@ public class NetworkStateReceiver extends BroadcastReceiver {
 
         if (isWiFi) {
             if (isConnected) {
-
-                //sending expense update to server
-                expense expense=new expense();
-                expense.SendOfflineExpensstoServer();
-
-                //sending task update to server
-                pending_order pending_order=new pending_order();
-                pending_order.SendOfflineTaskstoServer();
-
-                //sending tags to server on network changes
-                all_order all_order=new all_order();
-                all_order.SendOfflineTagstoServer();
-
-                //sending stops to server on network changes
-                dashboard dashboard=new dashboard();
-                dashboard.SendOfflineStopstoServer();
+//                SQLBase db = new SQLBase(context);
+//                Boolean stops=db.tableExists("tbl_offlinetask");
+//                Boolean tags=db.tableExists("tbl_tags");
+//                Boolean expens=db.tableExists("tbl_expense");
+//                Boolean task=db.tableExists("tbl_task");
+//
+//                if(expens) {
+//                    //sending expense update to server
+//                    expense expense = new expense();
+//                    expense.SendOfflineExpensstoServer();
+//                }
+//
+//                if(task) {
+//                    //sending task update to server
+//                    pending_order pending_order = new pending_order();
+//                    pending_order.SendOfflineTaskstoServer();
+//                }
+//
+//                if(tags) {
+//                    //sending tags to server on network changes
+//                    all_order all_order = new all_order();
+//                    all_order.SendOfflineTagstoServer();
+//                }
+//
+//                if(stops) {
+//                    //sending stops to server on network changes
+//                    dashboard dashboard = new dashboard();
+//                    dashboard.SendOfflineStopstoServer();
+//                }
 
                 Log.i("APP_TAG", "Wi-Fi - CONNECTED");
                 IsWifiConnected=true;
@@ -61,17 +69,35 @@ public class NetworkStateReceiver extends BroadcastReceiver {
         } else if (isMobile) {
             if (isConnected) {
 
-                //sending task update to server
-                pending_order pending_order=new pending_order();
-                pending_order.SendOfflineTaskstoServer();
-
-                //sending tags to server on network changes
-                all_order all_order=new all_order();
-                all_order.SendOfflineTagstoServer();
-
-                //sending stops to server on network changes
-                dashboard dashboard=new dashboard();
-                dashboard.SendOfflineStopstoServer();
+//                SQLBase db = new SQLBase(context);
+//                Boolean stops=db.tableExists("tbl_offlinetask");
+//                Boolean tags=db.tableExists("tbl_tags");
+//                Boolean expens=db.tableExists("tbl_expense");
+//                Boolean task=db.tableExists("tbl_task");
+//
+//                if(expens) {
+//                    //sending expense update to server
+//                    expense expense = new expense();
+//                    expense.SendOfflineExpensstoServer();
+//                }
+//
+//                if(task) {
+//                    //sending task update to server
+//                    pending_order pending_order = new pending_order();
+//                    pending_order.SendOfflineTaskstoServer();
+//                }
+//
+//                if(tags) {
+//                    //sending tags to server on network changes
+//                    all_order all_order = new all_order();
+//                    all_order.SendOfflineTagstoServer();
+//                }
+//
+//                if(stops) {
+//                    //sending stops to server on network changes
+//                    dashboard dashboard = new dashboard();
+//                    dashboard.SendOfflineStopstoServer();
+//                }
 
                 Log.i("APP_TAG", "Mobile - CONNECTED");
                 IsMobailConnected=true;

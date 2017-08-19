@@ -79,7 +79,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.lang.reflect.Type;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -91,7 +93,6 @@ import butterknife.OnClick;
 import static com.goyo.traveltracker.Service.RiderStatus.handler;
 import static com.goyo.traveltracker.forms.pending_order.TripId;
 import static com.goyo.traveltracker.gloabls.Global.urls.getEmpStatus;
-import static com.goyo.traveltracker.gloabls.Global.urls.getOrders;
 import static com.goyo.traveltracker.gloabls.Global.urls.mobileupload;
 
 public class dashboard extends AppCompatActivity implements LocationListener,
@@ -113,6 +114,8 @@ public class dashboard extends AppCompatActivity implements LocationListener,
     FrameLayout Notifications;
     @BindView(R.id.All_Order)
     FrameLayout All_Order;
+    @BindView(R.id.Holyday)
+    FrameLayout Holyday;
 
     private PopupWindow OrderPopup;
     private Button Btn_Accept, Btn_Reject;
@@ -475,7 +478,7 @@ public class dashboard extends AppCompatActivity implements LocationListener,
         json.addProperty("uid", Global.loginusr.getDriverid());
         json.addProperty("lat", latitude);
         json.addProperty("lon", longitude);
-        json.addProperty("enttid", "1");
+        json.addProperty("enttid", Global.loginusr.getEnttid());
         json.addProperty("btr", getBatteryLevel() + "");
         Ion.with(this)
                 .load((state == "true" ? Global.urls.starttripswitch.value :Global.urls.stoptripswitch.value))
@@ -732,7 +735,7 @@ public class dashboard extends AppCompatActivity implements LocationListener,
                         break;
                     case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
                         // Location settings are not satisfied. However, we have no way to fix the
-                        // settings so we won't show the dialog.
+                    // settings so we won't show the dialog.
                         break;
                 }
             }
@@ -783,7 +786,7 @@ public class dashboard extends AppCompatActivity implements LocationListener,
 
     @OnClick(R.id.Cash_Collection)
     void click2() {
-        Intent intent = new Intent(this, expense.class);
+    Intent intent = new Intent(this, rejected_order.class);
         startActivity(intent);
 
     }
@@ -796,7 +799,7 @@ public class dashboard extends AppCompatActivity implements LocationListener,
 
     @OnClick(R.id.Rejected_Orders)
     void click4() {
-        Intent intent = new Intent(this, rejected_order.class);
+        Intent intent = new Intent(this, Leave.class);
         startActivity(intent);
     }
 
@@ -824,6 +827,11 @@ public class dashboard extends AppCompatActivity implements LocationListener,
     @OnClick(R.id.All_Order_details)
     void click8() {
         Intent intent = new Intent(this, AllOrderDetails.class);
+        startActivity(intent);
+    }
+    @OnClick(R.id.Holyday)
+    void click9() {
+        Intent intent = new Intent(this, Holyday.class);
         startActivity(intent);
     }
 
@@ -943,32 +951,42 @@ public class dashboard extends AppCompatActivity implements LocationListener,
     }
 
     private void PendingCountOnCheck() {
-        if (Pending_element >= 0) {
-            Ion.with(this)
-                    .load("GET", getOrders.value)
-                    .addQuery("flag", "orders")
-                    .addQuery("subflag", "count")
-                    .addQuery("rdid", Global.loginusr.getDriverid() + "")
-                    .asJsonObject()
-                    .setCallback(new FutureCallback<JsonObject>() {
-                        @Override
-                        public void onCompleted(Exception e, JsonObject result) {
-
-                            try {
-
-                                if (result != null) Log.v("result", result.toString());
-                                Pending_element = result.get("data").getAsJsonArray().get(0).getAsJsonObject().get("count").getAsInt();
-                                Count_Pending.setText(Pending_element + "");
-                                Count_Pending.setVisibility(View.VISIBLE);
-                            } catch (Exception ea) {
-                                ea.printStackTrace();
-                            }
-                        }
-                    });
-        }
+//        if (Pending_element >= 0) {
+//            Ion.with(this)
+//                    .load("GET", getOrders.value)
+//                    .addQuery("flag", "orders")
+//                    .addQuery("subflag", "count")
+//                    .addQuery("rdid", Global.loginusr.getDriverid() + "")
+//                    .asJsonObject()
+//                    .setCallback(new FutureCallback<JsonObject>() {
+//                        @Override
+//                        public void onCompleted(Exception e, JsonObject result) {
+//
+//                            try {
+//
+//                                if (result != null) Log.v("result", result.toString());
+//                                Pending_element = result.get("data").getAsJsonArray().get(0).getAsJsonObject().get("count").getAsInt();
+//                                Count_Pending.setText(Pending_element + "");
+//                                Count_Pending.setVisibility(View.VISIBLE);
+//                            } catch (Exception ea) {
+//                                ea.printStackTrace();
+//                            }
+//                        }
+//                    });
+//        }
+        Calendar c = Calendar.getInstance();
+        SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
+        String formattedDate = df.format(c.getTime());
 
         SQLBase db = new SQLBase(this);
-        Count_TodayVisits.setText(db.getProfilesCount()+"");
+        List<HashMap<String,String>> Stops = db.Get_Today_Stops(formattedDate);
+        int StopCount=Stops.size();
+
+        List<HashMap<String,String>> Task = db.Get_Today_Task(formattedDate);
+        int TaskCount=Task.size();
+
+        Count_TodayVisits.setText(StopCount+"");
+        Count_Pending.setText(TaskCount+"");
     }
 
     @Override

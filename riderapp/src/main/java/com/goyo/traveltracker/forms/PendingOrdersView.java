@@ -276,7 +276,7 @@ public class PendingOrdersView extends View {
             return LineType.BEGIN;
         } else if(position == total_size - 1) {
             return LineType.END;
-        } else {
+        }else {
             return LineType.NORMAL;
         }
     }

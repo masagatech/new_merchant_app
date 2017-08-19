@@ -108,6 +108,7 @@ public final class Tables {
         public static final String Task_Creat_On = "task_creat_on";
         public static final String Is_Server_Send = "is_server_send";
         public static final String Tks_id = "tks_id";
+        public static final String EXP_Type= "exp_type";
         public static final String EXP_ID= "exp_id";
         public static final String EXP_Value= "exp_value";
         public static final String EXP_Disc= "exp_disc";
@@ -125,6 +126,20 @@ public final class Tables {
         public static final String TIME= "time";
          public static final String TITLE= "title";
         public static final String TYPE= "type";
+
+
+    }
+
+    public static class tblallexpense{
+
+
+        public static final String Date = "date";
+        public static final String Time= "time";
+        public static final String Name= "name";
+        public static final String Value= "value";
+        public static final String Disc= "disc";
+        public static final String Is_Server= "server";
+        public static final String Tags= "tags";
 
 
     }
@@ -154,6 +169,21 @@ public final class Tables {
         public static final String Leave_Server = "leave_server";
         public static final String Leave_Details = "leave_details";
         public static final String Leave_Created_By = "leave_created_by";
+        public static final String Leave_Status = "leave_status";
+    }
+
+
+    public static class tblexpense_all{
+
+        public static final String name = "tblexpense_all";
+
+        public static final String Expense_Id = "id";
+        public static final String Expense_Type= "expense_type";
+        public static final String Expense_Value = "expense_value";
+        public static final String Expense_Tags= "expense_tags";
+        public static final String Expense_Disc = "expense_disc";
+        public static final String Expense_Server = "expense_server";
+        public static final String Exp_Created_By = "exp_created_by";
     }
 
 

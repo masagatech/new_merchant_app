@@ -1,14 +1,12 @@
 package com.goyo.traveltracker.forms;
 
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -19,7 +17,9 @@ import com.goyo.traveltracker.database.Tables;
 import com.goyo.traveltracker.model.model_completed;
 import com.goyo.traveltracker.model.model_task;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
@@ -137,8 +137,13 @@ public class complated_order extends AppCompatActivity {
 
     private ArrayList<model_task> populateList(){
         SQLBase db = new SQLBase(this);
+
+        Calendar c = Calendar.getInstance();
+        SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
+        String formattedDate = df.format(c.getTime());
+
         ArrayList<model_task> data = new ArrayList<model_task>();
-        List<HashMap<String,String>> d = db.Get_TASK();
+        List<HashMap<String,String>> d = db.Get_Today_Stops(formattedDate);
         if(d.size()>0) {
             for (int i = 0; i <= d.size() - 1; i++) {
                 data.add(new model_task(d.get(i).get(Tables.tblofflinetask.Task_Title),d.get(i).get(Tables.tblofflinetask.Task_Body),d.get(i).get(Tables.tblofflinetask.Task_Lat),d.get(i).get(Tables.tblofflinetask.Task_Lon),d.get(i).get(Tables.tblofflinetask.Task_Tags),d.get(i).get(Tables.tblofflinetask.Task_Creat_On),d.get(i).get(Tables.tblofflinetask.Is_Server_Send),d.get(i).get(Tables.tblofflinetask.Task_Time),d.get(i).get(Tables.tblofflinetask.Task_Images_Paths),d.get(i).get(Tables.tblofflinetask.EXP_ID),d.get(i).get(Tables.tblofflinetask.EXP_Type),d.get(i).get(Tables.tblofflinetask.EXP_Value),d.get(i).get(Tables.tblofflinetask.EXP_Disc)));
@@ -197,22 +202,12 @@ public class complated_order extends AppCompatActivity {
 //        }
     }
 
-    //set action bar button menu
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_map, menu);
-        return true;
-    }
 
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         //Menu
         switch (item.getItemId()) {
-            case R.id.today_visit_map:
-                Intent i = new Intent(complated_order.this, TodayVisitsMapsActivity.class);
-                startActivity(i);
             //When home is clicked
             case android.R.id.home:
                 onBackPressed();

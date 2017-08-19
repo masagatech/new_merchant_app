@@ -1,10 +1,10 @@
 package com.goyo.traveltracker.forms;
 
 
-import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
@@ -13,11 +13,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Criteria;
 import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
-import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -81,8 +78,9 @@ import io.reactivex.functions.Consumer;
 import me.shaohui.advancedluban.Luban;
 
 import static android.app.Activity.RESULT_OK;
-import static android.content.Context.LOCATION_SERVICE;
 import static com.goyo.traveltracker.Service.NetworkStateReceiver.IsMobailConnected;
+import static com.goyo.traveltracker.Service.RiderStatus.Rider_Lat;
+import static com.goyo.traveltracker.Service.RiderStatus.Rider_Long;
 import static com.goyo.traveltracker.forms.dashboard.REQUEST_CHECK_SETTINGS;
 import static com.goyo.traveltracker.forms.dashboard.mGoogleApiClient;
 import static com.goyo.traveltracker.forms.pending_order.TripId;
@@ -92,11 +90,10 @@ import static com.goyo.traveltracker.gloabls.Global.urls.mobileupload;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class NewStops extends AAH_FabulousFragment implements LocationListener{
+public class NewStops extends AAH_FabulousFragment{
 
     private ImageView map;
     private EditText remark,remark_title;
-    private double lat=0.0, lon=0.0;
     private LocationManager locationManager2;
     public Criteria criteria;
     private  Location location;
@@ -111,12 +108,13 @@ public class NewStops extends AAH_FabulousFragment implements LocationListener{
     private static final String IMAGE_DIRECTORY = "/demonuts";
     private ChipsInput chipsInput;
     ArrayList<String> Image=new ArrayList<>();
-    String [] arrFilePaths=new String[5];
+    private String [] arrFilePaths=new String[4];
     ArrayList<File> CompressedImage = new ArrayList<>();
         List<String> Exp;
     List<String> Exp_Id;
     private Spinner Expense_Type;
     String Selected_Exp,Selected_Value,Selected_Disc,Selected_EXP_Type;
+    private ProgressDialog loader;
 
 
     public static  NewStops newInstance() {
@@ -151,7 +149,7 @@ public class NewStops extends AAH_FabulousFragment implements LocationListener{
         map = (ImageView) contentView.findViewById(R.id.map);
 
         //getting current location
-        GetLocation();
+//        GetLocation();
 
         //setting map based on location
         setMap();
@@ -188,12 +186,14 @@ public class NewStops extends AAH_FabulousFragment implements LocationListener{
             public void onClick(View v) {
 //                if(!IsConnected){
 
+
+
                 currentDateTimeString = DateFormat.getDateInstance().format(new Date());
                 Empl_Id= String.valueOf(Global.loginusr.getDriverid());
                 Title=remark_title.getText().toString();
                 Body=remark.getText().toString();
-                Lat=String.valueOf(lat);
-                Lon=String.valueOf(lon);
+                Lat=String.valueOf(Rider_Lat);
+                Lon=String.valueOf(Rider_Long);
 
                 //time
                 DateFormat dateFormat = new SimpleDateFormat("hh:mm a");
@@ -233,6 +233,10 @@ public class NewStops extends AAH_FabulousFragment implements LocationListener{
                             //sending info
                             SendToServer(Empl_Id, Title, Body, Lat, Lon, TimenDate, Tags,zipPath);
                         }else {
+                            loader = new ProgressDialog(getActivity());
+                            loader.setCancelable(false);
+                            loader.setMessage("Uploading..");
+                            loader.show();
                             //creatin zip file of all selected images
                             zip(arrFilePaths,zipPath);
 
@@ -390,7 +394,9 @@ public class NewStops extends AAH_FabulousFragment implements LocationListener{
                             } catch (Exception ea) {
                                 ea.printStackTrace();
                             }
-
+                            if(loader!=null) {
+                                loader.hide();
+                            }
 
                         }
                     });
@@ -469,7 +475,10 @@ public class NewStops extends AAH_FabulousFragment implements LocationListener{
 
         @Override
         public void onPickedSuccessfully(final ArrayList<ImageEntry> images) {
-
+            loader = new ProgressDialog(getActivity());
+            loader.setCancelable(false);
+            loader.setMessage("Compressing..");
+            loader.show();
             //getting selected images
             for (int i = 0; i < images.size(); i++) {
                 CompressedImage.add(new File(images.get(i).path));
@@ -487,6 +496,7 @@ public class NewStops extends AAH_FabulousFragment implements LocationListener{
                             while (size-- > 0) {
                                 arrFilePaths[size]=files.get(size).toString();
                             }
+                            loader.hide();
                         }
                     }, new Consumer<Throwable>() {
                         @Override
@@ -516,18 +526,16 @@ public class NewStops extends AAH_FabulousFragment implements LocationListener{
 
 
     private void pickImages(){
-
         //You can change many settings in builder like limit , Pick mode and colors
         new Picker.Builder(getActivity(),new MyPickListener(),R.style.MIP_theme)
                 .setPickMode(Picker.PickMode.MULTIPLE_IMAGES)
                 .setLimit(4)
                 .build()
                 .startActivity();
-
     }
 
     private void setMap(){
-        final String STATIC_MAP_API_ENDPOINT = "http://maps.google.com/maps/api/staticmap?center=" + lat + "," + lon + "&zoom=13&size=640x400&markers=color:red%7C" + lat + "," + lon;
+        final String STATIC_MAP_API_ENDPOINT = "http://maps.google.com/maps/api/staticmap?center=" + Rider_Lat + "," + Rider_Long + "&zoom=13&size=640x400&markers=color:red%7C" + Rider_Lat + "," + Rider_Long;
 
         AsyncTask<Void, Void, Bitmap> setImageFromUrl = new AsyncTask<Void, Void, Bitmap>() {
             @Override
@@ -556,54 +564,31 @@ public class NewStops extends AAH_FabulousFragment implements LocationListener{
         setImageFromUrl.execute();
     }
 
-    private void GetLocation() {
-
-        locationManager2 = (LocationManager) getActivity().getSystemService(LOCATION_SERVICE);
-        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
-
-        if(IsMobailConnected) {
-          location = locationManager2.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-        }else {
-           location = locationManager2.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        }
-        criteria = new Criteria();
-        bestProvider = String.valueOf(locationManager2.getBestProvider(criteria, true)).toString();
-        if ((location == null)) {
-            locationManager2.requestLocationUpdates(bestProvider, 1000, 0, this);
-        }
-
-        if (location != null) {
-            lat = location.getLatitude();
-            lon = location.getLongitude();
-
-            locationManager2.removeUpdates(this);
-        }
-    }
-
-    @Override
-    public void onLocationChanged(Location location) {
-        lat = location.getLatitude();
-        lon = location.getLongitude();
-
-        locationManager2.removeUpdates(this);
-    }
-
-    @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-
-    }
-
-    @Override
-    public void onProviderEnabled(String provider) {
-
-    }
-
-    @Override
-    public void onProviderDisabled(String provider) {
-
-    }
+//    private void GetLocation() {
+//
+//        locationManager2 = (LocationManager) getActivity().getSystemService(LOCATION_SERVICE);
+//        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+//            return;
+//        }
+//
+//        if(IsMobailConnected) {
+//          location = locationManager2.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+//        }else {
+//           location = locationManager2.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+//        }
+//        criteria = new Criteria();
+//        bestProvider = String.valueOf(locationManager2.getBestProvider(criteria, true)).toString();
+//        if ((location == null)) {
+//            locationManager2.requestLocationUpdates(bestProvider, 1000, 0, this);
+//        }
+//
+//        if (location != null) {
+//            lat = location.getLatitude();
+//            lon = location.getLongitude();
+//
+//            locationManager2.removeUpdates(this);
+//        }
+//    }
 
     public void settingsrequest() {
         LocationRequest locationRequest = LocationRequest.create();

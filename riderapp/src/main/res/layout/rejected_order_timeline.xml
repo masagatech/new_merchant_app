@@ -5,52 +5,58 @@
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginLeft="10dp"
-    android:layout_marginRight="10dp">
+    android:layout_marginLeft="5dp"
+    android:layout_marginRight="5dp">
 
     <com.github.vipulasri.timelineview.TimelineView
         android:id="@+id/time_marker"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         app:line="@android:color/holo_blue_dark"
-        app:linePadding="5dp"
-        app:lineSize="3dp"
-        app:markerSize="20dp" />
+        app:linePadding="2dp"
+        app:lineSize="2dp"
+        app:markerSize="10dp" />
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:layout_marginBottom="15dp"
+        android:layout_marginBottom="10dp"
         android:layout_marginLeft="10dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="10dp"
         app:cardElevation="1dp"
         app:contentPadding="15dp">
 
         <RelativeLayout
             android:id="@+id/border"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:background="@drawable/cir"
+            android:paddingBottom="15dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="15dp"
+            android:paddingTop="15dp">
 
             <FrameLayout
-                android:visibility="gone"
                 android:id="@+id/Expense"
+                android:layout_width="0dp"
+                android:layout_height="45dp"
                 android:layout_margin="10dp"
                 android:layout_weight="1"
-                android:layout_width="0dp"
-                android:layout_height="45dp">
+                android:visibility="gone">
+
                 <ImageView
-                    android:src="@drawable/expense"
                     android:id="@+id/imageView2"
-                    android:scaleType="fitCenter"
                     android:layout_width="match_parent"
-                    android:layout_height="30dp" />
+                    android:layout_height="30dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/expense" />
 
                 <TextView
-                    android:layout_marginTop="25dp"
-                    android:layout_gravity="center_horizontal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="25dp"
                     android:text="Expense" />
             </FrameLayout>
 
@@ -63,39 +69,39 @@
                 android:orientation="horizontal">
 
                 <Spinner
-                    android:visibility="gone"
                     android:id="@+id/nature_of_work"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
                     android:layout_weight="1"
-                    android:padding="10dp" />
+                    android:padding="10dp"
+                    android:visibility="gone" />
 
                 <Spinner
-                    android:visibility="gone"
-                    android:layout_gravity="end"
-                    android:layout_weight="1"
                     android:id="@+id/status"
-                    android:layout_margin="5dp"
                     android:layout_width="200dp"
                     android:layout_height="wrap_content"
-                    android:padding="10dp"/>
+                    android:layout_gravity="end"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:padding="10dp"
+                    android:visibility="gone" />
 
                 <EditText
-                    android:visibility="gone"
-                    android:drawableLeft="@drawable/cash_amount"
                     android:id="@+id/nature_value"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:background="@drawable/border_cash_collection"
+                    android:drawableLeft="@drawable/cash_amount"
                     android:hint="Enter value"
                     android:imeOptions="actionDone"
                     android:inputType="number"
                     android:maxLines="1"
                     android:padding="10dp"
                     android:textColor="@android:color/black"
-                    android:textSize="15dp" />
+                    android:textSize="15dp"
+                    android:visibility="gone" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -105,86 +111,117 @@
 
 
                     <LinearLayout
-                        android:visibility="gone"
                         android:id="@+id/cover"
-                        android:background="@drawable/border_cash_collection"
                         android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_below="@+id/remark_form"
-                        android:layout_height="wrap_content">
+                        android:background="@drawable/border_cash_collection"
+                        android:orientation="horizontal"
+                        android:visibility="gone">
 
-                        <co.lujun.androidtagview.TagContainerLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="0dp"
-                            android:padding="10dp"
-                            android:id="@+id/Tags"
-                            android:visibility="gone"
-                            app:container_enable_drag="false"
-                            app:horizontal_interval="10dp"
-                            app:tag_background_color="@color/blue_light"
-                            app:tag_text_color="@color/white"
-                            app:vertical_interval="10dp"
-                            app:tag_clickable="false"
-                            app:tag_theme="pure_teal" />
+
                         <com.pchmn.materialchips.ChipsInput
-                            android:layout_margin="4dp"
-                            android:layout_width="match_parent"
-                            android:layout_below="@+id/remark_form"
-                            android:layout_height="wrap_content"
                             android:id="@+id/chip"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/remark_form"
+                            android:layout_margin="4dp"
                             app:deletable="true"
                             app:hint="  Enter Tags" />
                     </LinearLayout>
 
-                    <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/text_timeline_date"
-                        android:layout_width="match_parent"
-                        android:visibility="gone"
-                        android:layout_height="wrap_content"
-                        android:textSize="12sp"
-                        tools:text="24 JAN" />
-                    <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/text_timeline_title"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:layout_weight="1"
-                        android:textColor="@android:color/black"
-                        tools:text=" #129" />
-
-                    <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/text_marchent"
-                        android:layout_width="225dp"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:textColor="@android:color/black"
-                        android:textStyle="bold"
-                        tools:text="Pizza hut, Pralhad nagar" />
-
                     <LinearLayout
-                        android:id="@+id/ClickToHide"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical">
+                        android:orientation="horizontal"
+                        >
+
                         <android.support.v7.widget.AppCompatTextView
-                            android:id="@+id/Custmer_name"
+                            android:id="@+id/text_timeline_date"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_weight="1"
                             android:gravity="center_vertical"
-                            android:textStyle="bold"
-                            android:drawableLeft="@drawable/pending_deliver_at"
-                            android:textColor="@android:color/black"
-                            tools:text="Sector 15, Navi mumbai" />
+                            android:text="12-AUG-17"
+                            android:drawableLeft="@drawable/esitmated_time"
+                            android:textColor="@android:color/black" />
 
                         <android.support.v7.widget.AppCompatTextView
                             android:id="@+id/Deliver_at"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:drawableLeft="@drawable/times"
                             android:gravity="center_vertical"
-                            android:layout_marginStart="31dp"
-                            android:layout_marginLeft="31dp"
                             android:textColor="@android:color/black"
+                            tools:text="03:40 AM" />
+
+                    </LinearLayout>
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/text_timeline_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:drawableLeft="@drawable/pending_outlets"
+                        android:gravity="center_vertical"
+                        android:textColor="@android:color/black"
+                        android:textStyle="bold"
+                        tools:text=" Expense 4" />
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/text_marchent"
+                        android:layout_width="225dp"
+                        android:layout_height="wrap_content"
+                        android:drawableLeft="@drawable/order_id"
+                        android:gravity="center_vertical"
+                        android:textColor="@android:color/black"
+                        tools:text="25" />
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/Time"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:drawableLeft="@drawable/det"
+                        android:gravity="center_vertical"
+                        android:textColor="@android:color/black"
+                        tools:text="For food and travel" />
+
+                    <co.lujun.androidtagview.TagContainerLayout
+                        android:id="@+id/Tags"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="0dp"
+                        android:padding="10dp"
+                        app:container_background_color="#00000000"
+                        app:container_border_color="#33666666"
+                        app:container_enable_drag="false"
+                        app:horizontal_interval="10dp"
+                        app:tag_background_color="@color/orange_light"
+                        app:tag_border_color="@color/white"
+                        app:tag_clickable="false"
+                        app:tag_text_color="@color/white"
+                        app:tag_theme="none"
+                        app:vertical_interval="10dp" />
+
+                    <LinearLayout
+                        android:id="@+id/ClickToHide"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+                        <android.support.v7.widget.AppCompatTextView
+                            android:id="@+id/Custmer_name"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:drawableLeft="@drawable/pending_deliver_at"
+                            android:gravity="center_vertical"
+                            android:textColor="@android:color/black"
+                            android:textStyle="bold"
                             tools:text="Sector 15, Navi mumbai" />
+
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -195,8 +232,8 @@
                                 android:id="@+id/Remark"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="31dp"
                                 android:layout_marginLeft="31dp"
+                                android:layout_marginStart="31dp"
                                 android:layout_weight="1"
                                 android:gravity="center_vertical"
                                 android:textColor="@android:color/black"
@@ -211,24 +248,16 @@
                                 android:visibility="gone" />
                         </LinearLayout>
 
-                        <android.support.v7.widget.AppCompatTextView
-                            android:id="@+id/Time"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:drawableLeft="@drawable/esitmated_time"
-                            android:gravity="center_vertical"
-                            android:textColor="@android:color/black"
-                            tools:text=" 08.00 PM" />
 
                         <EditText
-                            android:inputType="number"
                             android:id="@+id/Collected_Cash"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="5dp"
-                            android:padding="10dp"
                             android:background="@drawable/border_cash_collection"
                             android:hint="Enter collected cash"
+                            android:inputType="number"
+                            android:padding="10dp"
                             android:textColor="@android:color/black"
                             android:textSize="15dp" />
                     </LinearLayout>
@@ -238,52 +267,55 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
+
                     <ToggleButton
-                        android:background="@drawable/expand_arrow"
                         android:id="@+id/hideButton"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
-                        android:textOn=""
-                        android:textOff=""
+                        android:layout_centerVertical="true"
+                        android:background="@drawable/expand_arrow"
                         android:focusable="false"
                         android:focusableInTouchMode="false"
-                        android:layout_centerVertical="true"/>
+                        android:textOff=""
+                        android:textOn=""
+                        android:visibility="gone" />
 
                     <TextView
                         android:id="@+id/DeliverText"
-                        android:drawableLeft="@drawable/del"
-                        android:textColor="#fff"
-                        android:gravity="center"
-                        android:visibility="gone"
-                        android:layout_gravity="center"
-                        android:layout_marginLeft="10dp"
-                        android:paddingRight="10dp"
-                        android:background="@color/green_light"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/msg_delivered"/>
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="10dp"
+                        android:background="@color/green_light"
+                        android:drawableLeft="@drawable/del"
+                        android:gravity="center"
+                        android:paddingRight="10dp"
+                        android:text="@string/msg_delivered"
+                        android:textColor="#fff"
+                        android:visibility="gone" />
+
                     <ImageButton
+                        android:id="@+id/Btn_AcceptReject"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="5dp"
                         android:layout_marginLeft="5dp"
                         android:layout_weight="1"
-                        android:visibility="gone"
-                        android:id="@+id/Btn_AcceptReject"
+                        android:background="@color/green_light"
                         android:src="@drawable/complated_orders"
-                        android:background="@color/green_light"/>
+                        android:visibility="gone" />
 
                     <ImageButton
+                        android:id="@+id/Btn_Call"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="5dp"
                         android:layout_marginLeft="5dp"
                         android:layout_marginTop="10dp"
                         android:layout_weight="1"
-                        android:visibility="gone"
-                        android:id="@+id/Btn_Call"
                         android:background="@android:color/darker_gray"
-                        android:src="@drawable/call_custemer" />
+                        android:src="@drawable/call_custemer"
+                        android:visibility="gone" />
 
                     <ImageButton
                         android:id="@+id/Btn_map"
@@ -293,9 +325,9 @@
                         android:layout_marginLeft="5dp"
                         android:layout_marginTop="5dp"
                         android:layout_weight="1"
-                        android:visibility="gone"
                         android:background="@android:color/holo_blue_light"
-                        android:src="@drawable/map_custemer" />
+                        android:src="@drawable/map_custemer"
+                        android:visibility="gone" />
                 </LinearLayout>
 
 
@@ -305,10 +337,10 @@
                 android:id="@+id/hr"
                 android:layout_width="match_parent"
                 android:layout_height="2px"
-                android:visibility="gone"
                 android:layout_below="@+id/pending_orders"
                 android:layout_marginTop="10dp"
-                android:background="@color/colorPrimary">
+                android:background="@color/colorPrimary"
+                android:visibility="gone">
 
             </View>
 
@@ -317,8 +349,8 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/hr"
                 android:layout_marginTop="10dp"
-                android:visibility="gone"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="gone">
 
                 <Button
                     android:id="@+id/Btn_Delivery"

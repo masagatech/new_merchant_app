@@ -29,7 +29,9 @@ import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabSelectListener;
 
 import java.lang.reflect.Type;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
@@ -56,8 +58,8 @@ public class pending_order extends AppCompatActivity {
     private boolean mWithLinePadding;
     public static String TripId = "0";
     private ProgressDialog loader;
-    private  String Status = "0";
     private SwipeRefreshLayout mSwipeRefreshLayout;
+    public static String Status_Task="pending";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,15 +101,18 @@ public class pending_order extends AppCompatActivity {
             public void onTabSelected(@IdRes int tabId) {
                 if (tabId == R.id.tab_waiting) {
 
-                    Status="0";
+                    Calendar c = Calendar.getInstance();
+                    SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
+                   final String formattedDate = df.format(c.getTime());
 
                     //refresh data at first time
                     mSwipeRefreshLayout.post(new Runnable() {
                         @Override
                         public void run() {
                             mSwipeRefreshLayout.setRefreshing(true);
+                            Status_Task="pending";
                             //api call
-                            DataFromServer();
+                            DataFromServer(Status_Task,formattedDate);
 //                            SetPush(Status);
                         }
                     });
@@ -115,8 +120,9 @@ public class pending_order extends AppCompatActivity {
                     mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
                         @Override
                         public void onRefresh() {
+                            Status_Task="pending";
                             // Refresh items and get data from server
-                            DataFromServer();
+                            DataFromServer(Status_Task,formattedDate);
                         }
                     });
 //                    mRecyclerView.setLayoutManager(getLinearLayoutManager());
@@ -124,28 +130,38 @@ public class pending_order extends AppCompatActivity {
 
                 }else if(tabId == R.id.tab_allocated)
                 {
-                    Status="1";
+
+                    Calendar c = Calendar.getInstance();
+                    SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
+                    final String formattedDate = df.format(c.getTime());
+
 //                    mRecyclerView.invalidate();
                     //refresh data at first time
                     mSwipeRefreshLayout.post(new Runnable() {
                         @Override
                         public void run() {
                             mSwipeRefreshLayout.setRefreshing(true);
-                            //api call
                             mRecyclerView.setVisibility(View.INVISIBLE);
                             findViewById(txtNodata).setVisibility(View.VISIBLE);
                             mSwipeRefreshLayout.setRefreshing(false);
+
+
+//                            Status_Task="completed";
+//                            //api call
+//                            DataFromServer(Status_Task,formattedDate);
                         }
                     });
 
                     mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
                         @Override
                         public void onRefresh() {
-                            // Refresh items and get data from server
                             mRecyclerView.setVisibility(View.INVISIBLE);
-//                            StartRide.setVisibility(View.GONE);
                             findViewById(txtNodata).setVisibility(View.VISIBLE);
                             mSwipeRefreshLayout.setRefreshing(false);
+
+//                            Status_Task="completed";
+//                            // Refresh items and get data from server
+//                            DataFromServer(Status_Task,formattedDate);
                         }
                     });
                 }
@@ -157,9 +173,14 @@ public class pending_order extends AppCompatActivity {
         mSwipeRefreshLayout.post(new Runnable() {
             @Override
             public void run() {
+
+                Calendar c = Calendar.getInstance();
+                SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
+                final String formattedDate = df.format(c.getTime());
                 mSwipeRefreshLayout.setRefreshing(true);
+                Status_Task="pending";
                 //api call
-                DataFromServer();
+                DataFromServer(Status_Task,formattedDate);
             }
         });
 
@@ -167,8 +188,13 @@ public class pending_order extends AppCompatActivity {
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+
+                Calendar c = Calendar.getInstance();
+                SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
+                final String formattedDate = df.format(c.getTime());
+                Status_Task="pending";
                 // Refresh items and get data from server
-                DataFromServer();
+                DataFromServer(Status_Task,formattedDate);
             }
         });
 
@@ -232,7 +258,7 @@ public class pending_order extends AppCompatActivity {
 
     }
 
-    private void DataFromServer() {
+    private void DataFromServer(String Status,String Date) {
 //
 //        loader = new ProgressDialog(this);
 //        loader.setCancelable(false);
@@ -268,6 +294,10 @@ public class pending_order extends AppCompatActivity {
         JsonObject json = new JsonObject();
         json.addProperty("flag", "byemp");
         json.addProperty("empid",Global.loginusr.getDriverid());
+        json.addProperty("status",Status);
+        json.addProperty("enttid",Global.loginusr.getEnttid());
+        json.addProperty("fdate",Date);
+        json.addProperty("ddate",Date);
 
         Ion.with(this)
                 .load(getTaskAllocate.value)

@@ -239,7 +239,7 @@
 
         <activity
             android:name=".forms.AllOrderDetails"
-            android:label="Summery"
+            android:label="Summary"
             android:screenOrientation="portrait" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -271,7 +271,9 @@
             android:screenOrientation="portrait" />
         <activity android:name=".forms.AddTags" />
         <activity android:name=".forms.expense" />
-        <activity android:name=".forms.AddLeave"></activity>
+        <activity android:name=".forms.AddLeave" />
+        <activity android:name=".forms.Holyday" />
+        <activity android:name=".forms.Leave"></activity>
     </application>
 
 </manifest>

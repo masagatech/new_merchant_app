@@ -23,8 +23,15 @@ public class model_notification {
     public String stops;
     @SerializedName("pcktm")
     public String pcktm;
+
     @SerializedName("amt")
     public String amt;
+
+    @SerializedName("title")
+    public String title;
+
+    @SerializedName("msg")
+    public String msg;
 
     @SerializedName("expmin")
     public int expmin;

@@ -146,7 +146,7 @@ public class login extends AppCompatActivity implements View.OnClickListener {
                 json.addProperty("email", edtUserName.getText().toString());
                 json.addProperty("pwd", edtPassword.getText().toString());
                 json.addProperty("token", token);
-                json.addProperty("type", "employee");
+                json.addProperty("type", "emp");
                 json.addProperty("otherdetails", "{}");
                 json.addProperty("src", "m");
                 json.addProperty("imei",telephonyManager.getDeviceId());

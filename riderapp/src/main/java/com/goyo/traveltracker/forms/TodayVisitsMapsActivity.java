@@ -50,6 +50,8 @@ import java.util.List;
 import az.plainpie.PieView;
 import az.plainpie.animation.PieAngleAnimation;
 
+import static com.goyo.traveltracker.Service.RiderStatus.MapLoc;
+
 public class TodayVisitsMapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
@@ -59,6 +61,7 @@ public class TodayVisitsMapsActivity extends FragmentActivity implements OnMapRe
     String SelectedDate;
     ArrayList<map_model> data = new ArrayList<map_model>();
     PieView pieView,pieStops,pieTasks;
+    PolylineOptions lineOptions = null;
 
 //    private ArrayList<LatLng> Task = new ArrayList<>();
 //    private MarkerOptions TaskMarker = new MarkerOptions();
@@ -139,7 +142,11 @@ public class TodayVisitsMapsActivity extends FragmentActivity implements OnMapRe
             SelectedDate = formattedDate;
         }
 
-        Btn_Date.setText(SelectedDate);
+//       String BTNDate = new SimpleDateFormat("dd-MMM").format(SelectedDate);
+        SimpleDateFormat format = new SimpleDateFormat("dd-MMM");
+        String date = format.format(Date.parse(SelectedDate));
+
+        Btn_Date.setText(date);
         SQLBase db = new SQLBase(this);
         List<HashMap<String, String>> d = db.Get_CombinedVisit(SelectedDate);
         data.clear();
@@ -182,7 +189,7 @@ public class TodayVisitsMapsActivity extends FragmentActivity implements OnMapRe
                 }
 
 
-                numTxt.setText("0"+j);
+                numTxt.setText(j+"");
                 latlngs.add(new LatLng(Double.parseDouble(data.get(i).get_lat()), Double.parseDouble(data.get(i).get_lon())));
                 options.title(data.get(i).get_body());
                 options.snippet(data.get(i).get_title());
@@ -199,19 +206,121 @@ public class TodayVisitsMapsActivity extends FragmentActivity implements OnMapRe
 
 
         //draw path
-        if (latlngs.size() >= 2) {
-            LatLng origin = latlngs.get(0);
-            LatLng dest = latlngs.get(1);
+        if (MapLoc.size() >0) {
 
-            // Getting URL to the Google Directions API
-            String url = getDirectionsUrl(origin, dest);
+            lineOptions = new PolylineOptions();
+            lineOptions.addAll(MapLoc);
+            lineOptions.width(7);
+            lineOptions.color(Color.BLACK);
 
-            DownloadTask downloadTask = new DownloadTask();
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(MapLoc.get(0), 13));
+//                    }else {
+//                        // Adding all the points in the route to LineOptions
+//                        lineOptions.addAll(points);
+//                        lineOptions.width(7);
+//                        lineOptions.color(Color.GREEN);
+//                    }
 
-            // Start downloading json data from Google Directions API
-            downloadTask.execute(url);
+        }
+        Double Km;
+//        Km= distance/1000;
 
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latlngs.get(0), 13));
+//        if(Km<=10.0) {
+//            pieView.setPercentage(10);
+//        } else if (Km>20.0) {
+//            pieView.setPercentage(30);
+//        } else if (Km>30.0) {
+//            pieView.setPercentage(50);
+//        }else if (Km>50.0){
+//            pieView.setPercentage(70);
+//        }else if (Km>70.0){
+            pieView.setPercentage(88);
+//        }
+
+        pieView.setInnerText(8.17+"km");
+        pieView.setPercentageBackgroundColor(Color.parseColor("#a854d4"));
+        pieView.setInnerTextVisibility(View.VISIBLE);
+        PieAngleAnimation animation = new PieAngleAnimation(pieView);
+        animation.setDuration(900); //This is the duration of the animation in millis
+        pieView.startAnimation(animation);
+
+
+        int stops=0,tasks=0;
+        if(data.size()>0) {
+            for (int i = 0; i < data.size(); i++) {
+
+                if ((data.get(i).get_Type().equals("task"))) {
+                    tasks++;
+                } else {
+                    stops++;
+                }
+            }
+        }
+
+
+        //stops
+
+        pieStops.setPercentage(stops+10);
+//        if(stops<=2) {
+//            pieStops.setPercentage(10);
+//        } else if (stops>3) {
+//            pieStops.setPercentage(30);
+//        } else if (stops>4) {
+//            pieStops.setPercentage(50);
+//        }else if (stops>6){
+//            pieStops.setPercentage(70);
+//        }else if (stops>7){
+//            pieStops.setPercentage(88);
+//        }
+        pieStops.setInnerText(stops+"");
+        pieStops.setPercentageBackgroundColor(Color.parseColor("#ffffbb33"));
+// Change the color fill of the background of the widget, by default is transparent
+//            pieStops.setMainBackgroundColor(getResources().getColor(R.color.customColor5));
+        pieStops.setInnerTextVisibility(View.VISIBLE);
+        PieAngleAnimation animation2 = new PieAngleAnimation(pieStops);
+        animation2.setDuration(900); //This is the duration of the animation in millis
+        pieStops.startAnimation(animation2);
+
+
+
+
+//        //tasks
+
+        pieTasks.setPercentage(tasks+10);
+//        if(tasks<=2) {
+//            pieTasks.setPercentage(10);
+//        } else if (tasks>3) {
+//            pieTasks.setPercentage(30);
+//        } else if (tasks>4) {
+//            pieTasks.setPercentage(50);
+//        }else if (tasks>6){
+//            pieTasks.setPercentage(70);
+//        }else if (tasks>7){
+//            pieTasks.setPercentage(88);
+//        }
+        pieTasks.setInnerText(tasks+"");
+        pieTasks.setPercentageBackgroundColor(Color.parseColor("#ff33b5e5"));
+        pieTasks.setInnerTextVisibility(View.VISIBLE);
+        PieAngleAnimation animation3 = new PieAngleAnimation(pieTasks);
+        animation3.setDuration(900); //This is the duration of the animation in millis
+        pieTasks.startAnimation(animation3);
+        if(data.size()>0) {
+            if (lineOptions != null) {
+                mMap.addPolyline(lineOptions);
+            }
+
+//            LatLng origin = latlngs.get(0);
+//            LatLng dest = latlngs.get(1);
+//
+//            // Getting URL to the Google Directions API
+//            String url = getDirectionsUrl(origin, dest);
+//
+//            DownloadTask downloadTask = new DownloadTask();
+//
+//            // Start downloading json data from Google Directions API
+//            downloadTask.execute(url);
+
+
 
         }else {
 
@@ -220,9 +329,9 @@ public class TodayVisitsMapsActivity extends FragmentActivity implements OnMapRe
             pieView.setPercentageBackgroundColor(Color.parseColor("#a854d4"));
             pieView.setInnerText("0km");
             pieView.setInnerTextVisibility(View.VISIBLE);
-            PieAngleAnimation animation = new PieAngleAnimation(pieView);
-            animation.setDuration(1000); //This is the duration of the animation in millis
-            pieView.startAnimation(animation);
+            PieAngleAnimation animation4 = new PieAngleAnimation(pieView);
+            animation4.setDuration(1000); //This is the duration of the animation in millis
+            pieView.startAnimation(animation4);
 
 
             //stops
@@ -232,9 +341,9 @@ public class TodayVisitsMapsActivity extends FragmentActivity implements OnMapRe
 // Change the color fill of the background of the widget, by default is transparent
 //            pieStops.setMainBackgroundColor(getResources().getColor(R.color.customColor5));
             pieStops.setInnerTextVisibility(View.VISIBLE);
-            PieAngleAnimation animation2 = new PieAngleAnimation(pieStops);
-            animation2.setDuration(1000); //This is the duration of the animation in millis
-            pieStops.startAnimation(animation2);
+            PieAngleAnimation animation5 = new PieAngleAnimation(pieStops);
+            animation5.setDuration(1000); //This is the duration of the animation in millis
+            pieStops.startAnimation(animation5);
 
 
             //tasks
@@ -242,9 +351,9 @@ public class TodayVisitsMapsActivity extends FragmentActivity implements OnMapRe
             pieTasks.setInnerText("0");
             pieTasks.setPercentageBackgroundColor(Color.parseColor("#ff33b5e5"));
             pieTasks.setInnerTextVisibility(View.VISIBLE);
-            PieAngleAnimation animation3 = new PieAngleAnimation(pieTasks);
-            animation3.setDuration(1000); //This is the duration of the animation in millis
-            pieTasks.startAnimation(animation3);
+            PieAngleAnimation animation6 = new PieAngleAnimation(pieTasks);
+            animation6.setDuration(1000); //This is the duration of the animation in millis
+            pieTasks.startAnimation(animation6);
         }
     }
 
@@ -396,7 +505,7 @@ public class TodayVisitsMapsActivity extends FragmentActivity implements OnMapRe
 
                 ArrayList<LatLng> points = null;
                 PolylineOptions lineOptions = null;
-                Double distance =0.0;
+                Double distance = 0.0;
 
                 // Traversing through all the routes
                 for (int i = 0; i < result.size(); i++) {
@@ -410,17 +519,15 @@ public class TodayVisitsMapsActivity extends FragmentActivity implements OnMapRe
                     for (int j = 0; j < path.size(); j++) {
                         HashMap<String, String> point = path.get(j);
 
-                        if(point.get("distance")!=null) {
+                        if (point.get("distance") != null) {
                             distance = distance + Double.parseDouble(point.get("distance"));
                         }
-                        if(point.get("lat")!=null) {
+                        if (point.get("lat") != null) {
                             double lat = Double.parseDouble(point.get("lat"));
                             double lng = Double.parseDouble(point.get("lng"));
                             LatLng position = new LatLng(lat, lng);
                             points.add(position);
                         }
-
-
 
 
                     }
@@ -430,106 +537,9 @@ public class TodayVisitsMapsActivity extends FragmentActivity implements OnMapRe
 //                    mPolyline.setPattern(pattern);
 
 //                    if(points.get(0)==latlngs.get(0)){
-                        // Adding all the points in the route to LineOptions
-                        lineOptions.addAll(points);
-                        lineOptions.width(7);
-                        lineOptions.color(Color.BLACK);
-//                    }else {
-//                        // Adding all the points in the route to LineOptions
-//                        lineOptions.addAll(points);
-//                        lineOptions.width(7);
-//                        lineOptions.color(Color.GREEN);
-//                    }
-
-                }
-                Double Km;
-                Km= distance/1000;
-
-                if(Km<=10.0) {
-                    pieView.setPercentage(10);
-                } else if (Km>20.0) {
-                    pieView.setPercentage(30);
-                } else if (Km>30.0) {
-                    pieView.setPercentage(50);
-                }else if (Km>50.0){
-                    pieView.setPercentage(70);
-                }else if (Km>70.0){
-                    pieView.setPercentage(88);
-                }
-
-                pieView.setInnerText(Km+"km");
-                pieView.setPercentageBackgroundColor(Color.parseColor("#a854d4"));
-                pieView.setInnerTextVisibility(View.VISIBLE);
-                PieAngleAnimation animation = new PieAngleAnimation(pieView);
-                animation.setDuration(900); //This is the duration of the animation in millis
-                pieView.startAnimation(animation);
+                    // Adding all the points in the route to LineOptions
 
 
-                int stops=0,tasks=0;
-                if(data.size()>0) {
-                    for (int i = 0; i < data.size(); i++) {
-
-                        if ((data.get(i).get_Type().equals("task"))) {
-                            tasks++;
-                        } else {
-                            stops++;
-                        }
-                    }
-                }
-
-
-                //stops
-                        if(stops<=2) {
-                            pieStops.setPercentage(10);
-                        } else if (stops>3) {
-                            pieStops.setPercentage(30);
-                        } else if (stops>4) {
-                            pieStops.setPercentage(50);
-                        }else if (stops>6){
-                            pieStops.setPercentage(70);
-                        }else if (stops>7){
-                            pieStops.setPercentage(88);
-                        }
-                pieStops.setInnerText(stops+"");
-                pieStops.setPercentageBackgroundColor(Color.parseColor("#ffffbb33"));
-// Change the color fill of the background of the widget, by default is transparent
-//            pieStops.setMainBackgroundColor(getResources().getColor(R.color.customColor5));
-                pieStops.setInnerTextVisibility(View.VISIBLE);
-                PieAngleAnimation animation2 = new PieAngleAnimation(pieStops);
-                animation2.setDuration(900); //This is the duration of the animation in millis
-                pieStops.startAnimation(animation2);
-
-
-
-
-                //tasks
-                        if(tasks<=2) {
-                            pieTasks.setPercentage(10);
-                        } else if (tasks>3) {
-                            pieTasks.setPercentage(30);
-                        } else if (tasks>4) {
-                            pieTasks.setPercentage(50);
-                        }else if (tasks>6){
-                            pieTasks.setPercentage(70);
-                        }else if (tasks>7){
-                            pieTasks.setPercentage(88);
-                        }
-                pieTasks.setInnerText(tasks+"");
-                pieTasks.setPercentageBackgroundColor(Color.parseColor("#ff33b5e5"));
-                pieTasks.setInnerTextVisibility(View.VISIBLE);
-                PieAngleAnimation animation3 = new PieAngleAnimation(pieTasks);
-                animation3.setDuration(900); //This is the duration of the animation in millis
-                pieTasks.startAnimation(animation3);
-
-            // Change the text of the widget
-
-
-
-                // Drawing polyline in the Google Map for the i-th route
-                if(data.size()>0) {
-                    if (lineOptions != null) {
-                        mMap.addPolyline(lineOptions);
-                    }
                 }
             }
         }

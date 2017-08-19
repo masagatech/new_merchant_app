@@ -1,37 +1,31 @@
 package com.goyo.traveltracker.adapters;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Notification;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.CountDownTimer;
 import android.support.v4.app.NotificationCompat;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.gson.JsonObject;
-import com.koushikdutta.async.future.FutureCallback;
-import com.koushikdutta.ion.Ion;
 import com.goyo.traveltracker.R;
 import com.goyo.traveltracker.database.SQLBase;
 import com.goyo.traveltracker.forms.Orientation;
 import com.goyo.traveltracker.forms.PendingOrdersView;
 import com.goyo.traveltracker.gloabls.Global;
 import com.goyo.traveltracker.model.model_notification;
+import com.koushikdutta.async.future.FutureCallback;
+import com.koushikdutta.ion.Ion;
 
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.TimeUnit;
 
 import static android.content.Context.BIND_IMPORTANT;
 import static com.goyo.traveltracker.Service.RiderStatus.mBuilder;
@@ -75,117 +69,117 @@ public class NewOrderAdapter extends RecyclerView.Adapter<NewOrderAdapterViewHol
 
     @Override
     public void onBindViewHolder(final NewOrderAdapterViewHolder holder,int position) {
-        if (holder.timer != null) KillTimer(holder.timer);
+//        if (holder.timer != null) KillTimer(holder.timer);
         final model_notification timeLineModel = mFeedList.get(position);
 
-        holder.mStops.setText(timeLineModel.stops + "");
-        holder.Cash_amount.setText(String.format("%.2f", Double.parseDouble(timeLineModel.amt)));
-        holder.mOulets.setText(timeLineModel.olnm);
-        holder.mTime.setText(timeLineModel.pcktm);
+        holder.mStops.setText(timeLineModel.msg + "");
+//        holder.Cash_amount.setText(String.format("%.2f", Double.parseDouble(timeLineModel.amt)));
+        holder.mOulets.setText(timeLineModel.title+"");
+//        holder.mTime.setText(timeLineModel.pcktm);
 
 
         //accept/reject button hide if order is expired
-        if(!timeLineModel.isExpired) {
-            holder.Btn_Reject.setVisibility(View.VISIBLE);
-            holder.Btn_Accept.setVisibility(View.VISIBLE);
-        }
+//        if(!timeLineModel.isExpired) {
+//            holder.Btn_Reject.setVisibility(View.VISIBLE);
+//            holder.Btn_Accept.setVisibility(View.VISIBLE);
+//        }
 
 
-        holder.Btn_Accept.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setNoti("accept");
-                int newPosition = holder.getAdapterPosition();
+//        holder.Btn_Accept.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                setNoti("accept");
+//                int newPosition = holder.getAdapterPosition();
+//
+//                //calling Api
+//                setStatus("accord", timeLineModel.ordid, newPosition, timeLineModel.autoid, holder,"");
+//
+//
+//            }
+//        });
 
-                //calling Api
-                setStatus("accord", timeLineModel.ordid, newPosition, timeLineModel.autoid, holder,"");
-
-
-            }
-        });
-
-        holder.Btn_Reject.setOnClickListener(new View.OnClickListener() {
-                                                 @Override
-                                                 public void onClick(View v) {
-                                                     final EditText edittext = new EditText(mContext);
-                                                     edittext.setMaxLines(100);
-
-                                                     //showing alert dialog if press reject
-                                                    final AlertDialog alertDialog = new AlertDialog.Builder(mContext)
-                                                             .setTitle(mContext.getResources().getString(R.string.reject_reason_head))
-                                                             .setMessage(mContext.getResources().getString(R.string.reject_reason_body))
-                                                             .setView(edittext)
-                                                             .setPositiveButton(mContext.getResources().getString(R.string.yes), null)
-                                                             .setNegativeButton(R.string.alert_no_text, null)
-                                                             .setIcon(R.drawable.rider_del)
-                                                             .create();
-
-                                                     alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
-
-                                                         @Override
-                                                         public void onShow(DialogInterface dialog) {
-
-                                                             Button button = ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE);
-                                                             button.setOnClickListener(new View.OnClickListener() {
-                                                                 @Override
-                                                                 public void onClick(View view) {
-                                                                     String feedabck = "";
-                                                                     //Getting rider feed back
-                                                                     feedabck = edittext.getText().toString();
-                                                                     //hiding button and canceling timer
-
-                                                                     int newPosition = holder.getAdapterPosition();
-                                                                     if (feedabck.equals("")) {
-                                                                         Toast.makeText(mContext, "Please enter the reason!", Toast.LENGTH_SHORT).show();
-                                                                     } else {
-                                                                         //calling api
-                                                                         setNoti("reject");
-                                                                         setStatus("rejord", timeLineModel.ordid, newPosition, timeLineModel.autoid, holder, feedabck);
-                                                                         alertDialog.dismiss();
-                                                                     }
-                                                                 }
-                                                             });
-
-                                                             Button button2 = ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_NEGATIVE);
-                                                             button2.setOnClickListener(new View.OnClickListener() {
-                                                                 @Override
-                                                                 public void onClick(View view) {
-                                                                     alertDialog.dismiss();
-                                                                 }
-                                                             });
-                                                         }
-                                                     });
-                                                     alertDialog.show();
-                                                 }
-                                             });
-        Log.v("rmtm", "" + timeLineModel.remaintime);
-
-
-        //timer in each order
-        holder.timer = new CountDownTimer(timeLineModel.remaintime, 1000) {
-            public void onFinish() {
-                int newPosition = holder.getAdapterPosition();
-                Log.v("autoid", "" + timeLineModel.autoid);
-                Log.v("pos", "" + newPosition);
-                sb.NOTIFICATION_DELETE(timeLineModel.autoid + "");
-                holder.popup_counter.setText(mContext.getResources().getString(R.string.exp));
-                if(mFeedList.size()>0) {
-                    mFeedList.remove(newPosition);
-                    notifyItemRemoved(newPosition);
-                    notifyItemRangeChanged(newPosition, getItemCount());
-                }
-                holder.Btn_Reject.setVisibility(View.GONE);
-                holder.Btn_Accept.setVisibility(View.GONE);
-                timeLineModel.isExpired = true;
-            }
-
-            public void onTick(long millisUntilFinished) {
-                timeLineModel.remaintime -= 1000;
-                holder.popup_counter.setText("" + String.format("%02d:%02d",
-                        TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millisUntilFinished)),
-                        TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished))));
-            }
-        }.start();
+//        holder.Btn_Reject.setOnClickListener(new View.OnClickListener() {
+//                                                 @Override
+//                                                 public void onClick(View v) {
+//                                                     final EditText edittext = new EditText(mContext);
+//                                                     edittext.setMaxLines(100);
+//
+//                                                     //showing alert dialog if press reject
+//                                                    final AlertDialog alertDialog = new AlertDialog.Builder(mContext)
+//                                                             .setTitle(mContext.getResources().getString(R.string.reject_reason_head))
+//                                                             .setMessage(mContext.getResources().getString(R.string.reject_reason_body))
+//                                                             .setView(edittext)
+//                                                             .setPositiveButton(mContext.getResources().getString(R.string.yes), null)
+//                                                             .setNegativeButton(R.string.alert_no_text, null)
+//                                                             .setIcon(R.drawable.rider_del)
+//                                                             .create();
+//
+//                                                     alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+//
+//                                                         @Override
+//                                                         public void onShow(DialogInterface dialog) {
+//
+//                                                             Button button = ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE);
+//                                                             button.setOnClickListener(new View.OnClickListener() {
+//                                                                 @Override
+//                                                                 public void onClick(View view) {
+//                                                                     String feedabck = "";
+//                                                                     //Getting rider feed back
+//                                                                     feedabck = edittext.getText().toString();
+//                                                                     //hiding button and canceling timer
+//
+//                                                                     int newPosition = holder.getAdapterPosition();
+//                                                                     if (feedabck.equals("")) {
+//                                                                         Toast.makeText(mContext, "Please enter the reason!", Toast.LENGTH_SHORT).show();
+//                                                                     } else {
+//                                                                         //calling api
+//                                                                         setNoti("reject");
+//                                                                         setStatus("rejord", timeLineModel.ordid, newPosition, timeLineModel.autoid, holder, feedabck);
+//                                                                         alertDialog.dismiss();
+//                                                                     }
+//                                                                 }
+//                                                             });
+//
+//                                                             Button button2 = ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_NEGATIVE);
+//                                                             button2.setOnClickListener(new View.OnClickListener() {
+//                                                                 @Override
+//                                                                 public void onClick(View view) {
+//                                                                     alertDialog.dismiss();
+//                                                                 }
+//                                                             });
+//                                                         }
+//                                                     });
+//                                                     alertDialog.show();
+//                                                 }
+//                                             });
+//        Log.v("rmtm", "" + timeLineModel.remaintime);
+//
+//
+//        //timer in each order
+//        holder.timer = new CountDownTimer(timeLineModel.remaintime, 1000) {
+//            public void onFinish() {
+//                int newPosition = holder.getAdapterPosition();
+//                Log.v("autoid", "" + timeLineModel.autoid);
+//                Log.v("pos", "" + newPosition);
+//                sb.NOTIFICATION_DELETE(timeLineModel.autoid + "");
+//                holder.popup_counter.setText(mContext.getResources().getString(R.string.exp));
+//                if(mFeedList.size()>0) {
+//                    mFeedList.remove(newPosition);
+//                    notifyItemRemoved(newPosition);
+//                    notifyItemRangeChanged(newPosition, getItemCount());
+//                }
+//                holder.Btn_Reject.setVisibility(View.GONE);
+//                holder.Btn_Accept.setVisibility(View.GONE);
+//                timeLineModel.isExpired = true;
+//            }
+//
+//            public void onTick(long millisUntilFinished) {
+//                timeLineModel.remaintime -= 1000;
+//                holder.popup_counter.setText("" + String.format("%02d:%02d",
+//                        TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millisUntilFinished)),
+//                        TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished))));
+//            }
+//        }.start();
     }
 
 

@@ -9,6 +9,19 @@ import com.goyo.traveltracker.forms.OrderStatus;
 
 public class model_completed {
 
+    @SerializedName("elid")
+    public String elid;
+
+    @SerializedName("frmdt")
+    public String frmdt;
+
+    @SerializedName("todt")
+    public String todt;
+
+    @SerializedName("restype")
+    public String restype;
+
+
     @SerializedName("ordid")
     public String ordid;
 
