@@ -207,7 +207,8 @@ public final class Procedures {
                 +  Tables.tblexpense.Expense_Value + " VARCHAR, "
                 +  Tables.tblexpense.Expense_Code  + " VARCHAR, "
                 +  Tables.tblexpense.Expense_Is_Active  + " VARCHAR, "
-                +  Tables.tblexpense.Expense_Server  + " VARCHAR "
+                +  Tables.tblexpense.Expense_Server  + " VARCHAR ,"
+                +  Tables.tblexpense.Approval_Amount  + " VARCHAR "
                 +")";
 
 

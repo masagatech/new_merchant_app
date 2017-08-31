@@ -82,8 +82,8 @@ import static com.goyo.traveltracker.Service.NetworkStateReceiver.IsMobailConnec
 import static com.goyo.traveltracker.Service.RiderStatus.Rider_Lat;
 import static com.goyo.traveltracker.Service.RiderStatus.Rider_Long;
 import static com.goyo.traveltracker.forms.dashboard.REQUEST_CHECK_SETTINGS;
+import static com.goyo.traveltracker.forms.dashboard.TripId;
 import static com.goyo.traveltracker.forms.dashboard.mGoogleApiClient;
-import static com.goyo.traveltracker.forms.pending_order.TripId;
 import static com.goyo.traveltracker.gloabls.Global.urls.mobileupload;
 
 
@@ -375,7 +375,8 @@ public class NewStops extends AAH_FabulousFragment{
             .setMultipartParameter("lat", Lat)
             .setMultipartParameter("lng", Lon)
             .setMultipartParameter("trpid", TripId)
-            .setMultipartParameter("cuid", currentDateTimeString)
+            .setMultipartParameter("cuid",Global.loginusr.getUcode()+"" )
+            .setMultipartParameter("mob_createdon", currentDateTimeString)
             .setMultipartParameter("tag","{" + tag + "}")
             .setMultipartParameter("path","")
             .setMultipartParameter("expid", Selected_Exp)

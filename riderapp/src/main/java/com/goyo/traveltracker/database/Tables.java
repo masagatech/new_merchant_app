@@ -156,6 +156,7 @@ public final class Tables {
         public static final String Expense_Server = "expense_server";
         public static final String Exp_ID = "exp_id";
         public static final String Expense_Is_Active = "expense_is_active";
+        public static final String Approval_Amount = "approval_amount";
     }
 
     public static class tblleave{

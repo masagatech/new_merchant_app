@@ -47,7 +47,8 @@ import java.util.List;
 import static com.goyo.traveltracker.Service.NetworkStateReceiver.IsMobailConnected;
 import static com.goyo.traveltracker.Service.RiderStatus.Rider_Lat;
 import static com.goyo.traveltracker.Service.RiderStatus.Rider_Long;
-import static com.goyo.traveltracker.forms.pending_order.TripId;
+import static com.goyo.traveltracker.forms.dashboard.TripId;
+import static com.goyo.traveltracker.forms.pending_order.Status_Task;
 import static com.goyo.traveltracker.gloabls.Global.urls.saveTaskNature;
 import static com.goyo.traveltracker.gloabls.Global.urls.setTripAction;
 
@@ -133,7 +134,89 @@ public class pending_order_adapter extends RecyclerView.Adapter<pending_order_vi
 //            yourSpinner.setEnabled(false);
 //            yourSpinner.setClickable(false);
 //        }
+        final int newPosition = holder.getAdapterPosition();
 
+        //getting nature of work data from server
+        GetNtr_Work(holder);
+
+        //getting Status of work data from server
+        GetStatus_Work(holder);
+
+        GetCurrentStatus(newPosition,holder);
+
+
+        if(Status_Task==1){
+
+            holder.chipsInput.setVisibility(View.GONE);
+            holder.Btn_Delivery.setVisibility(View.GONE);
+            holder.Expense.setVisibility(View.GONE);
+
+            holder.collected_cash.setText(timeLineModel.remark+"");
+            holder.collected_cash.setEnabled(false);
+
+            holder.nature_value.setText(timeLineModel.value+"");
+            holder.nature_value.setEnabled(false);
+
+           final String Status=timeLineModel.tstype;
+
+//            holder.status.post(new Runnable() {
+//                @Override
+//                public void run() {
+//                    final int pos = Status_Work.indexOf(Status);
+//                    holder.status.setSelection(pos);
+//                }
+//            });
+
+            holder.status.setVisibility(View.GONE);
+//            holder.status.setEnabled(false);
+
+
+         final String  Nature=timeLineModel.tntype;
+
+
+            holder.nature_of_work.post(new Runnable() {
+                @Override
+                public void run() {
+                    if(Ntr_Work!=null) {
+                        final int pos2 = Ntr_Work.indexOf(Nature);
+                        holder.nature_of_work.setSelection(pos2);
+                    }
+
+                }
+            });
+
+            holder.nature_of_work.setEnabled(false);
+
+
+
+        }else {
+            holder.collected_cash.setText("");
+            holder.collected_cash.setEnabled(true);
+
+            holder.nature_value.setText("");
+            holder.nature_value.setEnabled(true);
+
+            holder.nature_of_work.setEnabled(true);
+
+            holder.status.setVisibility(View.VISIBLE);
+
+            holder.Expense.setVisibility(View.VISIBLE);
+            holder.chipsInput.setVisibility(View.VISIBLE);
+            holder.Btn_Delivery.setVisibility(View.VISIBLE);
+
+
+            SQLBase db = new SQLBase(mContext);
+
+            List<model_tag_db> data = new ArrayList<model_tag_db>();
+            List<HashMap<String,String>> d = db.Get_Tags();
+            if(d.size()>0) {
+                for (int i = 0; i <= d.size() - 1; i++) {
+                    data.add(new model_tag_db( d.get(i).get(Tables.tbltags.Tag_Id), d.get(i).get(Tables.tbltags.Tag_Title),d.get(i).get(Tables.tbltags.Tag_remark_1),d.get(i).get(Tables.tbltags.Tag_remark_2),d.get(i).get(Tables.tbltags.Tag_remark_3),d.get(i).get(Tables.tbltags.Tag_Creat_On),d.get(i).get(Tables.tbltags.Is_Server_Send)));
+                }
+            }
+
+            holder.chipsInput.setFilterableList(data);
+        }
 
         holder.mOrder.setText(timeLineModel.tskid +"");
         holder.mMarchant.setText(timeLineModel.task);
@@ -143,7 +226,6 @@ public class pending_order_adapter extends RecyclerView.Adapter<pending_order_vi
         holder.mTime.setText(timeLineModel.todt);
         holder.mDate.setText(timeLineModel.frmdt);
 //        holder.collected_cash.setText(+timeLineModel.amtcollect +"");
-        final int newPosition = holder.getAdapterPosition();
 
 
         holder.collected_cash.setOnClickListener(new View.OnClickListener() {
@@ -155,25 +237,11 @@ public class pending_order_adapter extends RecyclerView.Adapter<pending_order_vi
             }
         });
 
-        //getting nature of work data from server
-        GetNtr_Work(holder);
 
-        SQLBase db = new SQLBase(mContext);
 
-        List<model_tag_db> data = new ArrayList<model_tag_db>();
-        List<HashMap<String,String>> d = db.Get_Tags();
-        if(d.size()>0) {
-            for (int i = 0; i <= d.size() - 1; i++) {
-                data.add(new model_tag_db( d.get(i).get(Tables.tbltags.Tag_Id), d.get(i).get(Tables.tbltags.Tag_Title),d.get(i).get(Tables.tbltags.Tag_remark_1),d.get(i).get(Tables.tbltags.Tag_remark_2),d.get(i).get(Tables.tbltags.Tag_remark_3),d.get(i).get(Tables.tbltags.Tag_Creat_On),d.get(i).get(Tables.tbltags.Is_Server_Send)));
-            }
-        }
 
-        holder.chipsInput.setFilterableList(data);
 
-        //getting Status of work data from server
-        GetStatus_Work(holder);
 
-        GetCurrentStatus(newPosition,holder);
 
 
 //        holder.setIsRecyclable(false);
@@ -489,11 +557,13 @@ public class pending_order_adapter extends RecyclerView.Adapter<pending_order_vi
 
         JsonObject json = new JsonObject();
         json.addProperty("tntype", Selected_Nature);
+        json.addProperty("enttid", Global.loginusr.getEnttid());
         json.addProperty("tstype", Selected_Status);
         json.addProperty("ordno", Selected_OrNo);
         json.addProperty("value", Value);
         json.addProperty("remark", Remark);
-        json.addProperty("cuid", TimenDate);
+        json.addProperty("cuid", Global.loginusr.getUcode()+"");
+        json.addProperty("mob_createdon", TimenDate);
         json.addProperty("tskid", timeLineModel.tskid+ "");
         json.addProperty("trpid", TripId);
         json.addProperty("tag","{" + tag + "}");
@@ -518,14 +588,14 @@ public class pending_order_adapter extends RecyclerView.Adapter<pending_order_vi
 //                                //promt message to stop trip if its last order
 //                                AutoStop();
 
-//                                if(Status_Work != null && !Status_Work.isEmpty()) {
-//                                if (Status_Work.get(Status_Work.size() - 1).equals(Selected_Status)) {
-//                                    //removing order from list
-//                                    mFeedList.remove(newPosition);
-//                                    notifyItemRemoved(newPosition);
-//                                    notifyItemRangeChanged(newPosition, mFeedList.size());
-//                                }
-//                            }
+                                if(Status_Work != null && !Status_Work.isEmpty()) {
+                                if (Status_Work.get(Status_Work.size() - 1).equals(Selected_Status)) {
+                                    //removing order from list
+                                    mFeedList.remove(newPosition);
+                                    notifyItemRemoved(newPosition);
+                                    notifyItemRangeChanged(newPosition, mFeedList.size());
+                                }
+                            }
                             JsonObject o= result.get("data").getAsJsonArray().get(0).getAsJsonObject().get("funsave_tasknature").getAsJsonObject();
                             Toast.makeText(mContext, o.get("msg").toString(), Toast.LENGTH_SHORT).show();
 //                                Toast.makeText(mContext, result.get("data").getAsJsonObject().get("msg").toString()
@@ -751,7 +821,7 @@ public class pending_order_adapter extends RecyclerView.Adapter<pending_order_vi
         json.addProperty("amtrec", timeLineModel.amtcollect + "");   //        Cash
         json.addProperty("ordid", timeLineModel.ordid + "");
         json.addProperty("orddid", timeLineModel.orderdetailid + "");
-        json.addProperty("remark", timeLineModel.remark);
+//        json.addProperty("remark", timeLineModel.remark);
 
 
         Ion.with(mContext)

@@ -25,6 +25,7 @@ import android.net.Uri;
 import android.os.BatteryManager;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -64,6 +65,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.goyo.traveltracker.R;
 import com.goyo.traveltracker.Service.RiderStatus;
+import com.goyo.traveltracker.common.Checker;
 import com.goyo.traveltracker.database.SQLBase;
 import com.goyo.traveltracker.database.Tables;
 import com.goyo.traveltracker.gloabls.Global;
@@ -90,8 +92,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static android.preference.PreferenceManager.getDefaultSharedPreferences;
 import static com.goyo.traveltracker.Service.RiderStatus.handler;
-import static com.goyo.traveltracker.forms.pending_order.TripId;
 import static com.goyo.traveltracker.gloabls.Global.urls.getEmpStatus;
 import static com.goyo.traveltracker.gloabls.Global.urls.mobileupload;
 
@@ -133,6 +135,7 @@ public class dashboard extends AppCompatActivity implements LocationListener,
     public String bestProvider;
     LocationManager locationManager2;
    private int Pending_element;
+    public static String TripId;
     final Popup_Counter CountTimer = new Popup_Counter(180000, 1000);
     private NotificationManager notificationManager;
     TextView Count_Pending,Count_TodayVisits;
@@ -149,6 +152,10 @@ public class dashboard extends AppCompatActivity implements LocationListener,
 
         //checking app version
         AppVerCheck();
+
+        //getting Last TripId
+        TripId=PreferenceManager.getDefaultSharedPreferences(dashboard.this).getString("tripid", "0");
+
 
         //counts
         Count_Pending=(TextView)findViewById(R.id.Count);
@@ -495,6 +502,7 @@ public class dashboard extends AppCompatActivity implements LocationListener,
                                 if (result != null) Log.v("result", result.toString());
                                 if (Boolean.parseBoolean(Status)) {
                                     TripId = (result.get("data").getAsJsonObject()).get("tripid").toString();
+                                    getDefaultSharedPreferences(dashboard.this).edit().putString("tripid",TripId ).apply();
 //                                    Toast.makeText(dashboard.this, (result.get("data").getAsJsonObject()).get("resmessage").toString(), Toast.LENGTH_LONG).show();
                                     if (!isMyServiceRunning(RiderStatus.class)) {
                                         //Notification
@@ -520,6 +528,7 @@ public class dashboard extends AppCompatActivity implements LocationListener,
                                         stopService(new Intent(dashboard.this, RiderStatus.class));
                                 }
                                 TripId="0";
+                                getDefaultSharedPreferences(dashboard.this).edit().putString("tripid",TripId ).apply();
                                 if(isCallLogout){
                                     Logout();
                                 }
@@ -532,6 +541,23 @@ public class dashboard extends AppCompatActivity implements LocationListener,
                             }
                         }
                         } catch (Exception ea) {
+                            if (state == "true") {
+                                isStatusDbCheck = true;
+                                RiderStatusSwitch.setChecked(false);
+                                isStatusDbCheck = false;
+                            }else {
+                                isStatusDbCheck = true;
+                                RiderStatusSwitch.setChecked(true);
+                                isStatusDbCheck = false;
+                            }
+                            new Checker(dashboard.this).pass(new Checker.Pass() {
+                                @Override
+                                public void pass() {
+
+                                }
+
+                            }).check(Checker.Resource.NETWORK);
+                            Toast.makeText(dashboard.this, "There was an error", Toast.LENGTH_SHORT).show();
                             ea.printStackTrace();
                         }
 //                        Global.hideProgress(loader);

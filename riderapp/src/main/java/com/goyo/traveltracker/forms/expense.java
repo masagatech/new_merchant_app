@@ -86,6 +86,16 @@ public class expense extends AppCompatActivity {
 
     private void Update(final String Selected_Exp, final String Selected_Value, final String Selected_Disc, List<String> Tags){
 
+
+        //time
+        DateFormat dateFormat = new SimpleDateFormat("hh:mm a");
+        String time = dateFormat.format(new Date()).toString();
+        //date
+        Calendar c = Calendar.getInstance();
+        SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
+        String formattedDate = df.format(c.getTime());
+        String TimenDate=formattedDate+", "+time;
+
         String tag= Joiner.on(",").join(Tags);
 
         //JSONArray jsArray = new JSONArray(Tags);
@@ -95,7 +105,8 @@ public class expense extends AppCompatActivity {
         json.addProperty("expdesc", Selected_Disc);
         json.addProperty("expval", Selected_Value);
         json.addProperty("enttid",Global.loginusr.getEnttid() + "");
-        json.addProperty("cuid", Global.loginusr.getDriverid() + "");
+        json.addProperty("cuid", Global.loginusr.getUcode() + "");
+        json.addProperty("mob_createdon", TimenDate+ "");
         json.addProperty("tag","{" + tag + "}");
 
         Ion.with(this)
@@ -261,7 +272,7 @@ public class expense extends AppCompatActivity {
                         Gson gson = new Gson();
                         String TagString= gson.toJson(Tags);
 
-                        db.ADDEXPENSE(new model_expense(time,selectedExpense,Selected_Disc, Selected_Value, formattedDate,TagString,"2"));
+                        db.ADDEXPENSE(new model_expense(time,selectedExpense,Selected_Disc, Selected_Value, formattedDate,TagString,"2","Pending"));
                         Update(Selected_Exp,Selected_Value,Selected_Disc,Tags);
                     }else {
                             SQLBase db = new SQLBase(this);
@@ -270,7 +281,7 @@ public class expense extends AppCompatActivity {
                         Gson gson = new Gson();
                         String TagString= gson.toJson(Tags);
 
-                            db.ADDEXPENSE(new model_expense(time,selectedExpense,Selected_Disc, Selected_Value, formattedDate,TagString,"1"));
+                            db.ADDEXPENSE(new model_expense(time,selectedExpense,Selected_Disc, Selected_Value, formattedDate,TagString,"1","Pending"));
                             Toast.makeText(this, "Saved successfully", Toast.LENGTH_SHORT).show();
                            finish();
                         Intent intent=new Intent(expense.this,rejected_order.class);

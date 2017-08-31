@@ -100,6 +100,7 @@ public class RejectedOrderAdapter extends RecyclerView.Adapter<pending_order_vie
 
         //setting order no. and marchant name on start
     holder.mTime.setText(timeLineModel.get_disc());
+        holder.Custmer_name.setText("Approved Amount: "+timeLineModel.get_appr_amt());
         holder.mMarchant.setText("₹ "+timeLineModel.get_value());
         holder.mOrder.setText(timeLineModel.get_name());
         if(TagsArray!=null) {

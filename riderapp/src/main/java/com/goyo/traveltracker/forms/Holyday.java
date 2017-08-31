@@ -21,7 +21,9 @@ import java.util.Date;
 import java.util.List;
 
 public class Holyday extends AppCompatActivity {
-  private ArrayList<String> Dates;
+  private ArrayList<String> FromDates;
+    private ArrayList<String> ToDates;
+    private  List<Date> Dates;
     private List<Date> NewDate =new ArrayList<Date>();
     CaldroidFragment caldroidFragment;
 
@@ -33,7 +35,7 @@ public class Holyday extends AppCompatActivity {
         if(getSupportActionBar()!=null)
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        setTitle("Holy Days");
+        setTitle("Holli-Days");
 
 
         caldroidFragment = new CaldroidFragment();
@@ -67,11 +69,21 @@ public class Holyday extends AppCompatActivity {
                     public void onCompleted(Exception e, JsonObject result) {
                         // do stuff with the result or error
                         try {
-                            Dates =new ArrayList<String>();
+                            FromDates =new ArrayList<String>();
+                            ToDates =new ArrayList<String>();
                             for(int i=0;i<result.get("data").getAsJsonArray().size();i++){
-                                Dates.add(result.get("data").getAsJsonArray().get(i).getAsJsonObject().get("frmdt").getAsString());
+                                FromDates.add(result.get("data").getAsJsonArray().get(i).getAsJsonObject().get("frmdt").getAsString());
+                                ToDates.add(result.get("data").getAsJsonArray().get(i).getAsJsonObject().get("todt").getAsString());
                             }
-                            SetHolyday(Dates);
+
+                            for(int i=0;i<result.get("data").getAsJsonArray().size();i++) {
+                                List<Date> Date=getDates(FromDates.get(i),ToDates.get(i));
+                                for (int j=0;j<Date.size();j++) {
+                                    SetHolyday(Date.get(j));
+                                }
+//                                Dates.addAll(Date);
+                            }
+//                            SetHolyday(Dates);
 
                         } catch (Exception ea) {
                             ea.printStackTrace();
@@ -83,22 +95,55 @@ public class Holyday extends AppCompatActivity {
 
     }
 
-    private void SetHolyday(ArrayList<String> Dates){
+    private static List<Date> getDates(String dateString1, String dateString2)
+    {
+        ArrayList<Date> dates = new ArrayList<Date>();
+        DateFormat df1 = new SimpleDateFormat("dd-MMM-yyyy");
+
+        Date date1 = null;
+        Date date2 = null;
+
+        try {
+            date1 = df1 .parse(dateString1);
+            date2 = df1 .parse(dateString2);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        Calendar cal1 = Calendar.getInstance();
+        cal1.setTime(date1);
+
+
+        Calendar cal2 = Calendar.getInstance();
+        cal2.setTime(date2);
+
+        while(!cal1.after(cal2))
+        {
+            dates.add(cal1.getTime());
+            cal1.add(Calendar.DATE, 1);
+        }
+        return dates;
+    }
+
+    private void SetHolyday (Date  Dates){
         ColorDrawable red = new ColorDrawable(getResources().getColor(R.color.orange_light));
-        for(int j = 0; j <= Dates.size() - 1; j++){
-            try {
-                DateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
-                Date date= df.parse(Dates.get(j));
-                NewDate.add(date);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-        }
+//        for(int j = 0; j <= Dates.size() - 1; j++){
+//            try {
+//                DateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
+//                Date date= df.parse(Dates.get(j));
+//                NewDate.add(date);
+//            } catch (ParseException e) {
+//                e.printStackTrace();
+//            }
+//        }
 
-
-        for(int j = 0; j <= Dates.size() - 1; j++){
-            caldroidFragment.setBackgroundDrawableForDate(red, NewDate.get(j));
-        }
+//        for(int j = 0; j <= Dates.size() - 1; j++){
+            caldroidFragment.setBackgroundDrawableForDate(red, Dates);
+//        }
+//
+//        for(int j = 0; j <= Dates.size() - 1; j++){
+//            caldroidFragment.setBackgroundDrawableForDate(red, NewDate.get(j));
+//        }
     }
 
 

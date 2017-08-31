@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:background="@drawable/grad" xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/Start_Time"
+        android:gravity="center_vertical"
+        android:padding="5dp"
+        android:fontFamily="sans-serif-light"
+        android:layout_weight="1"
+        android:drawableLeft="@drawable/deliver_at"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="17dp"
+        android:textColor="#000"
+        android:text="12:12:12 pm"/>
+
+    <TextView
+        android:id="@+id/End_Time"
+        android:gravity="center_vertical"
+        android:padding="5dp"
+        android:fontFamily="sans-serif-light"
+        android:layout_weight="1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="17dp"
+        android:textColor="#fff"
+        android:text="12:12:12 pm"/>
+    <ImageView
+        android:id="@+id/Trip_Btn"
+        android:layout_width="40dp"
+        android:layout_height="match_parent"
+        android:background="@drawable/arr_trip"/>
+
+
+
+</LinearLayout>

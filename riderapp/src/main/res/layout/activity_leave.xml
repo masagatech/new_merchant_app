@@ -6,6 +6,77 @@
     android:layout_height="match_parent"
     tools:context="com.goyo.traveltracker.forms.Leave"
     android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+    <LinearLayout
+        android:layout_weight="1"
+        android:padding="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <ImageView
+            android:layout_marginLeft="10dp"
+            android:layout_gravity="center"
+            android:background="@drawable/rect_leave"
+            android:layout_width="20dp"
+            android:layout_height="20dp" />
+        <TextView
+            android:fontFamily="sans-serif-light"
+            android:padding="5dp"
+            android:textSize="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Leave     Days"/>
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_weight="1"
+        android:padding="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <ImageView
+            android:layout_gravity="center"
+            android:background="@drawable/rect_accepted"
+            android:layout_width="20dp"
+            android:layout_height="20dp" />
+        <TextView
+            android:fontFamily="sans-serif-light"
+            android:padding="5dp"
+            android:textSize="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Accepted Leave"/>
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_weight="1"
+        android:padding="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <ImageView
+            android:layout_gravity="center"
+            android:background="@drawable/rect_reject"
+            android:layout_width="20dp"
+            android:layout_height="20dp" />
+        <TextView
+            android:fontFamily="sans-serif-light"
+            android:padding="5dp"
+            android:textSize="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Rejected Leave"/>
+
+    </LinearLayout>
+        </LinearLayout>
 
 
 </LinearLayout>

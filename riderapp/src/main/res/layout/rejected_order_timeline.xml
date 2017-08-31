@@ -21,27 +21,23 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:layout_marginBottom="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginBottom="2dp"
         app:cardElevation="1dp"
-        app:contentPadding="15dp">
+        app:contentPadding="7dp">
 
         <RelativeLayout
+
             android:id="@+id/border"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/cir"
-            android:paddingBottom="15dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="15dp"
-            android:paddingTop="15dp">
+           android:padding="5dp">
 
             <FrameLayout
                 android:id="@+id/Expense"
                 android:layout_width="0dp"
                 android:layout_height="45dp"
-                android:layout_margin="10dp"
+                android:layout_margin="5dp"
                 android:layout_weight="1"
                 android:visibility="gone">
 
@@ -62,6 +58,8 @@
 
 
             <LinearLayout
+                android:clickable="true"
+                android:background="?android:attr/selectableItemBackground"
                 android:id="@+id/pending_orders"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -188,6 +186,15 @@
                         android:textColor="@android:color/black"
                         tools:text="For food and travel" />
 
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/Custmer_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableLeft="@drawable/cash_amount"
+                        android:gravity="center_vertical"
+                        android:textColor="@android:color/black"
+                        tools:text="Approved Amount : 300" />
+
                     <co.lujun.androidtagview.TagContainerLayout
                         android:id="@+id/Tags"
                         android:layout_width="match_parent"
@@ -212,15 +219,7 @@
                         android:orientation="vertical"
                         android:visibility="gone">
 
-                        <android.support.v7.widget.AppCompatTextView
-                            android:id="@+id/Custmer_name"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:drawableLeft="@drawable/pending_deliver_at"
-                            android:gravity="center_vertical"
-                            android:textColor="@android:color/black"
-                            android:textStyle="bold"
-                            tools:text="Sector 15, Navi mumbai" />
+
 
 
                         <LinearLayout

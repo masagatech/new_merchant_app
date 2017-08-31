@@ -24,7 +24,6 @@ import com.goyo.traveltracker.adapters.RejectedOrderAdapter;
 import com.goyo.traveltracker.database.SQLBase;
 import com.goyo.traveltracker.database.Tables;
 import com.goyo.traveltracker.gloabls.Global;
-import com.goyo.traveltracker.model.model_completed;
 import com.goyo.traveltracker.model.model_expense;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
@@ -36,8 +35,6 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
-import static com.goyo.traveltracker.gloabls.Global.urls.getEmployeeLeave;
-
 public class rejected_order extends AppCompatActivity {
     private com.goyo.traveltracker.adapters.RejectedOrderAdapter mTimeLineAdapter;
     private RecyclerView mRecyclerView;
@@ -48,6 +45,7 @@ public class rejected_order extends AppCompatActivity {
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private DatePickerTimeline timeline;
    private String SelectedDate;
+    private  ArrayList<model_expense> datas;
     TextView Exp,Stops,Tasks,Totals;
     private CheckBox Check_Task,Check_stops;
     private ImageButton Back,Add_Expense;
@@ -194,6 +192,7 @@ public class rejected_order extends AppCompatActivity {
             @Override
             public void onRefresh() {
                 // Refresh items and get data from server
+
                 DataFromServer(Status);
             }
         });
@@ -202,11 +201,16 @@ public class rejected_order extends AppCompatActivity {
 
     private void DataFromServer(String Status) {
 
-        int Exp_total=0,Stop_total=0,Task_total=0,Total=0;
-
         data= populateList(Status);
+        GetApprovedAmount(data);
 
+    }
+
+    private void Data(ArrayList<model_expense> data){
+
+        int Exp_total=0,Stop_total=0,Task_total=0,Total=0;
         if(data.size()>0) {
+
             for (int i = 0; i <= data.size() - 1; i++) {
                 if(data.get(i)._is_server.equals("task")) {
                     Task_total = Task_total + Integer.parseInt(data.get(i)._value);
@@ -245,33 +249,65 @@ public class rejected_order extends AppCompatActivity {
     }
 
 
-    private void DatafromServer(){
-
+    private void GetApprovedAmount(ArrayList<model_expense> data){
+        datas=new ArrayList<>();
+        datas=data;
         JsonObject json = new JsonObject();
-        json.addProperty("enttid", Global.loginusr.getEnttid());
-        json.addProperty("empid", Global.loginusr.getDriverid());
-        json.addProperty("flag", "byemp");
+        json.addProperty("empid",Global.loginusr.getDriverid()+"");
+        json.addProperty("flag", "approved");
+        json.addProperty("enttid", Global.loginusr.getEnttid()+"");
         Ion.with(this)
-                .load(getEmployeeLeave.value)
+                .load(Global.urls.getVoucherDetails.value)
                 .setJsonObjectBody(json)
                 .asJsonObject()
                 .setCallback(new FutureCallback<JsonObject>() {
                     @Override
                     public void onCompleted(Exception e, JsonObject result) {
-                        // do stuff with the result or error
                         try {
                             // JSONObject jsnobject = new JSONObject(jsond);
                             Gson gson = new Gson();
-                            Type listType = new TypeToken<List<model_completed>>() {
+                            Type listType = new TypeToken<List<model_expense>>() {
                             }.getType();
-                            List<model_completed> events = (List<model_completed>) gson.fromJson(result.get("data"), listType);
-//                            SavetoDb(events);
-                        }
-                        catch (Exception ea) {
+                            List<model_expense> events = (List<model_expense>) gson.fromJson(result.get("data"), listType);
+                            datas= SavetoDb(events,datas);
+                            Data(datas);
+                        } catch (Exception ea) {
                             ea.printStackTrace();
                         }
+
+
                     }
                 });
+
+    }
+
+    private ArrayList<model_expense> SavetoDb(List<model_expense> lst,ArrayList<model_expense> data) {
+        SQLBase db = new SQLBase(this);
+        if (lst.size() > 0) {
+            for (int i = 0; i <= lst.size() - 1; i++) {
+                if(lst.get(i).mob_createdon!=null) {
+                    String[] twoStringArray = lst.get(i).mob_createdon.split(", ", 2); //the main line
+                    String Date = twoStringArray[0];
+                    String Time = twoStringArray[1];
+                    //checking if expense alredy exist
+//                    if (db.ISEXPENSE_APPRO_ALREDY_EXIST(Date, Time)) {
+                        if (lst.get(i).appramt != null) {
+                            if(data.size()>0) {
+                                for (int j = 0; j <= data.size() - 1; j++) {
+
+                                    if (data.get(j)._code.equals(Date) && data.get(j)._exp_id.equals(Time)) {
+                                        data.get(j)._appr_amt = (lst.get(i).appramt);
+                                    }
+                                }
+                            }
+//                            db.EXPENSE_UPDATE_APPR(lst.get(i).appramt, Date, Time);
+//                        }
+                    }
+                }
+            }
+        }
+        return data;
+
     }
 
 
@@ -289,28 +325,28 @@ public class rejected_order extends AppCompatActivity {
             List<HashMap<String, String>> d = db.Get_CombinedTasksOnly(SelectedDate);
             if (d.size() > 0) {
                 for (int i = 0; i <= d.size() - 1; i++) {
-                    data.add(new model_expense(d.get(i).get(Tables.tblexpense.Exp_ID), d.get(i).get(Tables.tblexpense.Expense_Name), d.get(i).get(Tables.tblexpense.Expense_Disc), d.get(i).get(Tables.tblexpense.Expense_Value), d.get(i).get(Tables.tblexpense.Expense_Code), d.get(i).get(Tables.tblexpense.Expense_Is_Active), d.get(i).get(Tables.tblexpense.Expense_Server)));
+                    data.add(new model_expense(d.get(i).get(Tables.tblexpense.Exp_ID), d.get(i).get(Tables.tblexpense.Expense_Name), d.get(i).get(Tables.tblexpense.Expense_Disc), d.get(i).get(Tables.tblexpense.Expense_Value), d.get(i).get(Tables.tblexpense.Expense_Code), d.get(i).get(Tables.tblexpense.Expense_Is_Active), d.get(i).get(Tables.tblexpense.Expense_Server), d.get(i).get(Tables.tblexpense.Approval_Amount)));
                 }
             }
         }else if (Status.equals("Stop_Selected")){
             List<HashMap<String, String>> d = db.Get_CombinedStop_Only(SelectedDate);
             if (d.size() > 0) {
                 for (int i = 0; i <= d.size() - 1; i++) {
-                    data.add(new model_expense(d.get(i).get(Tables.tblexpense.Exp_ID), d.get(i).get(Tables.tblexpense.Expense_Name), d.get(i).get(Tables.tblexpense.Expense_Disc), d.get(i).get(Tables.tblexpense.Expense_Value), d.get(i).get(Tables.tblexpense.Expense_Code), d.get(i).get(Tables.tblexpense.Expense_Is_Active), d.get(i).get(Tables.tblexpense.Expense_Server)));
+                    data.add(new model_expense(d.get(i).get(Tables.tblexpense.Exp_ID), d.get(i).get(Tables.tblexpense.Expense_Name), d.get(i).get(Tables.tblexpense.Expense_Disc), d.get(i).get(Tables.tblexpense.Expense_Value), d.get(i).get(Tables.tblexpense.Expense_Code), d.get(i).get(Tables.tblexpense.Expense_Is_Active), d.get(i).get(Tables.tblexpense.Expense_Server), d.get(i).get(Tables.tblexpense.Approval_Amount)));
                 }
             }
         }else if (Status.equals("Both_Selected")) {
             List<HashMap<String, String>> d = db.Get_CombinedExpense(SelectedDate);
             if (d.size() > 0) {
                 for (int i = 0; i <= d.size() - 1; i++) {
-                    data.add(new model_expense(d.get(i).get(Tables.tblexpense.Exp_ID), d.get(i).get(Tables.tblexpense.Expense_Name), d.get(i).get(Tables.tblexpense.Expense_Disc), d.get(i).get(Tables.tblexpense.Expense_Value), d.get(i).get(Tables.tblexpense.Expense_Code), d.get(i).get(Tables.tblexpense.Expense_Is_Active), d.get(i).get(Tables.tblexpense.Expense_Server)));
+                    data.add(new model_expense(d.get(i).get(Tables.tblexpense.Exp_ID), d.get(i).get(Tables.tblexpense.Expense_Name), d.get(i).get(Tables.tblexpense.Expense_Disc), d.get(i).get(Tables.tblexpense.Expense_Value), d.get(i).get(Tables.tblexpense.Expense_Code), d.get(i).get(Tables.tblexpense.Expense_Is_Active), d.get(i).get(Tables.tblexpense.Expense_Server), d.get(i).get(Tables.tblexpense.Approval_Amount)));
                 }
             }
         }else if (Status.equals("None_Selected")) {
             List<HashMap<String, String>> d = db.Get_Expenses_ALL(SelectedDate);
             if (d.size() > 0) {
                 for (int i = 0; i <= d.size() - 1; i++) {
-                    data.add(new model_expense(d.get(i).get(Tables.tblexpense.Exp_ID), d.get(i).get(Tables.tblexpense.Expense_Name), d.get(i).get(Tables.tblexpense.Expense_Disc), d.get(i).get(Tables.tblexpense.Expense_Value), d.get(i).get(Tables.tblexpense.Expense_Code), d.get(i).get(Tables.tblexpense.Expense_Is_Active), d.get(i).get(Tables.tblexpense.Expense_Server)));
+                    data.add(new model_expense(d.get(i).get(Tables.tblexpense.Exp_ID), d.get(i).get(Tables.tblexpense.Expense_Name), d.get(i).get(Tables.tblexpense.Expense_Disc), d.get(i).get(Tables.tblexpense.Expense_Value), d.get(i).get(Tables.tblexpense.Expense_Code), d.get(i).get(Tables.tblexpense.Expense_Is_Active), d.get(i).get(Tables.tblexpense.Expense_Server), d.get(i).get(Tables.tblexpense.Approval_Amount)));
                 }
             }
         }

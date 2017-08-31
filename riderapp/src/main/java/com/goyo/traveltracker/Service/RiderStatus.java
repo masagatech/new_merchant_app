@@ -26,7 +26,6 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
@@ -46,14 +45,13 @@ import com.koushikdutta.ion.Ion;
 import org.json.JSONObject;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
 
 import static android.app.Notification.VISIBILITY_PUBLIC;
-import static com.goyo.traveltracker.forms.pending_order.TripId;
+import static com.goyo.traveltracker.forms.dashboard.TripId;
 import static com.goyo.traveltracker.gloabls.Global.urls.livebeats;
 
 
@@ -73,14 +71,14 @@ public class RiderStatus extends Service implements com.google.android.gms.locat
     protected static final int REQUEST_CHECK_SETTINGS = 0x1;
     private GoogleApiClient mGoogleApiClient;
 
-    private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10; // 10 meters
-    private static final long MIN_TIME_BW_UPDATES = 3000; // 3 seconds
-    private static final long FASTEST_TIME_BW_UPDATES = 7000; // 30 seconds
+    private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 20; // 10 meters
+    private static final long MIN_TIME_BW_UPDATES = 20000; // 20 seconds
+    private static final long FASTEST_TIME_BW_UPDATES = 20000; // 20 seconds
 
-//    private static final long MINIMUM_DISTANCE_CHANGE_FOR_UPDATES = 1000; // in Meters
-//    private static final long MINIMUM_TIME_BETWEEN_UPDATES = 10000; // in Milliseconds
+    private static final long MINIMUM_DISTANCE_CHANGE_FOR_UPDATES = 1000; // in Meters
+    private static final long MINIMUM_TIME_BETWEEN_UPDATES = 10000; // in Milliseconds
 
-    private static final Integer NOTIFICATION_CHECKR_TIMER = 8;//seconds
+//    private static final Integer NOTIFICATION_CHECKR_TIMER = 8;//seconds
     private static final Integer LOCATION_SENDER_TIMER = 15;//seconds
 
     public static LocationManager locationManager;
@@ -94,13 +92,15 @@ public class RiderStatus extends Service implements com.google.android.gms.locat
     String ordid, olnm, stops, amt;
     Integer exptm = 3;
     private Location mCurrentLoc;
+    private Location mPreviousLoc;
+    float bearing = 0f,accuracy=0f;
+    double altitude=0;
    public static NotificationCompat.Builder mBuilder;
     public static NotificationManager notificationManager;
-    public static ArrayList<LatLng> MapLoc= new ArrayList<LatLng>();
     private NotificationManager notificationManager2;
 
     Integer VersionCode;
-    Integer NotifyTimerResseter = NOTIFICATION_CHECKR_TIMER;
+//    Integer NotifyTimerResseter = NOTIFICATION_CHECKR_TIMER;
     Integer LocationTimerResseter = LOCATION_SENDER_TIMER;
 
     SQLBase sql;
@@ -125,6 +125,7 @@ public class RiderStatus extends Service implements com.google.android.gms.locat
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if (mGoogleApiClient == null) {
             mGoogleApiClient = new GoogleApiClient.Builder(this)
+//                    .addApi(ActivityRecognition.API)
                     .addConnectionCallbacks(this)
                     .addOnConnectionFailedListener(this)
                     .addApi(LocationServices.API)
@@ -140,8 +141,8 @@ public class RiderStatus extends Service implements com.google.android.gms.locat
             Rider_Lat = String.valueOf(mCurrentLoc.getLatitude());
             Rider_Long = String.valueOf(mCurrentLoc.getLongitude());
 
-            LatLng position = new LatLng(Double.parseDouble(Rider_Lat), Double.parseDouble(Rider_Long));
-            MapLoc.add(position);
+//            LatLng position = new LatLng(Double.parseDouble(Rider_Lat), Double.parseDouble(Rider_Long));
+//            MapLoc.add(position);
         }
 
 
@@ -149,12 +150,12 @@ public class RiderStatus extends Service implements com.google.android.gms.locat
         notify = new Runnable() {
             @Override
             public void run() {
-                if (NotifyTimerResseter == NOTIFICATION_CHECKR_TIMER) {
-                    Notify();
-                    NotifyTimerResseter = 0;
-                }
+//                if (NotifyTimerResseter == NOTIFICATION_CHECKR_TIMER) {
+//                    Notify();
+//                    NotifyTimerResseter = 0;
+//                }
 
-                //Notification
+//                Notification
                 try {
                     showNotification();
                 } catch (ExecutionException e) {
@@ -168,7 +169,7 @@ public class RiderStatus extends Service implements com.google.android.gms.locat
                     sendingLocationToServer();
                     LocationTimerResseter = 0;
                 }
-                NotifyTimerResseter += 1;
+//                NotifyTimerResseter += 1;
                 LocationTimerResseter += 1;
                 handler1.postDelayed(this, 1000);
             }
@@ -215,7 +216,7 @@ public class RiderStatus extends Service implements com.google.android.gms.locat
         }
         Notification notification = new NotificationCompat.Builder(this)
                 .setTicker("Online!")
-                .setSmallIcon(R.drawable.rider)
+                .setSmallIcon(R.drawable.tracker_ic)
                 .setContentTitle("Time-In With Travel Tracker!")
                 .setContentIntent(pi)
                 .setAutoCancel(false)
@@ -223,8 +224,8 @@ public class RiderStatus extends Service implements com.google.android.gms.locat
                 .build();
 
         notificationManager2 = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        notificationManager2.notify(1, notification);
-        startForeground(1, notification);
+        notificationManager2.notify(2, notification);
+        startForeground(2, notification);
     }
 
     @Override
@@ -238,7 +239,7 @@ public class RiderStatus extends Service implements com.google.android.gms.locat
         mSocket.close();
         if(notificationManager2!=null) {
             stopForeground(true);
-            notificationManager2.cancel(1);
+            notificationManager2.cancel(2);
         }
         handler1.removeCallbacks(notify);
         notify = null;
@@ -254,6 +255,8 @@ public class RiderStatus extends Service implements com.google.android.gms.locat
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
+
+
         int speed;
         if(mCurrentLoc!=null) {
             speed = (int) ((mCurrentLoc.getSpeed() * 3600) / 1000);
@@ -268,9 +271,12 @@ public class RiderStatus extends Service implements com.google.android.gms.locat
         json.addProperty("flag", "start");
         json.addProperty("drvid",  riderid + "");
         json.addProperty("uid", riderid + "");
+        json.addProperty("bearing", bearing + "");
         json.addProperty("btr", getBatteryLevel() + "");
         json.addProperty("appvr",VersionCode + "");
         json.addProperty("speed",speed);
+        json.addProperty("alt",altitude);
+        json.addProperty("accr",accuracy);
 
         Ion.with(this)
                 .load(livebeats.value)
@@ -281,23 +287,6 @@ public class RiderStatus extends Service implements com.google.android.gms.locat
                     public void onCompleted(Exception e, JsonObject result) {
                         // do stuff with the result or error
                         try {
-//        Ion.with(this)
-//                .load("GET", Global.urls.livebeats.value)
-////                .addQuery("rdid", riderid)
-//                .addQuery("loc", "["+ Rider_Lat+","+Rider_Long+"]")
-//                .addQuery("enttid", Global.loginusr.getEnttid()+"")
-//                .addQuery("tripid", TripId + "")
-//                .addQuery("flag", "start")
-//                .addQuery("drvid", riderid + "")
-//                .addQuery("uid", riderid + "")
-//                .addQuery("btr", getBatteryLevel() + "")
-//                .addQuery("appvr", VersionCode + "")
-//                .asJsonObject()
-//                .setCallback(new FutureCallback<JsonObject>() {
-//                    @Override
-//                    public void onCompleted(Exception e, JsonObject result) {
-//
-//                        try {
                             if (result != null) Log.v("result", result.toString());
 
                         } catch (Exception ea) {
@@ -353,44 +342,52 @@ public class RiderStatus extends Service implements com.google.android.gms.locat
         return ((float) level / (float) scale) * 100.0f;
     }
 
-    protected void showCurrentLocation() {
-
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
-        }
-        location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-        if (location == null) {
-            location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        }
-        if (location != null) {
-            Rider_Lat = String.valueOf(location.getLatitude());
-            Rider_Long = String.valueOf(location.getLongitude());
-
-            LatLng position = new LatLng(Double.parseDouble(Rider_Lat), Double.parseDouble(Rider_Long));
-            MapLoc.add(position);
-        }
-
-    }
+//    protected void showCurrentLocation() {
+//
+//        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+//            //    ActivityCompat#requestPermissions
+//            // here to request the missing permissions, and then overriding
+//            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+//            //                                          int[] grantResults)
+//            // to handle the case where the user grants the permission. See the documentation
+//            // for ActivityCompat#requestPermissions for more details.
+//            return;
+//        }
+//        location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+//        if (location == null) {
+//            location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+//        }
+//        if (location != null) {
+//            Rider_Lat = String.valueOf(location.getLatitude());
+//            Rider_Long = String.valueOf(location.getLongitude());
+//
+////            LatLng position = new LatLng(Double.parseDouble(Rider_Lat), Double.parseDouble(Rider_Long));
+////            MapLoc.add(position);
+//        }
+//
+//    }
 
     @Override
     public void onLocationChanged(Location location) {
         if (location != null) {
             mCurrentLoc = location;
-//            String message = String.format("New Location \n Longitude: %1$s \n Latitude: %2$s",
-//                    location.getLongitude(), location.getLatitude());
-//            Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+
+            altitude =location.getAltitude();
+
+            accuracy =location.getAccuracy();
+
             Rider_Lat = String.valueOf(location.getLatitude());
             Rider_Long = String.valueOf(location.getLongitude());
 
-            LatLng position = new LatLng(Double.parseDouble(Rider_Lat), Double.parseDouble(Rider_Long));
-            MapLoc.add(position);
+
+            if (mPreviousLoc != null) {
+                bearing = mPreviousLoc.bearingTo(mCurrentLoc);
+            }
+
+//            LatLng position = new LatLng(Double.parseDouble(Rider_Lat), Double.parseDouble(Rider_Long));
+//            MapLoc.add(position);
+
+            mPreviousLoc = location;
 
         }
 
@@ -516,8 +513,8 @@ public class RiderStatus extends Service implements com.google.android.gms.locat
                 PendingIntent pi = PendingIntent.getActivity(this, 0, new Intent(this, splash_screen.class), 0);
                 mBuilder =
                         new NotificationCompat.Builder(this)
-                                .setSmallIcon(R.drawable.rider)
-                                .setContentTitle("New Order")
+                                .setSmallIcon(R.drawable.tracker_ic)
+                                .setContentTitle("New Task")
                                 .setDefaults(Notification.DEFAULT_ALL) // must requires VIBRATE permission
                                 .setPriority(NotificationCompat.PRIORITY_HIGH) //must give priority to High, Max which will considered as heads-up notification
                                 .setVisibility(BIND_IMPORTANT)

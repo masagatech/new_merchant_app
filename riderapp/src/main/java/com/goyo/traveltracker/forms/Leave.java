@@ -1,5 +1,6 @@
 package com.goyo.traveltracker.forms;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -7,12 +8,19 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 import com.goyo.traveltracker.R;
 import com.goyo.traveltracker.database.SQLBase;
 import com.goyo.traveltracker.database.Tables;
+import com.goyo.traveltracker.gloabls.Global;
 import com.goyo.traveltracker.model.modal_leave;
+import com.koushikdutta.async.future.FutureCallback;
+import com.koushikdutta.ion.Ion;
 import com.roomorama.caldroid.CaldroidFragment;
 
+import java.lang.reflect.Type;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -22,9 +30,15 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import static com.goyo.traveltracker.database.Tables.tblleave.Leave_From;
+import static com.goyo.traveltracker.database.Tables.tblleave.Leave_Status;
+import static com.goyo.traveltracker.database.Tables.tblleave.Leave_To;
+
 public class Leave extends AppCompatActivity {
 
     private  List<Date> Dates;
+    private ProgressDialog loader;
+    CaldroidFragment caldroidFragment;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,7 +52,7 @@ public class Leave extends AppCompatActivity {
         setTitle(getResources().getString(R.string.Rejected_Order));
 
 
-        CaldroidFragment caldroidFragment = new CaldroidFragment();
+       caldroidFragment = new CaldroidFragment();
         Bundle args = new Bundle();
         Calendar cal = Calendar.getInstance();
         args.putInt(CaldroidFragment.MONTH, cal.get(Calendar.MONTH) + 1);
@@ -49,26 +63,49 @@ public class Leave extends AppCompatActivity {
         t.replace(R.id.cal, caldroidFragment);
         t.commit();
 
+        SetDates();
 
+    }
 
+    private void SetDates(){
         SQLBase db = new SQLBase(this);
 
+        ColorDrawable blue = new ColorDrawable(getResources().getColor(R.color.blue_light));
+        ColorDrawable red = new ColorDrawable(getResources().getColor(R.color.red_light));
+        ColorDrawable green = new ColorDrawable(getResources().getColor(R.color.green_light));
+
         ArrayList<modal_leave> data = new ArrayList<modal_leave>();
-            List<HashMap<String, String>> d = db.Get_Leave();
-            if (d.size() > 0) {
-                for (int i = 0; i <= d.size() - 1; i++) {
-                    data.add(new modal_leave(d.get(i).get(Tables.tblleave.Leave_From), d.get(i).get(Tables.tblleave.Leave_To), d.get(i).get(Tables.tblleave.Leave_Type), d.get(i).get(Tables.tblleave.Leave_Details), d.get(i).get(Tables.tblleave.Leave_Created_By), d.get(i).get(Tables.tblleave.Leave_Server), d.get(i).get(Tables.tblleave.Leave_Status)));
+        List<HashMap<String, String>> d = db.Get_Leave();
+        if (d.size() > 0) {
+            for (int i = 0; i <= d.size() - 1; i++) {
+                data.add(new modal_leave(d.get(i).get(Leave_From), d.get(i).get(Leave_To), d.get(i).get(Tables.tblleave.Leave_Type), d.get(i).get(Tables.tblleave.Leave_Details), d.get(i).get(Tables.tblleave.Leave_Created_By), d.get(i).get(Tables.tblleave.Leave_Server), d.get(i).get(Leave_Status)));
 
-                    Dates=getDates(d.get(i).get(Tables.tblleave.Leave_From),d.get(i).get(Tables.tblleave.Leave_To));
-                    ColorDrawable blue = new ColorDrawable(getResources().getColor(R.color.blue_light));
+                if(d.get(i).get(Leave_Status).equals("Pending")) {
 
-                    for(int j = 0; j <= Dates.size() - 1; j++){
+                    Dates = getDates(d.get(i).get(Leave_From), d.get(i).get(Leave_To));
+                    for (int j = 0; j <= Dates.size() - 1; j++) {
                         caldroidFragment.setBackgroundDrawableForDate(blue, Dates.get(j));
+
+                    }
+                }else if(d.get(i).get(Leave_Status).equals("Accpeted")) {
+
+                    Dates = getDates(d.get(i).get(Leave_From), d.get(i).get(Leave_To));
+                    for (int j = 0; j <= Dates.size() - 1; j++) {
+                        caldroidFragment.setBackgroundDrawableForDate(green, Dates.get(j));
+
+                    }
+                }else if(d.get(i).get(Leave_Status).equals("Rejected")){
+
+                    Dates = getDates(d.get(i).get(Leave_From), d.get(i).get(Leave_To));
+                    for (int j = 0; j <= Dates.size() - 1; j++) {
+                        caldroidFragment.setBackgroundDrawableForDate(red, Dates.get(j));
+
                     }
                 }
-                }
             }
-
+            caldroidFragment.refreshView();
+        }
+    }
     private static List<Date> getDates(String dateString1, String dateString2)
     {
         ArrayList<Date> dates = new ArrayList<Date>();
@@ -99,6 +136,58 @@ public class Leave extends AppCompatActivity {
         return dates;
     }
 
+
+    private void GetStatus(){
+
+        loader = new ProgressDialog(this);
+        loader.setCancelable(false);
+        loader.setMessage(this.getString(R.string.wait_msg));
+        loader.show();
+
+       JsonObject json = new JsonObject();
+        json.addProperty("empid",Global.loginusr.getDriverid()+"");
+        json.addProperty("flag", "approved");
+        json.addProperty("enttid", Global.loginusr.getEnttid()+"");
+        Ion.with(this)
+                .load(Global.urls.getEmployeeLeave.value)
+                .setJsonObjectBody(json)
+                .asJsonObject()
+                .setCallback(new FutureCallback<JsonObject>() {
+                    @Override
+                    public void onCompleted(Exception e, JsonObject result) {
+                        try {
+                            // JSONObject jsnobject = new JSONObject(jsond);
+                            Gson gson = new Gson();
+                            Type listType = new TypeToken<List<modal_leave>>() {
+                            }.getType();
+                            List<modal_leave> events = (List<modal_leave>) gson.fromJson(result.get("data"), listType);
+                            SavetoDb(events);
+                        } catch (Exception ea) {
+                            ea.printStackTrace();
+                        }
+                        SetDates();
+                        loader.hide();
+
+
+                    }
+                });
+
+    }
+
+    private void SavetoDb(List<modal_leave> lst) {
+        SQLBase db = new SQLBase(this);
+        if (lst.size() > 0) {
+            for (int i = 0; i <= lst.size() - 1; i++) {
+
+                if (db.ISLeave_ALREDY_EXIST((lst.get(i).mob_createdon))) {
+                    db.Leave_UPDATE(lst.get(i).statusdesc,lst.get(i).mob_createdon);
+                }
+            }
+        }
+
+    }
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -123,10 +212,7 @@ public class Leave extends AppCompatActivity {
                 return true;
 
             case R.id.Sync:
-//                mSwipeRefreshLayout.setRefreshing(true);
-//                DatafromServer();
-//                DataFromServer();
-//                mSwipeRefreshLayout.setRefreshing(false);
+                GetStatus();
                 return true;
             default:
         }

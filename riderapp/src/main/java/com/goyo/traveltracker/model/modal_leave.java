@@ -1,5 +1,6 @@
 package com.goyo.traveltracker.model;
 
+import com.google.gson.annotations.SerializedName;
 import com.goyo.traveltracker.forms.OrderStatus;
 
 /**
@@ -7,6 +8,20 @@ import com.goyo.traveltracker.forms.OrderStatus;
  */
 
 public class modal_leave {
+
+    @SerializedName("frmdt")
+    public String frmdt;
+
+    @SerializedName("todt")
+    public String todt;
+
+    @SerializedName("statusdesc")
+    public String statusdesc;
+
+    @SerializedName("mob_createdon")
+    public String mob_createdon;
+
+
     int _id;
     String _is_server_send;
     String _leave_from;

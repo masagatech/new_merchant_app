@@ -20,10 +20,8 @@ import com.goyo.traveltracker.adapters.PushOrderAdapter;
 import com.goyo.traveltracker.database.SQLBase;
 import com.goyo.traveltracker.database.Tables;
 import com.goyo.traveltracker.gloabls.Global;
-import com.goyo.traveltracker.model.model_completed;
 import com.goyo.traveltracker.model.model_expense;
 import com.goyo.traveltracker.model.model_push_order;
-import com.goyo.traveltracker.model.model_tag;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
@@ -35,7 +33,6 @@ import java.util.List;
 import butterknife.ButterKnife;
 
 import static com.goyo.traveltracker.R.id.recyclerView;
-import static com.goyo.traveltracker.gloabls.Global.urls.getPushTagDetails;
 
 
 public class PushOrder extends AppCompatActivity {
@@ -237,50 +234,6 @@ public class PushOrder extends AppCompatActivity {
     }
 
 
-    private void DatafromServer(){
-
-        JsonObject json = new JsonObject();
-        json.addProperty("enttid", Global.loginusr.getEnttid());
-        json.addProperty("empid", Global.loginusr.getDriverid());
-        json.addProperty("flag", "byemp");
-        Ion.with(this)
-                .load(getPushTagDetails.value)
-                .setJsonObjectBody(json)
-                .asJsonObject()
-                .setCallback(new FutureCallback<JsonObject>() {
-                    @Override
-                    public void onCompleted(Exception e, JsonObject result) {
-                        // do stuff with the result or error
-                        try {
-                            // JSONObject jsnobject = new JSONObject(jsond);
-                            Gson gson = new Gson();
-                            Type listType = new TypeToken<List<model_completed>>() {
-                            }.getType();
-                            List<model_completed> events = (List<model_completed>) gson.fromJson(result.get("data"), listType);
-                            SavetoDb(events);
-                        }
-                        catch (Exception ea) {
-                            ea.printStackTrace();
-                        }
-                    }
-                });
-    }
-
-
-    private void SavetoDb(List<model_completed> lst) {
-        String Empl_Id= String.valueOf(Global.loginusr.getDriverid());
-        SQLBase db = new SQLBase(this);
-        if (lst.size() > 0) {
-            for (int i = 0; i <= lst.size() - 1; i++) {
-                //checking if tag alredy exist
-                if (!db.ISTAG_ALREDY_EXIST(lst.get(i).tagnm)) {
-                    db.TAG_ADDTAG(new model_tag(lst.get(i).tagnm, lst.get(i).remark2, lst.get(i).remark3, lst.get(i).remark33, Empl_Id, lst.get(i).createdon, "2"));
-                }
-            }
-        }
-
-    }
-
 
 
     private ArrayList<model_expense> populateList(){
@@ -289,7 +242,7 @@ public class PushOrder extends AppCompatActivity {
         List<HashMap<String,String>> d = db.Get_Expenses_Display();
         if(d.size()>0) {
             for (int i = 0; i <= d.size() - 1; i++) {
-                data.add(new model_expense(d.get(i).get(Tables.tblexpense.Exp_ID), d.get(i).get(Tables.tblexpense.Expense_Name), d.get(i).get(Tables.tblexpense.Expense_Disc),d.get(i).get(Tables.tblexpense.Expense_Value),d.get(i).get(Tables.tblexpense.Expense_Code),d.get(i).get(Tables.tblexpense.Expense_Is_Active),d.get(i).get(Tables.tblexpense.Expense_Server)));
+                data.add(new model_expense(d.get(i).get(Tables.tblexpense.Exp_ID), d.get(i).get(Tables.tblexpense.Expense_Name), d.get(i).get(Tables.tblexpense.Expense_Disc),d.get(i).get(Tables.tblexpense.Expense_Value),d.get(i).get(Tables.tblexpense.Expense_Code),d.get(i).get(Tables.tblexpense.Expense_Is_Active),d.get(i).get(Tables.tblexpense.Expense_Server),d.get(i).get(Tables.tblexpense.Approval_Amount)));
             }
         }
 
@@ -297,6 +250,12 @@ public class PushOrder extends AppCompatActivity {
     }
 
     private void GetExpenseData(){
+
+        loader = new ProgressDialog(this);
+        loader.setCancelable(false);
+        loader.setMessage(this.getString(R.string.wait_msg));
+        loader.show();
+
         JsonObject json = new JsonObject();
         json.addProperty("flag", "byemp");
         json.addProperty("empid", Global.loginusr.getDriverid()+"");
@@ -319,11 +278,12 @@ public class PushOrder extends AppCompatActivity {
                             }.getType();
                             List<model_expense> events = (List<model_expense>) gson.fromJson(result.get("data"), listType);
                             SavetoDbs(events);
+                            bindCurrentTrips();
                         }
                         catch (Exception ea) {
                             ea.printStackTrace();
                         }
-                        mSwipeRefreshLayout.setRefreshing(false);
+                        loader.hide();
 
                     }
                 });
@@ -336,7 +296,7 @@ public class PushOrder extends AppCompatActivity {
             for (int i = 0; i <= lst.size() - 1; i++) {
                 //checking if expense alredy exist
                 if (!db.ISEXPENSE_ALREDY_EXIST(lst.get(i).expnm)) {
-                    db.ADDEXPENSE(new model_expense(lst.get(i).expid,lst.get(i).expnm, lst.get(i).expdesc, "", lst.get(i).expcd,String.valueOf(lst.get(i).isactive),"0"));
+                    db.ADDEXPENSE(new model_expense(lst.get(i).expid,lst.get(i).expnm, lst.get(i).expdesc, "", lst.get(i).expcd,String.valueOf(lst.get(i).isactive),"0","Pending"));
                 }
             }
         }
@@ -399,7 +359,6 @@ public class PushOrder extends AppCompatActivity {
                 return true;
 
             case R.id.menu_refresh:
-                mSwipeRefreshLayout.setRefreshing(true);
                 GetExpenseData();
                 return true;
             default:

@@ -41,6 +41,7 @@ import butterknife.ButterKnife;
 import static com.goyo.traveltracker.R.id.txtNodata;
 import static com.goyo.traveltracker.Service.RiderStatus.Rider_Lat;
 import static com.goyo.traveltracker.Service.RiderStatus.Rider_Long;
+import static com.goyo.traveltracker.forms.dashboard.TripId;
 import static com.goyo.traveltracker.gloabls.Global.urls.getTaskAllocate;
 import static com.goyo.traveltracker.gloabls.Global.urls.setTripAction;
 
@@ -56,10 +57,9 @@ public class pending_order extends AppCompatActivity {
     private com.goyo.traveltracker.adapters.pending_order_adapter mTimeLineAdapter;
     private Orientation mOrientation;
     private boolean mWithLinePadding;
-    public static String TripId = "0";
     private ProgressDialog loader;
     private SwipeRefreshLayout mSwipeRefreshLayout;
-    public static String Status_Task="pending";
+    public static int Status_Task=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,7 +110,7 @@ public class pending_order extends AppCompatActivity {
                         @Override
                         public void run() {
                             mSwipeRefreshLayout.setRefreshing(true);
-                            Status_Task="pending";
+                            Status_Task=0;
                             //api call
                             DataFromServer(Status_Task,formattedDate);
 //                            SetPush(Status);
@@ -120,7 +120,7 @@ public class pending_order extends AppCompatActivity {
                     mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
                         @Override
                         public void onRefresh() {
-                            Status_Task="pending";
+                            Status_Task=0;
                             // Refresh items and get data from server
                             DataFromServer(Status_Task,formattedDate);
                         }
@@ -140,15 +140,10 @@ public class pending_order extends AppCompatActivity {
                     mSwipeRefreshLayout.post(new Runnable() {
                         @Override
                         public void run() {
-                            mSwipeRefreshLayout.setRefreshing(true);
-                            mRecyclerView.setVisibility(View.INVISIBLE);
-                            findViewById(txtNodata).setVisibility(View.VISIBLE);
-                            mSwipeRefreshLayout.setRefreshing(false);
 
-
-//                            Status_Task="completed";
-//                            //api call
-//                            DataFromServer(Status_Task,formattedDate);
+                            Status_Task=1;
+                            //api call
+                            DataFromServer(Status_Task,formattedDate);
                         }
                     });
 
@@ -159,9 +154,9 @@ public class pending_order extends AppCompatActivity {
                             findViewById(txtNodata).setVisibility(View.VISIBLE);
                             mSwipeRefreshLayout.setRefreshing(false);
 
-//                            Status_Task="completed";
-//                            // Refresh items and get data from server
-//                            DataFromServer(Status_Task,formattedDate);
+                            Status_Task=1;
+                            // Refresh items and get data from server
+                            DataFromServer(Status_Task,formattedDate);
                         }
                     });
                 }
@@ -178,7 +173,7 @@ public class pending_order extends AppCompatActivity {
                 SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
                 final String formattedDate = df.format(c.getTime());
                 mSwipeRefreshLayout.setRefreshing(true);
-                Status_Task="pending";
+                Status_Task=0;
                 //api call
                 DataFromServer(Status_Task,formattedDate);
             }
@@ -192,7 +187,7 @@ public class pending_order extends AppCompatActivity {
                 Calendar c = Calendar.getInstance();
                 SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
                 final String formattedDate = df.format(c.getTime());
-                Status_Task="pending";
+                Status_Task=0;
                 // Refresh items and get data from server
                 DataFromServer(Status_Task,formattedDate);
             }
@@ -258,7 +253,7 @@ public class pending_order extends AppCompatActivity {
 
     }
 
-    private void DataFromServer(String Status,String Date) {
+    private void DataFromServer(int Status,String Date) {
 //
 //        loader = new ProgressDialog(this);
 //        loader.setCancelable(false);
@@ -294,7 +289,7 @@ public class pending_order extends AppCompatActivity {
         JsonObject json = new JsonObject();
         json.addProperty("flag", "byemp");
         json.addProperty("empid",Global.loginusr.getDriverid());
-        json.addProperty("status",Status);
+        json.addProperty("tskstatus",Status);
         json.addProperty("enttid",Global.loginusr.getEnttid());
         json.addProperty("fdate",Date);
         json.addProperty("ddate",Date);

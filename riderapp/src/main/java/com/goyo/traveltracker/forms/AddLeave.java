@@ -1,10 +1,8 @@
 package com.goyo.traveltracker.forms;
 
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
-import android.icu.text.DateFormat;
-import android.icu.text.SimpleDateFormat;
-import android.icu.util.Calendar;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
@@ -24,8 +22,11 @@ import com.goyo.traveltracker.model.modal_leave;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
+import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -39,6 +40,7 @@ public class AddLeave extends AppCompatActivity {
     Spinner LeaveType;
     Button ApplyLeave;
     private  List<Date> Dates;
+    private ProgressDialog loader;
 
 
     @Override
@@ -90,6 +92,10 @@ public class AddLeave extends AppCompatActivity {
                     if(Dates.size()==0){
                         Toast.makeText(AddLeave.this, "Please Choose different date!", Toast.LENGTH_SHORT).show();
                     }else {
+                        loader = new ProgressDialog(AddLeave.this);
+                        loader.setCancelable(false);
+                        loader.setMessage(AddLeave.this.getString(R.string.wait_msg));
+                        loader.show();
                         SavetoDb();
                         SentToServer();
                     }
@@ -209,7 +215,8 @@ public class AddLeave extends AppCompatActivity {
         json.addProperty("frmdt", leave_from);
         json.addProperty("todt", leave_to);
         json.addProperty("restype", selected_leave_type);
-        json.addProperty("cuid", currentDateTimeString);
+        json.addProperty("cuid", Global.loginusr.getUcode());
+        json.addProperty("mob_createdon", currentDateTimeString);
         json.addProperty("enttid", Global.loginusr.getEnttid()+"");
         json.addProperty("reason",details);
         Ion.with(this)
@@ -232,6 +239,7 @@ public class AddLeave extends AppCompatActivity {
                         } catch (Exception ea) {
                             ea.printStackTrace();
                         }
+                        loader.hide();
 
 
                     }
@@ -250,11 +258,11 @@ public class AddLeave extends AppCompatActivity {
         SQLBase db = new SQLBase(this);
         if(IsMobailConnected){
             if (!db.ISLeave_ALREDY_EXIST(currentDateTimeString)) {
-                db.ADDLeave(new modal_leave(leave_from, leave_to, selected_leave_type, details, currentDateTimeString, "0", "Applied"));
+                db.ADDLeave(new modal_leave(leave_from, leave_to, selected_leave_type, details, currentDateTimeString, "0", "Pending"));
             }
         }else {
             if (!db.ISLeave_ALREDY_EXIST(currentDateTimeString)) {
-                db.ADDLeave(new modal_leave(leave_from, leave_to, selected_leave_type, details, currentDateTimeString, "1", "Applied"));
+                db.ADDLeave(new modal_leave(leave_from, leave_to, selected_leave_type, details, currentDateTimeString, "1", "Pending"));
                 finish();
                 Intent intent = new Intent(AddLeave.this, Leave.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

@@ -27,6 +27,15 @@ public class model_pending {
     @SerializedName("todt")
     public String todt;
 
+    @SerializedName("tntype")
+    public String tntype;
+
+    @SerializedName("value")
+    public String value;
+
+    @SerializedName("tstype")
+    public String tstype;
+
 
     @SerializedName("ordid")
     public int ordid;
@@ -34,7 +43,7 @@ public class model_pending {
     @SerializedName("ordno")
     public String ordno;
 
-    @SerializedName("rm")
+    @SerializedName("remark")
     public String remark;
 
     @SerializedName("olnm")

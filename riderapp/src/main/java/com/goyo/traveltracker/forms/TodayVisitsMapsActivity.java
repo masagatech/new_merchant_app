@@ -6,15 +6,17 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
-import android.os.AsyncTask;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,19 +29,26 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 import com.goyo.traveltracker.R;
+import com.goyo.traveltracker.adapters.Map_Trip_Adapter;
 import com.goyo.traveltracker.database.SQLBase;
+import com.goyo.traveltracker.gloabls.Global;
 import com.goyo.traveltracker.model.map_model;
+import com.goyo.traveltracker.model.model_trip_map;
+import com.koushikdutta.async.future.FutureCallback;
+import com.koushikdutta.ion.Ion;
+import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import java.lang.reflect.Type;
+import java.text.DateFormat;
+import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -50,32 +59,56 @@ import java.util.List;
 import az.plainpie.PieView;
 import az.plainpie.animation.PieAngleAnimation;
 
-import static com.goyo.traveltracker.Service.RiderStatus.MapLoc;
-
 public class TodayVisitsMapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
     private MarkerOptions options = new MarkerOptions();
     private ArrayList<LatLng> latlngs = new ArrayList<>();
+
     private Button Btn_Date;
     String SelectedDate;
     ArrayList<map_model> data = new ArrayList<map_model>();
     PieView pieView,pieStops,pieTasks;
-    PolylineOptions lineOptions = null;
+    private ArrayList<model_trip_map> lsttrip;
+    private ListView lst_trip_list;
+    private String TripId = "0";
+    Polyline polylineFinal;
 
-//    private ArrayList<LatLng> Task = new ArrayList<>();
-//    private MarkerOptions TaskMarker = new MarkerOptions();
-//    private List<MapData> MapData = new ArrayList<>();
+    //drag panel
+    private SlidingUpPanelLayout mLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_today_visits_maps);
 
-
         pieView = (PieView) findViewById(R.id.pieView);
         pieStops = (PieView) findViewById(R.id.pieStops);
         pieTasks = (PieView) findViewById(R.id.pieTasks);
+        mLayout = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
+        lst_trip_list = (ListView) findViewById(R.id.lst_ripcrew_list);
+
+
+        //slide panel
+
+        mLayout.addPanelSlideListener(new SlidingUpPanelLayout.PanelSlideListener() {
+            @Override
+            public void onPanelSlide(View panel, float slideOffset) {
+                //Log.i(TAG, "onPanelSlide, offset " + slideOffset);
+            }
+
+            @Override
+            public void onPanelStateChanged(View panel, SlidingUpPanelLayout.PanelState previousState, SlidingUpPanelLayout.PanelState newState) {
+                //Log.i(TAG, "onPanelStateChanged " + newState);
+            }
+        });
+        mLayout.setFadeOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+            }
+        });
+
 
 
 
@@ -84,6 +117,15 @@ public class TodayVisitsMapsActivity extends FragmentActivity implements OnMapRe
         Btn_Date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Date startDate=new Date();
+                DateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
+                try {
+                    startDate = df.parse(SelectedDate);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+
                 new SingleDateAndTimePickerDialog.Builder(TodayVisitsMapsActivity.this)
                         .titleTextColor(Color.WHITE)
                         .backgroundColor(Color.BLACK)
@@ -92,6 +134,7 @@ public class TodayVisitsMapsActivity extends FragmentActivity implements OnMapRe
                         .curved()
                         .displayHours(false)
                         .displayMinutes(false)
+                       .defaultDate(startDate)
                         .listener(new SingleDateAndTimePickerDialog.Listener() {
                             @Override
                             public void onDateSelected(Date date) {
@@ -102,6 +145,20 @@ public class TodayVisitsMapsActivity extends FragmentActivity implements OnMapRe
                                 }
                                 }
                         }).display();
+            }
+        });
+
+
+        lst_trip_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if(polylineFinal!=null){
+                    polylineFinal.remove();
+                }
+                model_trip_map model_trip_map=lsttrip.get(position);
+                TripId=model_trip_map.trpid;
+                GetPathOnly(TripId);
+                mLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
             }
         });
 
@@ -131,6 +188,151 @@ public class TodayVisitsMapsActivity extends FragmentActivity implements OnMapRe
     }
 
 
+    private void GetTodayPath(String Date){
+        JsonObject json = new JsonObject();
+
+        json.addProperty("uid", Global.loginusr.getDriverid()+"");
+        json.addProperty("flag", "mob_history");
+        json.addProperty("enttid", Global.loginusr.getEnttid()+"");
+        json.addProperty("trpdate", Date);
+        Ion.with(this)
+                .load(Global.urls.gettrackboard.value)
+                .setJsonObjectBody(json)
+                .asJsonObject()
+                .setCallback(new FutureCallback<JsonObject>() {
+                    @Override
+                    public void onCompleted(Exception e, JsonObject result) {
+                        // do stuff with the result or error
+                        try {
+                            if (result != null) Log.v("result", result.toString());
+                            // JSONObject jsnobject = new JSONObject(jsond);
+                            Gson gson = new Gson();
+                            Type listType = new TypeToken<ArrayList<model_trip_map>>() {
+                            }.getType();
+                            JsonElement k = result.get("data");
+                            lsttrip = (ArrayList<model_trip_map>) gson.fromJson(result.get("data"), listType);
+                            bindCreawData(lsttrip);
+
+                        } catch (Exception ea) {
+                            ea.printStackTrace();
+                        }
+
+
+                    }
+                });
+
+    }
+
+
+    private void GetPathOnly(String TripId){
+        JsonObject json = new JsonObject();
+        json.addProperty("limit", 50000);
+        json.addProperty("tripid", TripId);
+        Ion.with(this)
+                .load(Global.urls.getdelta.value)
+                .setJsonObjectBody(json)
+                .asJsonObject()
+                .setCallback(new FutureCallback<JsonObject>() {
+                    @Override
+                    public void onCompleted(Exception e, JsonObject result) {
+                        // do stuff with the result or error
+                        try {
+                            ArrayList<LatLng> MapLoc= new ArrayList<LatLng>();
+                            if (result != null) Log.v("result", result.toString());
+                            for(int i=0;i<result.get("data").getAsJsonArray().size();i++) {
+                               Double lon= result.get("data").getAsJsonArray().get(i).getAsJsonObject().get("loc").getAsJsonArray().get(0).getAsDouble();
+                                Double lat=result.get("data").getAsJsonArray().get(i).getAsJsonObject().get("loc").getAsJsonArray().get(1).getAsDouble();
+                                LatLng position = new LatLng(lat,lon);
+                                MapLoc.add(position);
+                            }
+
+                            DrawinMap(MapLoc);
+
+                        } catch (Exception ea) {
+                            ea.printStackTrace();
+                        }
+
+
+                    }
+                });
+
+    }
+
+    private void DrawinMap(ArrayList<LatLng> Map) {
+        PolylineOptions lineOptions = null;
+        //draw path
+        if (Map.size() > 0) {
+            lineOptions = new PolylineOptions();
+            lineOptions.addAll(Map);
+            lineOptions.width(7);
+            lineOptions.color(Color.BLACK);
+
+//            mMap.addPolyline(lineOptions);
+            polylineFinal = mMap.addPolyline (lineOptions);
+
+            List<LatLng> latlngs = lineOptions.getPoints();
+            int size = latlngs.size() - 1;
+            float[] results = new float[1];
+            Double sum = 0.0;
+
+            for(int i = 0; i < size; i++){
+                Location.distanceBetween(
+                        latlngs.get(i).latitude,
+                        latlngs.get(i).longitude,
+                        latlngs.get(i+1).latitude,
+                        latlngs.get(i+1).longitude,
+                        results);
+                sum += results[0];
+            }
+
+
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(Map.get(0), 13));
+
+            sum=sum/1000;
+            FillKM(sum);
+        }
+    }
+
+
+    private void bindCreawData(ArrayList<model_trip_map> lst) {
+        if (lst.size() > 0) {
+            findViewById(R.id.txtNodatas).setVisibility(View.GONE);
+            lst_trip_list.setVisibility(View.VISIBLE);
+            Map_Trip_Adapter map_trip_adapter = new Map_Trip_Adapter(this, lst, getResources());
+            lst_trip_list.setAdapter(map_trip_adapter);
+            map_trip_adapter.notifyDataSetChanged();
+            //registerForAlert();
+        } else {
+            lst_trip_list.setVisibility(View.GONE);
+            findViewById(R.id.txtNodatas).setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void FillKM(Double Km){
+
+
+        if(Km==0.0) {
+            pieView.setPercentage(1);
+        } else if (Km>5.0) {
+            pieView.setPercentage(10);
+        } else if (Km>10.0) {
+            pieView.setPercentage(40);
+        }else if (Km>30.0){
+            pieView.setPercentage(70);
+        }else if (Km>50.0){
+        pieView.setPercentage(88);
+        }
+
+        pieView.setInnerText(new DecimalFormat("##.#").format(Km)+"km");
+        pieView.setPercentageBackgroundColor(Color.parseColor("#a854d4"));
+        pieView.setInnerTextVisibility(View.VISIBLE);
+        PieAngleAnimation animation = new PieAngleAnimation(pieView);
+        animation.setDuration(900); //This is the duration of the animation in millis
+        pieView.startAnimation(animation);
+
+    }
+
+
     private void DrawPath(GoogleMap googleMap){
 
         Calendar c = Calendar.getInstance();
@@ -141,6 +343,8 @@ public class TodayVisitsMapsActivity extends FragmentActivity implements OnMapRe
         if(SelectedDate==null) {
             SelectedDate = formattedDate;
         }
+
+        GetTodayPath(SelectedDate);
 
 //       String BTNDate = new SimpleDateFormat("dd-MMM").format(SelectedDate);
         SimpleDateFormat format = new SimpleDateFormat("dd-MMM");
@@ -157,19 +361,7 @@ public class TodayVisitsMapsActivity extends FragmentActivity implements OnMapRe
         }
 
 
-
         latlngs.clear();
-//        latlngs.add(new LatLng(19.075984, 72.877656));
-//        latlngs.add(new LatLng(19.085819, 72.894877));
-//        latlngs.add(new LatLng(19.084907, 72.907323));
-//        latlngs.add(new LatLng(19.070610, 72.894748));
-//        latlngs.add(new LatLng(19.0997, 72.9164));
-//        latlngs.add(new LatLng(18.835374, 73.945370));
-//        latlngs.add(new LatLng(18.864616, 74.018841));
-//        latlngs.add(new LatLng(18.848046, 74.119778));
-//        latlngs.add(new LatLng(18.818476, 74.255733));
-//        latlngs.add(new LatLng(18.742416, 74.349117));
-//        latlngs.add(new LatLng(18.742416, 74.349117));
 
         View icon = ((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.custommapicon_1, null);
 
@@ -204,47 +396,6 @@ public class TodayVisitsMapsActivity extends FragmentActivity implements OnMapRe
         }
 
 
-
-        //draw path
-        if (MapLoc.size() >0) {
-
-            lineOptions = new PolylineOptions();
-            lineOptions.addAll(MapLoc);
-            lineOptions.width(7);
-            lineOptions.color(Color.BLACK);
-
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(MapLoc.get(0), 13));
-//                    }else {
-//                        // Adding all the points in the route to LineOptions
-//                        lineOptions.addAll(points);
-//                        lineOptions.width(7);
-//                        lineOptions.color(Color.GREEN);
-//                    }
-
-        }
-        Double Km;
-//        Km= distance/1000;
-
-//        if(Km<=10.0) {
-//            pieView.setPercentage(10);
-//        } else if (Km>20.0) {
-//            pieView.setPercentage(30);
-//        } else if (Km>30.0) {
-//            pieView.setPercentage(50);
-//        }else if (Km>50.0){
-//            pieView.setPercentage(70);
-//        }else if (Km>70.0){
-            pieView.setPercentage(88);
-//        }
-
-        pieView.setInnerText(8.17+"km");
-        pieView.setPercentageBackgroundColor(Color.parseColor("#a854d4"));
-        pieView.setInnerTextVisibility(View.VISIBLE);
-        PieAngleAnimation animation = new PieAngleAnimation(pieView);
-        animation.setDuration(900); //This is the duration of the animation in millis
-        pieView.startAnimation(animation);
-
-
         int stops=0,tasks=0;
         if(data.size()>0) {
             for (int i = 0; i < data.size(); i++) {
@@ -258,82 +409,18 @@ public class TodayVisitsMapsActivity extends FragmentActivity implements OnMapRe
         }
 
 
-        //stops
-
-        pieStops.setPercentage(stops+10);
-//        if(stops<=2) {
-//            pieStops.setPercentage(10);
-//        } else if (stops>3) {
-//            pieStops.setPercentage(30);
-//        } else if (stops>4) {
-//            pieStops.setPercentage(50);
-//        }else if (stops>6){
-//            pieStops.setPercentage(70);
-//        }else if (stops>7){
-//            pieStops.setPercentage(88);
-//        }
-        pieStops.setInnerText(stops+"");
-        pieStops.setPercentageBackgroundColor(Color.parseColor("#ffffbb33"));
-// Change the color fill of the background of the widget, by default is transparent
-//            pieStops.setMainBackgroundColor(getResources().getColor(R.color.customColor5));
-        pieStops.setInnerTextVisibility(View.VISIBLE);
-        PieAngleAnimation animation2 = new PieAngleAnimation(pieStops);
-        animation2.setDuration(900); //This is the duration of the animation in millis
-        pieStops.startAnimation(animation2);
+        //km
+        pieView.setPercentage(1);
+        pieView.setPercentageBackgroundColor(Color.parseColor("#a854d4"));
+        pieView.setInnerText("0km");
+        pieView.setInnerTextVisibility(View.VISIBLE);
+        PieAngleAnimation animation4 = new PieAngleAnimation(pieView);
+        animation4.setDuration(1000); //This is the duration of the animation in millis
+        pieView.startAnimation(animation4);
 
 
-
-
-//        //tasks
-
-        pieTasks.setPercentage(tasks+10);
-//        if(tasks<=2) {
-//            pieTasks.setPercentage(10);
-//        } else if (tasks>3) {
-//            pieTasks.setPercentage(30);
-//        } else if (tasks>4) {
-//            pieTasks.setPercentage(50);
-//        }else if (tasks>6){
-//            pieTasks.setPercentage(70);
-//        }else if (tasks>7){
-//            pieTasks.setPercentage(88);
-//        }
-        pieTasks.setInnerText(tasks+"");
-        pieTasks.setPercentageBackgroundColor(Color.parseColor("#ff33b5e5"));
-        pieTasks.setInnerTextVisibility(View.VISIBLE);
-        PieAngleAnimation animation3 = new PieAngleAnimation(pieTasks);
-        animation3.setDuration(900); //This is the duration of the animation in millis
-        pieTasks.startAnimation(animation3);
-        if(data.size()>0) {
-            if (lineOptions != null) {
-                mMap.addPolyline(lineOptions);
-            }
-
-//            LatLng origin = latlngs.get(0);
-//            LatLng dest = latlngs.get(1);
-//
-//            // Getting URL to the Google Directions API
-//            String url = getDirectionsUrl(origin, dest);
-//
-//            DownloadTask downloadTask = new DownloadTask();
-//
-//            // Start downloading json data from Google Directions API
-//            downloadTask.execute(url);
-
-
-
-        }else {
-
-            //km
-            pieView.setPercentage(1);
-            pieView.setPercentageBackgroundColor(Color.parseColor("#a854d4"));
-            pieView.setInnerText("0km");
-            pieView.setInnerTextVisibility(View.VISIBLE);
-            PieAngleAnimation animation4 = new PieAngleAnimation(pieView);
-            animation4.setDuration(1000); //This is the duration of the animation in millis
-            pieView.startAnimation(animation4);
-
-
+        if(stops==0||data.size()==0)
+        {
             //stops
             pieStops.setPercentage(1);
             pieStops.setInnerText("0");
@@ -345,7 +432,35 @@ public class TodayVisitsMapsActivity extends FragmentActivity implements OnMapRe
             animation5.setDuration(1000); //This is the duration of the animation in millis
             pieStops.startAnimation(animation5);
 
+        }else {
+            //stops
 
+            pieStops.setPercentage(stops + 10);
+//        if(stops<=2) {
+//            pieStops.setPercentage(10);
+//        } else if (stops>3) {
+//            pieStops.setPercentage(30);
+//        } else if (stops>4) {
+//            pieStops.setPercentage(50);
+//        }else if (stops>6){
+//            pieStops.setPercentage(70);
+//        }else if (stops>7){
+//            pieStops.setPercentage(88);
+//        }
+            pieStops.setInnerText(stops + "");
+            pieStops.setPercentageBackgroundColor(Color.parseColor("#ffffbb33"));
+// Change the color fill of the background of the widget, by default is transparent
+//            pieStops.setMainBackgroundColor(getResources().getColor(R.color.customColor5));
+            pieStops.setInnerTextVisibility(View.VISIBLE);
+            PieAngleAnimation animation2 = new PieAngleAnimation(pieStops);
+            animation2.setDuration(900); //This is the duration of the animation in millis
+            pieStops.startAnimation(animation2);
+
+
+        }
+
+
+        if(tasks==0||data.size()==0){
             //tasks
             pieTasks.setPercentage(1);
             pieTasks.setInnerText("0");
@@ -354,6 +469,28 @@ public class TodayVisitsMapsActivity extends FragmentActivity implements OnMapRe
             PieAngleAnimation animation6 = new PieAngleAnimation(pieTasks);
             animation6.setDuration(1000); //This is the duration of the animation in millis
             pieTasks.startAnimation(animation6);
+        }else {
+//        //tasks
+
+            pieTasks.setPercentage(tasks + 10);
+//        if(tasks<=2) {
+//            pieTasks.setPercentage(10);
+//        } else if (tasks>3) {
+//            pieTasks.setPercentage(30);
+//        } else if (tasks>4) {
+//            pieTasks.setPercentage(50);
+//        }else if (tasks>6){
+//            pieTasks.setPercentage(70);
+//        }else if (tasks>7){
+//            pieTasks.setPercentage(88);
+//        }
+            pieTasks.setInnerText(tasks + "");
+            pieTasks.setPercentageBackgroundColor(Color.parseColor("#ff33b5e5"));
+            pieTasks.setInnerTextVisibility(View.VISIBLE);
+            PieAngleAnimation animation3 = new PieAngleAnimation(pieTasks);
+            animation3.setDuration(900); //This is the duration of the animation in millis
+            pieTasks.startAnimation(animation3);
+
         }
     }
 
@@ -372,176 +509,5 @@ public class TodayVisitsMapsActivity extends FragmentActivity implements OnMapRe
 
         return bitmap;
     }
-        private String getDirectionsUrl(LatLng origin,LatLng dest){
-
-            // Origin of route
-            String str_origin = "origin="+origin.latitude+","+origin.longitude;
-
-            // Destination of route
-            String str_dest = "destination="+dest.latitude+","+dest.longitude;
-
-            // Sensor enabled
-            String sensor = "sensor=false";
-
-            // Waypoints
-            String waypoints = "";
-            for(int i=2;i<latlngs.size();i++){
-                LatLng point  = (LatLng) latlngs.get(i);
-                if(i==2)
-                    waypoints = "waypoints=";
-                waypoints += point.latitude + "," + point.longitude + "|";
-            }
-
-            // Building the parameters to the web service
-            String parameters = str_origin+"&"+str_dest+"&"+sensor+"&"+waypoints;
-
-            // Output format
-            String output = "json";
-
-            // Building the url to the web service
-            String url = "https://maps.googleapis.com/maps/api/directions/"+output+"?"+parameters;
-
-            return url;
-        }
-
-
-    /** A method to download json data from url */
-        private String downloadUrl(String strUrl) throws IOException {
-            String data = "";
-            InputStream iStream = null;
-            HttpURLConnection urlConnection = null;
-            try{
-                URL url = new URL(strUrl);
-
-                // Creating an http connection to communicate with url
-                urlConnection = (HttpURLConnection) url.openConnection();
-
-                // Connecting to url
-                urlConnection.connect();
-
-                // Reading data from url
-                iStream = urlConnection.getInputStream();
-
-                BufferedReader br = new BufferedReader(new InputStreamReader(iStream));
-
-                StringBuffer sb  = new StringBuffer();
-
-                String line = "";
-                while( ( line = br.readLine())  != null){
-                    sb.append(line);
-                }
-
-                data = sb.toString();
-
-                br.close();
-
-            }catch(Exception e){
-                Log.d("Exception while", e.toString());
-            }finally{
-                iStream.close();
-                urlConnection.disconnect();
-            }
-            return data;
-        }
-
-        // Fetches data from url passed
-        private class DownloadTask extends AsyncTask<String, Void, String> {
-
-            // Downloading data in non-ui thread
-            @Override
-            protected String doInBackground(String... url) {
-
-                // For storing data from web service
-
-                String data = "";
-
-                try{
-                    // Fetching the data from web service
-                    data = downloadUrl(url[0]);
-                }catch(Exception e){
-                    Log.d("Background Task",e.toString());
-                }
-                return data;
-            }
-
-            // Executes in UI thread, after the execution of
-            // doInBackground()
-            @Override
-            protected void onPostExecute(String result) {
-                super.onPostExecute(result);
-
-                ParserTask parserTask = new ParserTask();
-
-                // Invokes the thread for parsing the JSON data
-                parserTask.execute(result);
-            }
-        }
-
-        /** A class to parse the Google Places in JSON format */
-        private class ParserTask extends AsyncTask<String, Integer, List<List<HashMap<String,String>>> > {
-
-            // Parsing the data in non-ui thread
-            @Override
-            protected List<List<HashMap<String, String>>> doInBackground(String... jsonData) {
-
-                JSONObject jObject;
-                List<List<HashMap<String, String>>> routes = null;
-
-                try {
-                    jObject = new JSONObject(jsonData[0]);
-                    DirectionsJSONParser parser = new DirectionsJSONParser();
-
-                    // Starts parsing data
-                    routes = parser.parse(jObject);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                return routes;
-            }
-
-            // Executes in UI thread, after the parsing process
-            @Override
-            protected void onPostExecute(List<List<HashMap<String, String>>> result) {
-
-                ArrayList<LatLng> points = null;
-                PolylineOptions lineOptions = null;
-                Double distance = 0.0;
-
-                // Traversing through all the routes
-                for (int i = 0; i < result.size(); i++) {
-                    points = new ArrayList<LatLng>();
-                    lineOptions = new PolylineOptions();
-
-                    // Fetching i-th route
-                    List<HashMap<String, String>> path = result.get(i);
-
-                    // Fetching all the points in i-th route
-                    for (int j = 0; j < path.size(); j++) {
-                        HashMap<String, String> point = path.get(j);
-
-                        if (point.get("distance") != null) {
-                            distance = distance + Double.parseDouble(point.get("distance"));
-                        }
-                        if (point.get("lat") != null) {
-                            double lat = Double.parseDouble(point.get("lat"));
-                            double lng = Double.parseDouble(point.get("lng"));
-                            LatLng position = new LatLng(lat, lng);
-                            points.add(position);
-                        }
-
-
-                    }
-
-//                    List<PatternItem> pattern = Arrays.<PatternItem>asList(
-//                            new Dot(), new Gap(20), new Dash(30), new Gap(20));
-//                    mPolyline.setPattern(pattern);
-
-//                    if(points.get(0)==latlngs.get(0)){
-                    // Adding all the points in the route to LineOptions
-
-
-                }
-            }
-        }
 
 }

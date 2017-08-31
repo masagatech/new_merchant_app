@@ -1038,6 +1038,8 @@ public class SQLBase  {
         values.put(Tables.tblexpense.Expense_Code, Expense.get_code());
         values.put(Tables.tblexpense.Expense_Is_Active, Expense.get_is_active());
         values.put(Tables.tblexpense.Expense_Server,Expense.get_is_server());
+        values.put(Tables.tblexpense.Approval_Amount,Expense.get_appr_amt());
+
 
         // Inserting Row
         sqLiteDB.insert(Tables.tblexpense.name, null, values);
@@ -1054,7 +1056,8 @@ public class SQLBase  {
                 + Tables.tblexpense.Expense_Value +","
                 + Tables.tblexpense.Expense_Code +","
                 + Tables.tblexpense.Expense_Is_Active +","
-                + Tables.tblexpense.Expense_Server
+                + Tables.tblexpense.Expense_Server +","
+                + Tables.tblexpense.Approval_Amount
                 + " FROM " + Tables.tblexpense.name +" WHERE "
                 + Tables.tblexpense.Expense_Name + " = '" + Tag_Name+ "'";
         Cursor cursor = sqLiteDB.rawQuery(Query, null);
@@ -1064,6 +1067,42 @@ public class SQLBase  {
         }
         cursor.close();
         return true;
+    }
+
+
+    public Boolean ISEXPENSE_APPRO_ALREDY_EXIST(String CreatedBy,String Time){
+
+        String Query = "SELECT "
+                + Tables.tblexpense.Expense_Id+","
+                + Tables.tblexpense.Exp_ID+","
+                + Tables.tblexpense.Expense_Name+","
+                + Tables.tblexpense.Expense_Disc +","
+                + Tables.tblexpense.Expense_Value +","
+                + Tables.tblexpense.Expense_Code +","
+                + Tables.tblexpense.Expense_Is_Active +","
+                + Tables.tblexpense.Expense_Server +","
+                + Tables.tblexpense.Approval_Amount
+                + " FROM " + Tables.tblexpense.name +" WHERE "
+                + Tables.tblexpense.Expense_Code + " = '" + CreatedBy+ "'"
+                + " AND "
+                + Tables.tblexpense.Exp_ID + " = '"+Time+"'";
+        Cursor cursor = sqLiteDB.rawQuery(Query, null);
+        if(cursor.getCount() <= 0){
+            cursor.close();
+            return false;
+        }
+        cursor.close();
+        return true;
+    }
+
+    //update Approval amount
+    public void EXPENSE_UPDATE_APPR(String amount, String date,String time){
+        sqLiteDB.execSQL("UPDATE " + Tables.tblexpense.name + " SET "
+                +  Tables.tblexpense.Approval_Amount + "='" + amount+ "'"
+                +" WHERE "
+                + Tables.tblexpense.Expense_Code + " = '" + date+ "'"
+                + " AND "
+                + Tables.tblexpense.Exp_ID + " = '"+time+"'");
     }
 
     public List<HashMap<String, String>> Get_Expense(){
@@ -1111,7 +1150,8 @@ public class SQLBase  {
                 + Tables.tblexpense.Expense_Value +","
                 + Tables.tblexpense.Expense_Code +","
                 + Tables.tblexpense.Expense_Is_Active +","
-                + Tables.tblexpense.Expense_Server
+                + Tables.tblexpense.Expense_Server +","
+                + Tables.tblexpense.Approval_Amount
                 + " FROM " + Tables.tblexpense.name +" WHERE "
                 + Tables.tblexpense.Expense_Server + " = '0'";
         Cursor cursor = sqLiteDB.rawQuery(selectEvents, null);
@@ -1128,6 +1168,7 @@ public class SQLBase  {
                 map.put(Tables.tblexpense.Expense_Code, cursor.getString(5));
                 map.put(Tables.tblexpense.Expense_Is_Active, cursor.getString(6));
                 map.put(Tables.tblexpense.Expense_Server, cursor.getString(7));
+                map.put(Tables.tblexpense.Approval_Amount, cursor.getString(8));
                 data.add(map);
             } while (cursor.moveToNext());
         }
@@ -1148,7 +1189,8 @@ public class SQLBase  {
                 + Tables.tblexpense.Expense_Value +","
                 + Tables.tblexpense.Expense_Code +","
                 + Tables.tblexpense.Expense_Is_Active +","
-                + Tables.tblexpense.Expense_Server
+                + Tables.tblexpense.Expense_Server +","
+                + Tables.tblexpense.Approval_Amount
                 + " FROM " + Tables.tblexpense.name +" WHERE "
                 + Tables.tblexpense.Expense_Server + " = '1'";
         Cursor cursor = sqLiteDB.rawQuery(selectEvents, null);
@@ -1165,6 +1207,7 @@ public class SQLBase  {
                 map.put(Tables.tblexpense.Expense_Code, cursor.getString(5));
                 map.put(Tables.tblexpense.Expense_Is_Active, cursor.getString(6));
                 map.put(Tables.tblexpense.Expense_Server, cursor.getString(7));
+                map.put(Tables.tblexpense.Approval_Amount, cursor.getString(8));
                 data.add(map);
             } while (cursor.moveToNext());
         }
@@ -1185,7 +1228,8 @@ public class SQLBase  {
                 + Tables.tblexpense.Expense_Disc +","
                 + Tables.tblexpense.Expense_Value +","
                 + Tables.tblexpense.Expense_Is_Active +","
-                + Tables.tblexpense.Expense_Server
+                + Tables.tblexpense.Expense_Server +","
+                + Tables.tblexpense.Approval_Amount
                 + " FROM " + Tables.tblexpense.name +" WHERE "
                 + Tables.tblexpense.Expense_Server + " = '1' "
                 + " OR "
@@ -1202,7 +1246,8 @@ public class SQLBase  {
                 + Tables.tbltasks.EXP_Disc+","
                 + Tables.tbltasks.EXP_Value+","
                 + Tables.tbltasks.Task_Tags+","
-                + "'task'"
+                + "'task',"
+                + "'Pending'"
                 + " FROM " + Tables.tbltasks.name +" WHERE "
                 + Tables.tbltasks.Task_Creat_On+ " = '"+Date+"'"
                 + " AND "
@@ -1225,6 +1270,7 @@ public class SQLBase  {
                 map.put(Tables.tblexpense.Expense_Value, cursor.getString(4));
                 map.put(Tables.tblexpense.Expense_Is_Active, cursor.getString(5));
                 map.put(Tables.tblexpense.Expense_Server, cursor.getString(6));
+                map.put(Tables.tblexpense.Approval_Amount, cursor.getString(7));
                 data.add(map);
             } while (cursor.moveToNext());
         }
@@ -1243,7 +1289,8 @@ public class SQLBase  {
                 + Tables.tblexpense.Expense_Disc +","
                 + Tables.tblexpense.Expense_Value +","
                 + Tables.tblexpense.Expense_Is_Active +","
-                + Tables.tblexpense.Expense_Server
+                + Tables.tblexpense.Expense_Server +","
+                + Tables.tblexpense.Approval_Amount
                 + " FROM " + Tables.tblexpense.name +" WHERE "
                 + Tables.tblexpense.Expense_Server + " = '1' "
                 + " OR "
@@ -1260,7 +1307,8 @@ public class SQLBase  {
                 + Tables.tblofflinetask.EXP_Disc+","
                 + Tables.tblofflinetask.EXP_Value+","
                 + Tables.tblofflinetask.Task_Tags+","
-                + "'stop'"
+                + "'stop',"
+                + "'Pending'"
                 + " FROM " + Tables.tblofflinetask.name +" WHERE "
                 + Tables.tblofflinetask.Task_Creat_On+ " = '"+Date+"'"
                 + " AND "
@@ -1283,6 +1331,7 @@ public class SQLBase  {
                 map.put(Tables.tblexpense.Expense_Value, cursor.getString(4));
                 map.put(Tables.tblexpense.Expense_Is_Active, cursor.getString(5));
                 map.put(Tables.tblexpense.Expense_Server, cursor.getString(6));
+                map.put(Tables.tblexpense.Approval_Amount, cursor.getString(7));
                 data.add(map);
             } while (cursor.moveToNext());
         }
@@ -1304,7 +1353,8 @@ public class SQLBase  {
                 + Tables.tblexpense.Expense_Disc +","
                 + Tables.tblexpense.Expense_Value +","
                 + Tables.tblexpense.Expense_Is_Active +","
-                + Tables.tblexpense.Expense_Server
+                + Tables.tblexpense.Expense_Server +","
+                + Tables.tblexpense.Approval_Amount
                 + " FROM " + Tables.tblexpense.name +" WHERE "
                 + Tables.tblexpense.Expense_Server + " = '1' "
                 + " OR "
@@ -1321,7 +1371,8 @@ public class SQLBase  {
                 + Tables.tbltasks.EXP_Disc+","
                 + Tables.tbltasks.EXP_Value+","
                 + Tables.tbltasks.Task_Tags+","
-                + "'task'"
+                + "'task',"
+                + "'Pending'"
                 + " FROM " + Tables.tbltasks.name +" WHERE "
                 + Tables.tbltasks.Task_Creat_On+ " = '"+Date+"'"
                 + " AND "
@@ -1337,7 +1388,8 @@ public class SQLBase  {
                 + Tables.tblofflinetask.EXP_Disc+","
                 + Tables.tblofflinetask.EXP_Value+","
                 + Tables.tblofflinetask.Task_Tags+","
-                + "'stop'"
+                + "'stop',"
+                + "'Pending'"
                 + " FROM " + Tables.tblofflinetask.name +" WHERE "
                 + Tables.tblofflinetask.Task_Creat_On+ " = '"+Date+"'"
                 + " AND "
@@ -1360,6 +1412,7 @@ public class SQLBase  {
                 map.put(Tables.tblexpense.Expense_Value, cursor.getString(4));
                 map.put(Tables.tblexpense.Expense_Is_Active, cursor.getString(5));
                 map.put(Tables.tblexpense.Expense_Server, cursor.getString(6));
+                map.put(Tables.tblexpense.Approval_Amount, cursor.getString(7));
                 data.add(map);
             } while (cursor.moveToNext());
         }
@@ -1379,7 +1432,8 @@ public class SQLBase  {
                 + Tables.tblexpense.Expense_Disc +","
                 + Tables.tblexpense.Expense_Value +","
                 + Tables.tblexpense.Expense_Is_Active +","
-                + Tables.tblexpense.Expense_Server
+                + Tables.tblexpense.Expense_Server +","
+                + Tables.tblexpense.Approval_Amount
                 + " FROM " + Tables.tblexpense.name +" WHERE "
                 + Tables.tblexpense.Expense_Server + " = '1' "
                 + " OR "
@@ -1399,6 +1453,7 @@ public class SQLBase  {
                 map.put(Tables.tblexpense.Expense_Value, cursor.getString(4));
                 map.put(Tables.tblexpense.Expense_Is_Active, cursor.getString(5));
                 map.put(Tables.tblexpense.Expense_Server, cursor.getString(6));
+                map.put(Tables.tblexpense.Approval_Amount, cursor.getString(7));
                 data.add(map);
             } while (cursor.moveToNext());
         }
@@ -1433,6 +1488,8 @@ public class SQLBase  {
                 +  Tables.tblexpense.Expense_Server + "='" + sendtoserver+ "'"
                 + " WHERE " + Tables.tblexpense.Expense_Id+ " = '" + _Exp_Id+ "'");
     }
+
+
 
 
 //    //update offline
@@ -1558,10 +1615,10 @@ public class SQLBase  {
 
 
     //update offline
-    public void Leave_UPDATE(String _leave_from, String sendtoserver){
+    public void Leave_UPDATE(String Status, String createdOn){
         sqLiteDB.execSQL("UPDATE " + Tables.tblleave.name + " SET "
-                +  Tables.tblleave.Leave_Server + "='" + sendtoserver+ "'"
-                + " WHERE " + Tables.tblleave.Leave_From+ " = '" + _leave_from+ "'");
+                +  Tables.tblleave.Leave_Status + "='" + Status+ "'"
+                + " WHERE " + Tables.tblleave.Leave_Created_By+ " = '" + createdOn+ "'");
     }
 
 public void Leave_UPDATE_Status(String _created_by, String status){

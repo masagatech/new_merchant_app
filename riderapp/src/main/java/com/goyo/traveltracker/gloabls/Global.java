@@ -21,8 +21,8 @@ public class Global {
       public final static String REST_URL = "http://traveltrack.goyo.in:8080/goyoapi";
       public static final String SOCKET_URL = "http://traveltrack.goyo.in:8080/";
 
-//    public final static String REST_URL = "http://192.168.1.101:8092/goyoapi";
-//    public static final String SOCKET_URL = "http://192.168.1.101:8091/";
+//    public final static String REST_URL = "http://192.168.1.100:8092/goyoapi";
+//    public static final String SOCKET_URL = "http://192.168.1.100:8091/";
 
 //    public final static String REST_URL = "http://192.168.43.10:8092/goyoapi";
 //    public static final String SOCKET_URL = "http://192.168.43.10:8083/";
@@ -76,7 +76,7 @@ public class Global {
         getNatureTask("getTaskNature", REST_URL +"/getTaskNature"),
         saveTagInfo("saveTagInfo", REST_URL +"/saveTagInfo"),
         getTagDetails("getTagDetails", REST_URL +"/getTagDetails"),
-        getPushTagDetails("getPushTagDetails", REST_URL +"/getPushTagDetails"),
+        getTagEmployeeMap("getTagEmployeeMap", REST_URL +"/getTagEmployeeMap"),
         livebeats("livebeats", REST_URL +"/livebeats"),
         mobileupload("mobileupload", REST_URL +"/mobileupload"),
         getExpenseDetails("getExpenseDetails", REST_URL +"/getExpenseDetails"),
@@ -84,7 +84,10 @@ public class Global {
         saveEmployeeLeave("saveEmployeeLeave", REST_URL +"/saveEmployeeLeave"),
         getEmployeeLeave("getEmployeeLeave", REST_URL +"/getEmployeeLeave"),
         getHoliday("getHoliday", REST_URL +"/getHoliday"),
-        getNotification("getNotification", REST_URL +"/getNotification");
+        getNotification("getNotification", REST_URL +"/getNotification"),
+        gettrackboard("gettrackboard", REST_URL +"/tripapi/gettrackboard"),
+        getdelta("getdelta", REST_URL +"/tripapi/getdelta"),
+        getVoucherDetails("getVoucherDetails", REST_URL +"/getVoucherDetails");
 
 
 

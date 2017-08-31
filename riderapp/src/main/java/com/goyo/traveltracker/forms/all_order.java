@@ -31,7 +31,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import static com.goyo.traveltracker.gloabls.Global.urls.getPushTagDetails;
+import static com.goyo.traveltracker.gloabls.Global.urls.getTagEmployeeMap;
 
 public class all_order extends AppCompatActivity {
     private RecyclerView mRecyclerView;
@@ -179,12 +179,17 @@ public class all_order extends AppCompatActivity {
 
     private void DatafromServer(){
 
+        loader = new ProgressDialog(this);
+        loader.setCancelable(false);
+        loader.setMessage(this.getString(R.string.wait_msg));
+        loader.show();
+
         JsonObject json = new JsonObject();
         json.addProperty("enttid", Global.loginusr.getEnttid());
         json.addProperty("empid", Global.loginusr.getDriverid());
         json.addProperty("flag", "byemp");
         Ion.with(this)
-                .load(getPushTagDetails.value)
+                .load(getTagEmployeeMap.value)
                 .setJsonObjectBody(json)
                 .asJsonObject()
                 .setCallback(new FutureCallback<JsonObject>() {
@@ -198,10 +203,12 @@ public class all_order extends AppCompatActivity {
                             }.getType();
                             List<model_completed> events = (List<model_completed>) gson.fromJson(result.get("data"), listType);
                             SavetoDb(events);
+                            DataFromServer();
                         }
                         catch (Exception ea) {
                             ea.printStackTrace();
                         }
+                        loader.hide();
                     }
                 });
     }
@@ -247,7 +254,7 @@ public class all_order extends AppCompatActivity {
             for (int i = 0; i <= lst.size() - 1; i++) {
                 //checking if tag alredy exist
                 if (!db.ISTAG_ALREDY_EXIST(lst.get(i).tagnm)) {
-                    db.TAG_ADDTAG(new model_tag(lst.get(i).tagnm, lst.get(i).remark2, lst.get(i).remark3, lst.get(i).remark33, Empl_Id, lst.get(i).createdon, "2"));
+                    db.TAG_ADDTAG(new model_tag(lst.get(i).tagnm, lst.get(i).remark2, lst.get(i).remark3, lst.get(i).remark33, Empl_Id, lst.get(i).createdby, "2"));
                 }
             }
         }
@@ -318,10 +325,9 @@ public class all_order extends AppCompatActivity {
                 return true;
 
             case R.id.Sync:
-                mSwipeRefreshLayout.setRefreshing(true);
+//                mSwipeRefreshLayout.setRefreshing(true);
 //                SendOfflineTagstoServer();
                 DatafromServer();
-                DataFromServer();
                 return true;
             default:
         }
