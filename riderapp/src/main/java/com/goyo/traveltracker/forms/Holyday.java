@@ -4,6 +4,8 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 import com.google.gson.JsonObject;
 import com.goyo.traveltracker.R;
@@ -11,6 +13,7 @@ import com.goyo.traveltracker.gloabls.Global;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 import com.roomorama.caldroid.CaldroidFragment;
+import com.roomorama.caldroid.CaldroidListener;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -23,9 +26,9 @@ import java.util.List;
 public class Holyday extends AppCompatActivity {
   private ArrayList<String> FromDates;
     private ArrayList<String> ToDates;
-    private  List<Date> Dates;
-    private List<Date> NewDate =new ArrayList<Date>();
+    private  List<String> DateNames;
     CaldroidFragment caldroidFragment;
+    private TextView DateName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +38,9 @@ public class Holyday extends AppCompatActivity {
         if(getSupportActionBar()!=null)
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        setTitle("Holli-Days");
+        setTitle("Holidays");
+
+        DateName=(TextView)findViewById(R.id.DateName);
 
 
         caldroidFragment = new CaldroidFragment();
@@ -51,7 +56,28 @@ public class Holyday extends AppCompatActivity {
 
         GetHolyDays();
 
-    }
+        final CaldroidListener listener = new CaldroidListener() {
+
+            @Override
+            public void onSelectDate(Date date, View view) {
+                SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
+                String Date=df.format(date);
+                if(FromDates!=null){
+                    for(int i=0;i<FromDates.size();i++) {
+                        if(FromDates.get(i).equals(Date)){
+                            if(DateNames!=null) {
+                                DateName.setText(DateNames.get(i));
+                            }
+                        }
+                    }
+                }
+
+            }
+        };
+        caldroidFragment.setCaldroidListener(listener);
+
+
+        }
 
 
     private void GetHolyDays(){
@@ -71,9 +97,11 @@ public class Holyday extends AppCompatActivity {
                         try {
                             FromDates =new ArrayList<String>();
                             ToDates =new ArrayList<String>();
+                            DateNames=new ArrayList<String>();
                             for(int i=0;i<result.get("data").getAsJsonArray().size();i++){
                                 FromDates.add(result.get("data").getAsJsonArray().get(i).getAsJsonObject().get("frmdt").getAsString());
                                 ToDates.add(result.get("data").getAsJsonArray().get(i).getAsJsonObject().get("todt").getAsString());
+                                DateNames.add(result.get("data").getAsJsonArray().get(i).getAsJsonObject().get("hldnm").getAsString());
                             }
 
                             for(int i=0;i<result.get("data").getAsJsonArray().size();i++) {

@@ -87,7 +87,9 @@ public class Global {
         getNotification("getNotification", REST_URL +"/getNotification"),
         gettrackboard("gettrackboard", REST_URL +"/tripapi/gettrackboard"),
         getdelta("getdelta", REST_URL +"/tripapi/getdelta"),
-        getVoucherDetails("getVoucherDetails", REST_URL +"/getVoucherDetails");
+        getVoucherDetails("getVoucherDetails", REST_URL +"/getVoucherDetails"),
+        getEmployeeDetails("getEmployeeDetails", REST_URL +"/getEmployeeDetails"),
+        saveContactUs("saveContactUs", REST_URL +"/saveContactUs");
 
 
 

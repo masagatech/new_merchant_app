@@ -43,6 +43,28 @@
 
     </style>
 
+
+    <style name="TechniqueButton">
+        <item name="android:background">@color/primary</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:layout_width">200dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_margin">10dp</item>
+        <item name="android:padding">10dp</item>
+        <item name="android:layout_centerHorizontal">true</item>
+        <item name="android:onClick">on_click</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="TechniqueToolbar">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">?attr/actionBarSize</item>
+        <item name="android:background">@color/primary</item>
+        <item name="android:theme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
+        <item name="android:popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
+        <item name="android:minHeight">?attr/actionBarSize</item>
+    </style>
+
     <style name="Base.Widget.AppCompat.Button.themebuttonTime">
         <item name="android:background">#FFFFFF</item>
         <item name="android:textColor">#000000</item>

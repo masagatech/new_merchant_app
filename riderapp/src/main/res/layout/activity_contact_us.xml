@@ -19,6 +19,7 @@
             float:fletTextAppearance="@style/floatlabelededittext">
 
                 <EditText
+                    android:id="@+id/name"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:padding="10dp"
@@ -37,6 +38,7 @@
             float:fletTextAppearance="@style/floatlabelededittext">
 
                 <EditText
+                    android:id="@+id/campany_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="10dp"
@@ -55,6 +57,7 @@
             float:fletTextAppearance="@style/floatlabelededittext">
 
                 <EditText
+                    android:id="@+id/contact_number"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="10dp"
@@ -76,6 +79,7 @@
             float:fletTextAppearance="@style/floatlabelededittext">
 
                 <EditText
+                    android:id="@+id/remarks"
                     android:background="@drawable/border_cash_collection"
                     android:layout_height="150dp"
                     android:layout_width="match_parent"

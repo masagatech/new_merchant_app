@@ -32,6 +32,7 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="com.google.android.gms.permission.ACTIVITY_RECOGNITION" />
 
     <!--
         <permission
@@ -158,6 +159,9 @@
         <!-- android:screenOrientation="portrait" /> -->
 
         <service
+            android:name=".Service.ActivitiesIntentService"
+            android:exported="false" />
+        <service
             android:name=".Service.RiderStatus"
             android:exported="false" />
 
@@ -269,11 +273,18 @@
             android:name=".forms.TodayVisitsMapsActivity"
             android:label="@string/title_activity_today_visits_maps"
             android:screenOrientation="portrait" />
-        <activity android:name=".forms.AddTags" />
-        <activity android:name=".forms.expense" />
-        <activity android:name=".forms.AddLeave" />
-        <activity android:name=".forms.Holyday" />
-        <activity android:name=".forms.Leave"></activity>
+        <activity android:name=".forms.AddTags"
+            android:screenOrientation="portrait" />
+        <activity android:name=".forms.expense"
+            android:screenOrientation="portrait" />
+        <activity android:name=".forms.AddLeave"
+            android:screenOrientation="portrait" />
+        <activity android:name=".forms.Holyday"
+            android:screenOrientation="portrait" />
+        <activity android:name=".forms.Leave"
+            android:screenOrientation="portrait" />
+        <activity android:name=".forms.Profile_Page"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

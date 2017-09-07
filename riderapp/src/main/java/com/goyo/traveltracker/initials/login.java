@@ -49,6 +49,7 @@ public class login extends AppCompatActivity implements View.OnClickListener {
     ProgressDialog loader;
     public static String EnttId = "0";
     public static final int REQUEST_ID_MULTIPLE_PERMISSIONS = 1;
+    private  boolean Permmission=true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +61,10 @@ public class login extends AppCompatActivity implements View.OnClickListener {
 //        setTitle(getResources().getString(R.string.login_title));
 //        ActionBar actionBar = getActionBar();
 //        actionBar.hide();
-        checkAndRequestPermissions();
+        if(checkAndRequestPermissions()){
+            Permmission=false;
+        }
+//        Permmission = checkAndRequestPermissions();
         initAllControls();
     }
 
@@ -134,73 +138,79 @@ public class login extends AppCompatActivity implements View.OnClickListener {
                 }
 //                Intent intent=new Intent(login.this, dashboard.class);
 //                startActivity(intent);
-                    String token = "";
-                try{
-                    token  = FirebaseInstanceId.getInstance().getToken();
-                }catch (Exception ex){
+                String token = "";
+                try {
+                    token = FirebaseInstanceId.getInstance().getToken();
+                } catch (Exception ex) {
 
                 }
-                TelephonyManager telephonyManager = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
+                TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
 
-                JsonObject json = new JsonObject();
-                json.addProperty("email", edtUserName.getText().toString());
-                json.addProperty("pwd", edtPassword.getText().toString());
-                json.addProperty("token", token);
-                json.addProperty("type", "emp");
-                json.addProperty("otherdetails", "{}");
-                json.addProperty("src", "m");
-                json.addProperty("imei",telephonyManager.getDeviceId());
-                Global.showProgress(loader);
-                Ion.with(this)
-                        .load(Global.urls.getlogin.value)
-                        .setJsonObjectBody(json)
-                        .asJsonObject()
-                        .setCallback(new FutureCallback<JsonObject>() {
-                            @Override
-                            public void onCompleted(Exception e, JsonObject result) {
-                                // do stuff with the result or error
-                                try {
-                                    if (result != null) Log.v("result", result.toString());
+//                boolean Permmission = checkAndRequestPermissions();
+//                if (Permmission) {
+//                    Toast.makeText(this, "Please Accept permission", Toast.LENGTH_SHORT).show();
+////                    Permmission = checkAndRequestPermissions();
+//                } else {
+                    JsonObject json = new JsonObject();
+                    json.addProperty("email", edtUserName.getText().toString());
+                    json.addProperty("pwd", edtPassword.getText().toString());
+                    json.addProperty("token", token);
+                    json.addProperty("type", "emp");
+                    json.addProperty("otherdetails", "{}");
+                    json.addProperty("src", "m");
+                    json.addProperty("imei", telephonyManager.getDeviceId());
+                    Global.showProgress(loader);
+                    Ion.with(this)
+                            .load(Global.urls.getlogin.value)
+                            .setJsonObjectBody(json)
+                            .asJsonObject()
+                            .setCallback(new FutureCallback<JsonObject>() {
+                                @Override
+                                public void onCompleted(Exception e, JsonObject result) {
+                                    // do stuff with the result or error
+                                    try {
+                                        if (result != null) Log.v("result", result.toString());
 //                                    JsonObject Data=  result.get("data").getAsJsonObject();
 //                                    EnttId=Data.get("enttid").toString();
-                                    // JSONObject jsnobject = new JSONObject(jsond);
-                                    Gson gson = new Gson();
-                                    Type listType = new TypeToken<List<model_loginusr>>() {
-                                    }.getType();
-                                    List<model_loginusr> login = (List<model_loginusr>) gson.fromJson(result.get("data"), listType);
-                                    if (login.size() > 0) {
-                                        Global.loginusr = login.get(0);
-                                        if (Global.loginusr.getStatus() == 1) {
-                                            SHP.set(login.this, SHP.ids.uid, Global.loginusr.getDriverid() + "");
-                                            SHP.set(login.this, SHP.ids.hsid, Global.loginusr.getHsid() + "");
-                                            String g = Global.loginusr.getSessiondetails().toString();
-                                            if(!g.equals("null")){
-                                               String s =  ((LinkedTreeMap)Global.loginusr.getSessiondetails()).get("sessionid").toString();
-                                                Global.loginusr.setSessiondetails( s.replace(".0",""));
-                                                SHP.set(login.this, SHP.ids.sessionid, Global.loginusr.getSessiondetails().toString());
+                                        // JSONObject jsnobject = new JSONObject(jsond);
+                                        Gson gson = new Gson();
+                                        Type listType = new TypeToken<List<model_loginusr>>() {
+                                        }.getType();
+                                        List<model_loginusr> login = (List<model_loginusr>) gson.fromJson(result.get("data"), listType);
+                                        if (login.size() > 0) {
+                                            Global.loginusr = login.get(0);
+                                            if (Global.loginusr.getStatus() == 1) {
+                                                SHP.set(login.this, SHP.ids.uid, Global.loginusr.getDriverid() + "");
+                                                SHP.set(login.this, SHP.ids.hsid, Global.loginusr.getHsid() + "");
+                                                String g = Global.loginusr.getSessiondetails().toString();
+                                                if (!g.equals("null")) {
+                                                    String s = ((LinkedTreeMap) Global.loginusr.getSessiondetails()).get("sessionid").toString();
+                                                    Global.loginusr.setSessiondetails(s.replace(".0", ""));
+                                                    SHP.set(login.this, SHP.ids.sessionid, Global.loginusr.getSessiondetails().toString());
+                                                }
+
+                                                //Toast.makeText(login.this, "Login Successfully!", Toast.LENGTH_SHORT).show();
+                                                Intent i = new Intent(login.this, dashboard.class);
+                                                startActivity(i);
+                                                login.this.finish();
+                                            } else {
+                                                Toast.makeText(login.this, "Login Failed! " + Global.loginusr.getErrmsg(), Toast.LENGTH_SHORT).show();
+                                                edtPassword.setText("");
                                             }
-
-                                            //Toast.makeText(login.this, "Login Successfully!", Toast.LENGTH_SHORT).show();
-                                             Intent i = new Intent(login.this, dashboard.class);
-                                            startActivity(i);
-                                            login.this.finish();
                                         } else {
-                                            Toast.makeText(login.this, "Login Failed! " + Global.loginusr.getErrmsg() , Toast.LENGTH_SHORT).show();
-                                            edtPassword.setText("");
+                                            Toast.makeText(login.this, "Oops there is some issue! please login later!", Toast.LENGTH_SHORT).show();
                                         }
-                                    } else {
-                                        Toast.makeText(login.this, "Oops there is some issue! please login later!", Toast.LENGTH_SHORT).show();
+
+                                    } catch (Exception ea) {
+                                        Toast.makeText(login.this, "Error: " + ea.getMessage(), Toast.LENGTH_LONG).show();
+                                        ea.printStackTrace();
                                     }
+                                    Global.hideProgress(loader);
 
-                                } catch (Exception ea) {
-                                    Toast.makeText(login.this, "Error: " + ea.getMessage(), Toast.LENGTH_LONG).show();
-                                    ea.printStackTrace();
                                 }
-                                Global.hideProgress(loader);
+                            });
 
-                            }
-                        });
-
+//                }
             }
             break;
             default:

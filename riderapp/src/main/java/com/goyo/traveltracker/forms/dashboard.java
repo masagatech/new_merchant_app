@@ -1070,6 +1070,11 @@ public class dashboard extends AppCompatActivity implements LocationListener,
                 Intent intent2 = new Intent(this, ContactDashBoard.class);
                 startActivity(intent2);
                 return true;
+
+            case R.id.my_profile:
+                Intent intent3 = new Intent(this, Profile_Page.class);
+                startActivity(intent3);
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
