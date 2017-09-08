@@ -1,7 +1,7 @@
 <resources>
     <string name="title_activity_splash_screen" translatable="false">splash_screen</string>
     <string name="lblSarthiName">Sarathi Name :</string>
-    <string name="app_name">Travel Tracker</string>
+    <string name="app_name">GoYo Parent</string>
     <string name="mytrp_todaytrip">Today\'s Trips</string>
     <string name="mytrp_history">History</string>
     <string name="del_schoolnm">Dhiru Bhai Ambani School</string>
@@ -75,14 +75,14 @@
     <string name="play_again_desc" translatable="false">To see the welcome slider again, goto Settings -> apps -> welcome slider -> clear data</string>
     <string name="play_again" translatable="false">Play Again</string>
 
-    <string name="Pending_Order" translatable="false">My Tasks</string>
-    <string name="Complated_Order" translatable="false">Today Visits</string>
-    <string name="Cash_Collection" translatable="false">Expense</string>
-    <string name="All_Order" translatable="false">Tags</string>
+    <string name="Pending_Order" translatable="false">Children</string>
+    <string name="Complated_Order" translatable="false">Exams</string>
+    <string name="Cash_Collection" translatable="false">Results</string>
+    <string name="All_Order" translatable="false">Assignment</string>
     <string name="New_Order" translatable="false">Notifications</string>
     <string name="Rejected_Order" translatable="false">Leave</string>
-    <string name="Push_Order" translatable="false">Expense \n Type</string>
-    <string name="order_details" translatable="false">Report</string>
+<string name="Push_Order" translatable="false">Connect</string>
+    <string name="order_details" translatable="false">Attendance</string>
     <string name="title_activity_custemer_maps" translatable="false">Map</string>
     <string name="exp" translatable="false">Expired !!!</string>
     <string name="notification_accept" translatable="false">ACCEPTED</string>

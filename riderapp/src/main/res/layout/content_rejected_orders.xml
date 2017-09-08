@@ -8,7 +8,7 @@ android:layout_marginTop="130dp"
     android:id="@+id/Refresh"
     android:layout_height="wrap_content"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.goyo.traveltracker.forms.pending_order"
+    tools:context="com.goyo.parent.forms.pending_order"
     tools:showIn="@layout/activity_rejected_order">
 
     <android.support.v7.widget.RecyclerView

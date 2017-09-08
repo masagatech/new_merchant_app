@@ -3,7 +3,7 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/model_login_bg"
+    android:background="@drawable/img"
     
     >
 
@@ -21,11 +21,10 @@
 
 
     <TextView
-        android:drawableTop="@drawable/rider"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Travel Tracker"
+        android:text="GoYo Parent"
         android:id="@+id/textView16"
         android:layout_alignBottom="@+id/imageView1"
         android:gravity="center_horizontal"

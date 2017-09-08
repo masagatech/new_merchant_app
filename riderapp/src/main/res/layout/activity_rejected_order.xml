@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
 
-    tools:context="com.goyo.traveltracker.forms.rejected_order">
+    tools:context="com.goyo.parent.forms.rejected_order">
 
     <!--android:background="@color/colorBackground"-->
 

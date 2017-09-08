@@ -8,6 +8,7 @@
     >
 
         <TextView
+            android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/offline_switch_text"
@@ -22,11 +23,12 @@
         android:id="@+id/nameRider"
         android:textSize="16dp"
         android:fontFamily="sans-serif-light"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="6dp"
        android:layout_centerHorizontal="true" />
 
         <android.support.v7.widget.SwitchCompat
             android:id="@+id/compatSwitch"
+            android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:theme="@style/Switch"

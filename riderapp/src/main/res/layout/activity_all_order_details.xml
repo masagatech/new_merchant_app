@@ -3,7 +3,7 @@
 xmlns:tools="http://schemas.android.com/tools"
 android:layout_width="match_parent"
 android:layout_height="match_parent"
-tools:context="com.goyo.traveltracker.forms.AllOrderDetails" >
+tools:context="com.goyo.parent.forms.AllOrderDetails" >
 
     <TextView
         android:id="@+id/txtNodata"
@@ -23,7 +23,7 @@ tools:context="com.goyo.traveltracker.forms.AllOrderDetails" >
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:id="@+id/Refresh"
-        tools:context="com.goyo.traveltracker.forms.AllOrderDetails"
+        tools:context="com.goyo.parent.forms.AllOrderDetails"
         android:layout_height="wrap_content">
         <ListView
         android:id="@+id/all_details"

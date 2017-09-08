@@ -5,7 +5,7 @@
     xmlns:float="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.goyo.traveltracker.forms.ContactDashBoard">
+    tools:context="com.goyo.parent.forms.ContactDashBoard">
 
     <com.wrapp.floatlabelededittext.FloatLabeledEditText
         android:layout_width="match_parent"
