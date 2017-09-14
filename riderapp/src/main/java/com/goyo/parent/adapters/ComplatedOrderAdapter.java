@@ -1,33 +1,21 @@
 package com.goyo.parent.adapters;
 
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.graphics.drawable.GradientDrawable;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.goyo.parent.R;
-import com.goyo.parent.forms.OrderStatus;
 import com.goyo.parent.forms.Orientation;
 import com.goyo.parent.forms.PendingOrdersView;
 import com.goyo.parent.model.model_completed;
 import com.goyo.parent.model.model_task;
-import com.goyo.parent.utils.VectorDrawableUtils;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
@@ -91,62 +79,66 @@ public class ComplatedOrderAdapter extends RecyclerView.Adapter<pending_order_vi
         final model_task timeLineModel = mFeedList.get(position);
 
 
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+//        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+//
+//            if (timeLineModel.status == OrderStatus.INACTIVE) {
+//                holder.mTimelineView.setMarker(VectorDrawableUtils.getDrawable(mContext, R.drawable.ic_marker_inactive, android.R.color.darker_gray));
+//            } else if (timeLineModel.status == OrderStatus.ACTIVE) {
+//                holder.mTimelineView.setMarker(VectorDrawableUtils.getDrawable(mContext, R.drawable.ic_marker_active, R.color.round));
+//            } else {
+//                holder.mTimelineView.setMarker(ContextCompat.getDrawable(mContext, R.drawable.ic_marker), ContextCompat.getColor(mContext, R.color.round));
+//            }
+//        }
 
-            if (timeLineModel.status == OrderStatus.INACTIVE) {
-                holder.mTimelineView.setMarker(VectorDrawableUtils.getDrawable(mContext, R.drawable.ic_marker_inactive, android.R.color.darker_gray));
-            } else if (timeLineModel.status == OrderStatus.ACTIVE) {
-                holder.mTimelineView.setMarker(VectorDrawableUtils.getDrawable(mContext, R.drawable.ic_marker_active, R.color.round));
-            } else {
-                holder.mTimelineView.setMarker(ContextCompat.getDrawable(mContext, R.drawable.ic_marker), ContextCompat.getColor(mContext, R.color.round));
-            }
-        }
-
-        final Gson gson = new Gson();
-        Type type = new TypeToken<ArrayList<String>>() {}.getType();
-
-        ArrayList<String> TagsArray = gson.fromJson(timeLineModel.get_tags(), type);
+//        final Gson gson = new Gson();
+//        Type type = new TypeToken<ArrayList<String>>() {}.getType();
+//
+//        ArrayList<String> TagsArray = gson.fromJson(timeLineModel.get_tags(), type);
 
 
         //setting order no. and marchant name on start
-        holder.mOrder.setText(timeLineModel.get_creat_on());
-        holder.mMarchant.setText(timeLineModel.get_title());
-        holder.Custmer_name.setText(timeLineModel.get_body());
-        holder.mTime.setText(timeLineModel.get_time());
-        holder.mMarchant.setText(timeLineModel.get_title());
-        holder.Tags.setTags(TagsArray);
+        holder.mOrder.setText(timeLineModel.createdon+"");
+        holder.mMarchant.setText(timeLineModel.title+"");
+        holder.Custmer_name.setText(timeLineModel.desc+"");
+//        holder.mTime.setText(timeLineModel.get_time());
+//        holder.mMarchant.setText(timeLineModel.get_title());
+//        holder.Tags.setTags(TagsArray);
 
 
 
+        if(position==0){
+            timeLineModel.isEnabled = true;
+            holder.ClickToHide.setVisibility(View.VISIBLE);
+        }
 
 
 
-        //showing border and text if order is delivered or retruned
-        switch (timeLineModel.get_is_server_send()) {
-            case "0": {
-                GradientDrawable gd = (GradientDrawable) holder.Border.getBackground();
-                int width_px = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 2, mContext.getResources().getDisplayMetrics());
-                gd.setStroke(width_px, Color.parseColor("#ff99cc00"));
-
-                break;
-            }
-            case "1": {
-                GradientDrawable gd = (GradientDrawable) holder.Border.getBackground();
-                int width_px = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 2, mContext.getResources().getDisplayMetrics());
-                gd.setStroke(width_px, Color.parseColor("#ffff4444"));
-                break;
-            }
-//            case "2": {
+//        //showing border and text if order is delivered or retruned
+//        switch (timeLineModel.get_is_server_send()) {
+//            case "0": {
 //                GradientDrawable gd = (GradientDrawable) holder.Border.getBackground();
 //                int width_px = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 2, mContext.getResources().getDisplayMetrics());
-//                gd.setStroke(width_px, Color.parseColor("#ffffbb33"));
+//                gd.setStroke(width_px, Color.parseColor("#ff99cc00"));
+//
 //                break;
 //            }
-            default:
-                GradientDrawable gd = (GradientDrawable) holder.Border.getBackground();
-                int width_px = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 0, mContext.getResources().getDisplayMetrics());
-                gd.setStroke(width_px, Color.parseColor("#ffffbb33"));
-        }
+//            case "1": {
+//                GradientDrawable gd = (GradientDrawable) holder.Border.getBackground();
+//                int width_px = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 2, mContext.getResources().getDisplayMetrics());
+//                gd.setStroke(width_px, Color.parseColor("#ffff4444"));
+//                break;
+//            }
+////            case "2": {
+////                GradientDrawable gd = (GradientDrawable) holder.Border.getBackground();
+////                int width_px = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 2, mContext.getResources().getDisplayMetrics());
+////                gd.setStroke(width_px, Color.parseColor("#ffffbb33"));
+////                break;
+////            }
+//            default:
+//                GradientDrawable gd = (GradientDrawable) holder.Border.getBackground();
+//                int width_px = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 0, mContext.getResources().getDisplayMetrics());
+//                gd.setStroke(width_px, Color.parseColor("#ffffbb33"));
+//        }
 
 //        List<int[]> colors = new ArrayList<int[]>();
 ////int[] color = {TagBackgroundColor, TabBorderColor, TagTextColor}
@@ -166,7 +158,7 @@ public class ComplatedOrderAdapter extends RecyclerView.Adapter<pending_order_vi
 
 
         //click to expand and hide when press agine
-        holder.ButtonHide.setOnClickListener(new View.OnClickListener() {
+        holder.Border.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View m) {
                 if(holder.ClickToHide.getVisibility() == View.VISIBLE){
@@ -223,141 +215,141 @@ public class ComplatedOrderAdapter extends RecyclerView.Adapter<pending_order_vi
 
 
         }
-        if(timeLineModel.get_exp_id()==null){
-            holder.ArrowRemark.setImageResource(R.drawable.cwac_cam2_ic_close_white);
-            holder.Btn_Map.setEnabled(false);
-        }else {
-            holder.ArrowRemark.setImageResource(R.drawable.ic_done);
-            holder.Btn_Map.setEnabled(true);
-            holder.Btn_Map.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    View alertLayout = mLayoutInflater.inflate(R.layout.expense_data, null);
-
-                    final TextView Expense_Type = (TextView) alertLayout.findViewById(R.id.Expense_Type);
-                    final TextView Expense_Value = (TextView) alertLayout.findViewById(R.id.Expense_Value);
-                    final TextView Expense_Disc = (TextView) alertLayout.findViewById(R.id.Expense_Disc);
-
-                    Expense_Type.setText(timeLineModel.get_exp_type());
-                    Expense_Value.setText(timeLineModel.get_exp_value());
-                    Expense_Disc.setText(timeLineModel.get_exp_disc());
-
-
-                    AlertDialog.Builder alert = new AlertDialog.Builder(mContext);
-                    alert.setTitle("Expense");
-                    // this is set the view from XML inside AlertDialog
-                    alert.setView(alertLayout);
-                    // disallow cancel of AlertDialog on click of back button and outside touch
-                    alert.setCancelable(false);
-                    alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                        }
-                    });
-                    AlertDialog dialog = alert.create();
-                    dialog.show();
-
-                }
-            });
-        }
-
-        String zipPath = mContext.getApplicationInfo().dataDir+"/default_image.PNG";
-
-        if(timeLineModel.get_image_paths().equals(zipPath)){
-            holder.Btn_AcceptReject.setImageResource(R.drawable.cwac_cam2_ic_close_white);
-            holder.Btn_Call.setEnabled(false);
-        }else {
-            holder.Btn_AcceptReject.setImageResource(R.drawable.ic_done);
-            holder.Btn_Call.setEnabled(true);
-            holder.Btn_Call.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    View alertLayout = mLayoutInflater.inflate(R.layout.image_data, null);
-
-                    final ImageView ImageView1 = (ImageView) alertLayout.findViewById(R.id.image1);
-                    final ImageView ImageView2 = (ImageView) alertLayout.findViewById(R.id.image2);
-                    final ImageView ImageView3 = (ImageView) alertLayout.findViewById(R.id.image3);
-                    final ImageView ImageView4 = (ImageView) alertLayout.findViewById(R.id.image4);
-
-                    ArrayList<String> f = new ArrayList<String>();// list of file paths
-
-                    //getting selected image
-                    File TargetLocation = new File(mContext.getApplicationInfo().dataDir+"/new"+timeLineModel.get_title());
-                    File ZipFile = new File(timeLineModel.get_image_paths());
-
-
-                    if(!TargetLocation.exists()) {
-                        try {
-                            //unzip
-                            unzip(ZipFile, TargetLocation);
-                            //get images from folders
-                            getFromSdcard(TargetLocation,f);
-
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }else {
-                        getFromSdcard(TargetLocation,f);
-                    }
-
-                    if(f.size()==1) {
-                        Bitmap myBitmap = BitmapFactory.decodeFile(f.get(0));
-                        ImageView1.setImageBitmap(myBitmap);
-
-                        ImageView2.setVisibility(View.GONE);
-                        ImageView3.setVisibility(View.GONE);
-                        ImageView4.setVisibility(View.GONE);
-                    }else if (f.size()==2){
-                        Bitmap myBitmap = BitmapFactory.decodeFile(f.get(0));
-                        ImageView1.setImageBitmap(myBitmap);
-
-                        Bitmap myBitmap2 = BitmapFactory.decodeFile(f.get(1));
-                        ImageView2.setImageBitmap(myBitmap2);
-
-                        ImageView3.setVisibility(View.GONE);
-                        ImageView4.setVisibility(View.GONE);
-                    }else if (f.size()==3){
-                        Bitmap myBitmap = BitmapFactory.decodeFile(f.get(0));
-                        ImageView1.setImageBitmap(myBitmap);
-
-                        Bitmap myBitmap2 = BitmapFactory.decodeFile(f.get(1));
-                        ImageView2.setImageBitmap(myBitmap2);
-
-                        Bitmap myBitmap3 = BitmapFactory.decodeFile(f.get(2));
-                        ImageView3.setImageBitmap(myBitmap3);
-
-                        ImageView4.setVisibility(View.GONE);
-                    }else if (f.size()==4){
-                        Bitmap myBitmap = BitmapFactory.decodeFile(f.get(0));
-                        ImageView1.setImageBitmap(myBitmap);
-
-                        Bitmap myBitmap2 = BitmapFactory.decodeFile(f.get(1));
-                        ImageView2.setImageBitmap(myBitmap2);
-
-                        Bitmap myBitmap3 = BitmapFactory.decodeFile(f.get(2));
-                        ImageView3.setImageBitmap(myBitmap3);
-
-                        Bitmap myBitmap4 = BitmapFactory.decodeFile(f.get(3));
-                        ImageView4.setImageBitmap(myBitmap4);
-                    }
-
-                    AlertDialog.Builder alert = new AlertDialog.Builder(mContext);
-                    alert.setTitle("Images");
-                    // this is set the view from XML inside AlertDialog
-                    alert.setView(alertLayout);
-                    // disallow cancel of AlertDialog on click of back button and outside touch
-                    alert.setCancelable(false);
-                    alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                        }
-                    });
-                    AlertDialog dialog = alert.create();
-                    dialog.show();
-                }
-            });
-
-        }
+//        if(timeLineModel.get_exp_id()==null){
+//            holder.ArrowRemark.setImageResource(R.drawable.cwac_cam2_ic_close_white);
+//            holder.Btn_Map.setEnabled(false);
+//        }else {
+//            holder.ArrowRemark.setImageResource(R.drawable.ic_done);
+//            holder.Btn_Map.setEnabled(true);
+//            holder.Btn_Map.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    View alertLayout = mLayoutInflater.inflate(R.layout.expense_data, null);
+//
+//                    final TextView Expense_Type = (TextView) alertLayout.findViewById(R.id.Expense_Type);
+//                    final TextView Expense_Value = (TextView) alertLayout.findViewById(R.id.Expense_Value);
+//                    final TextView Expense_Disc = (TextView) alertLayout.findViewById(R.id.Expense_Disc);
+//
+//                    Expense_Type.setText(timeLineModel.get_exp_type());
+//                    Expense_Value.setText(timeLineModel.get_exp_value());
+//                    Expense_Disc.setText(timeLineModel.get_exp_disc());
+//
+//
+//                    AlertDialog.Builder alert = new AlertDialog.Builder(mContext);
+//                    alert.setTitle("Expense");
+//                    // this is set the view from XML inside AlertDialog
+//                    alert.setView(alertLayout);
+//                    // disallow cancel of AlertDialog on click of back button and outside touch
+//                    alert.setCancelable(false);
+//                    alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+//                        @Override
+//                        public void onClick(DialogInterface dialog, int which) {
+//                        }
+//                    });
+//                    AlertDialog dialog = alert.create();
+//                    dialog.show();
+//
+//                }
+//            });
+//        }
+//
+//        String zipPath = mContext.getApplicationInfo().dataDir+"/default_image.PNG";
+//
+//        if(timeLineModel.get_image_paths().equals(zipPath)){
+//            holder.Btn_AcceptReject.setImageResource(R.drawable.cwac_cam2_ic_close_white);
+//            holder.Btn_Call.setEnabled(false);
+//        }else {
+//            holder.Btn_AcceptReject.setImageResource(R.drawable.ic_done);
+//            holder.Btn_Call.setEnabled(true);
+//            holder.Btn_Call.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    View alertLayout = mLayoutInflater.inflate(R.layout.image_data, null);
+//
+//                    final ImageView ImageView1 = (ImageView) alertLayout.findViewById(R.id.image1);
+//                    final ImageView ImageView2 = (ImageView) alertLayout.findViewById(R.id.image2);
+//                    final ImageView ImageView3 = (ImageView) alertLayout.findViewById(R.id.image3);
+//                    final ImageView ImageView4 = (ImageView) alertLayout.findViewById(R.id.image4);
+//
+//                    ArrayList<String> f = new ArrayList<String>();// list of file paths
+//
+//                    //getting selected image
+//                    File TargetLocation = new File(mContext.getApplicationInfo().dataDir+"/new"+timeLineModel.get_title());
+//                    File ZipFile = new File(timeLineModel.get_image_paths());
+//
+//
+//                    if(!TargetLocation.exists()) {
+//                        try {
+//                            //unzip
+//                            unzip(ZipFile, TargetLocation);
+//                            //get images from folders
+//                            getFromSdcard(TargetLocation,f);
+//
+//                        } catch (IOException e) {
+//                            e.printStackTrace();
+//                        }
+//                    }else {
+//                        getFromSdcard(TargetLocation,f);
+//                    }
+//
+//                    if(f.size()==1) {
+//                        Bitmap myBitmap = BitmapFactory.decodeFile(f.get(0));
+//                        ImageView1.setImageBitmap(myBitmap);
+//
+//                        ImageView2.setVisibility(View.GONE);
+//                        ImageView3.setVisibility(View.GONE);
+//                        ImageView4.setVisibility(View.GONE);
+//                    }else if (f.size()==2){
+//                        Bitmap myBitmap = BitmapFactory.decodeFile(f.get(0));
+//                        ImageView1.setImageBitmap(myBitmap);
+//
+//                        Bitmap myBitmap2 = BitmapFactory.decodeFile(f.get(1));
+//                        ImageView2.setImageBitmap(myBitmap2);
+//
+//                        ImageView3.setVisibility(View.GONE);
+//                        ImageView4.setVisibility(View.GONE);
+//                    }else if (f.size()==3){
+//                        Bitmap myBitmap = BitmapFactory.decodeFile(f.get(0));
+//                        ImageView1.setImageBitmap(myBitmap);
+//
+//                        Bitmap myBitmap2 = BitmapFactory.decodeFile(f.get(1));
+//                        ImageView2.setImageBitmap(myBitmap2);
+//
+//                        Bitmap myBitmap3 = BitmapFactory.decodeFile(f.get(2));
+//                        ImageView3.setImageBitmap(myBitmap3);
+//
+//                        ImageView4.setVisibility(View.GONE);
+//                    }else if (f.size()==4){
+//                        Bitmap myBitmap = BitmapFactory.decodeFile(f.get(0));
+//                        ImageView1.setImageBitmap(myBitmap);
+//
+//                        Bitmap myBitmap2 = BitmapFactory.decodeFile(f.get(1));
+//                        ImageView2.setImageBitmap(myBitmap2);
+//
+//                        Bitmap myBitmap3 = BitmapFactory.decodeFile(f.get(2));
+//                        ImageView3.setImageBitmap(myBitmap3);
+//
+//                        Bitmap myBitmap4 = BitmapFactory.decodeFile(f.get(3));
+//                        ImageView4.setImageBitmap(myBitmap4);
+//                    }
+//
+//                    AlertDialog.Builder alert = new AlertDialog.Builder(mContext);
+//                    alert.setTitle("Images");
+//                    // this is set the view from XML inside AlertDialog
+//                    alert.setView(alertLayout);
+//                    // disallow cancel of AlertDialog on click of back button and outside touch
+//                    alert.setCancelable(false);
+//                    alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+//                        @Override
+//                        public void onClick(DialogInterface dialog, int which) {
+//                        }
+//                    });
+//                    AlertDialog dialog = alert.create();
+//                    dialog.show();
+//                }
+//            });
+//
+//        }
 
 
     }

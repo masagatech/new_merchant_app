@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:background="@color/colorBackground"
-    tools:context="com.goyo.parent.forms.complated_order">
+    tools:context="com.goyo.parent.forms.Announcment">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -22,49 +22,23 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <Spinner
-        android:visibility="gone"
-        android:gravity="center"
-        android:padding="10dp"
-        android:layout_marginTop="55dp"
-        android:id="@+id/Groups"
-        android:spinnerMode="dropdown"
-        android:background="@color/blue_light"
-        android:popupBackground="@color/blue_light"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"/>
-    <FrameLayout
-        android:visibility="gone"
-        android:layout_alignParentRight="true"
-        android:layout_marginTop="55dp"
-        android:layout_marginRight="20dp"
-        android:layout_width="30dp"
-        android:layout_height="40dp">
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:src="@drawable/arrow_down"/>
-
-    </FrameLayout>
-
     <TextView
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="70dp"
         android:id="@+id/txtNodata"
-        android:drawableTop="@drawable/novisits"
+        android:drawableTop="@drawable/notags"
         android:layout_width="match_parent"
         android:gravity="center"
-        android:textColor="@color/blue_light"
-        android:layout_height="wrap_content"
-        android:text="@string/complated_empthy_msg"
-        android:textSize="16sp"
         android:visibility="gone"
         android:fontFamily="sans-serif-light"
+        android:textColor="@color/blue_light"
+        android:layout_height="wrap_content"
+        android:text="No tags Added! Start add now!"
+        android:textSize="16sp"
         android:layout_centerInParent="true"
         />
 
-    <include
-        layout="@layout/content_complated_orders" />
+    <include layout="@layout/content_announce" />
+
 
 
 </android.support.design.widget.CoordinatorLayout>

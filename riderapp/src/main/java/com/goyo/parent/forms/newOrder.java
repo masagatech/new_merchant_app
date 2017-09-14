@@ -20,6 +20,7 @@ import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 import com.goyo.parent.R;
 import com.goyo.parent.adapters.NewOrderAdapter;
+import com.goyo.parent.common.Preferences;
 import com.goyo.parent.database.SQLBase;
 import com.goyo.parent.database.Tables;
 import com.goyo.parent.gloabls.Global;
@@ -122,9 +123,8 @@ public class newOrder extends AppCompatActivity {
     private void DataFromServer() {
 
         JsonObject json = new JsonObject();
-        json.addProperty("empid",Global.loginusr.getDriverid()+"");
-        json.addProperty("flag", "all");
-        json.addProperty("enttid", Global.loginusr.getEnttid()+"");
+        json.addProperty("flag", "byparents");
+        json.addProperty("uid", Preferences.getValue_String(getApplicationContext(), Preferences.USER_ID));
         Ion.with(this)
                 .load(Global.urls.getNotification.value)
                 .setJsonObjectBody(json)
@@ -211,9 +211,9 @@ public class newOrder extends AppCompatActivity {
                     Type listType = new TypeToken<model_notification>() {
                     }.getType();
                     model_notification m = gson.fromJson(obj, listType);
-                    m.autoid = Integer.parseInt(autoid);
-                    m.createdon = date2;
-                    m.remaintime = (expTm * 60* 1000) - milisec;
+//                    m.autoid = Integer.parseInt(autoid);
+//                    m.createdon = date2;
+//                    m.remaintime = (expTm * 60* 1000) - milisec;
                     lst.add(m);
                 }
 

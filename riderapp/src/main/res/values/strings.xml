@@ -81,7 +81,7 @@
     <string name="All_Order" translatable="false">Assignment</string>
     <string name="New_Order" translatable="false">Notifications</string>
     <string name="Rejected_Order" translatable="false">Leave</string>
-<string name="Push_Order" translatable="false">Connect</string>
+    <string name="Push_Order" translatable="false">Connect</string>
     <string name="order_details" translatable="false">Attendance</string>
     <string name="title_activity_custemer_maps" translatable="false">Map</string>
     <string name="exp" translatable="false">Expired !!!</string>
@@ -144,7 +144,6 @@
     <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
     <string name="title_activity_today_visits_maps" translatable="false">Map</string>
     <string name="holidays" translatable="false">Holidays</string>
-
 
 
 </resources>

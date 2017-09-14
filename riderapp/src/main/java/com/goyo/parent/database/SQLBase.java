@@ -1764,12 +1764,12 @@ public void Leave_UPDATE_Status(String _created_by, String status){
         @Override
         public void onCreate(SQLiteDatabase db) {
             //db.execSQL(Procedures.tbl_driver_info.CREATE);
-            db.execSQL(Procedures.tblnotification.CREATE);
-            db.execSQL(Procedures.tbltag.CREATE);
-            db.execSQL(Procedures.tblofflinetask.CREATE);
-            db.execSQL(Procedures.tbltask.CREATE);
-            db.execSQL(Procedures.tblexpense.CREATE);
-            db.execSQL(Procedures.tblleave.CREATE);
+//            db.execSQL(Procedures.tblnotification.CREATE);
+//            db.execSQL(Procedures.tbltag.CREATE);
+//            db.execSQL(Procedures.tblofflinetask.CREATE);
+//            db.execSQL(Procedures.tbltask.CREATE);
+//            db.execSQL(Procedures.tblexpense.CREATE);
+//            db.execSQL(Procedures.tblleave.CREATE);
 //            db.execSQL(Procedures.tblexpense_all.CREATE);
         }
 

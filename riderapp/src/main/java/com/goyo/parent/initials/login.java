@@ -17,20 +17,15 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import com.google.gson.internal.LinkedTreeMap;
-import com.google.gson.reflect.TypeToken;
 import com.goyo.parent.R;
 import com.goyo.parent.common.Checker;
+import com.goyo.parent.common.Preferences;
 import com.goyo.parent.forms.dashboard;
 import com.goyo.parent.gloabls.Global;
-import com.goyo.parent.model.model_loginusr;
-import com.goyo.parent.utils.SHP;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -152,13 +147,13 @@ public class login extends AppCompatActivity implements View.OnClickListener {
 ////                    Permmission = checkAndRequestPermissions();
 //                } else {
                     JsonObject json = new JsonObject();
-                    json.addProperty("email", edtUserName.getText().toString());
-                    json.addProperty("pwd", edtPassword.getText().toString());
-                    json.addProperty("token", token);
-                    json.addProperty("type", "emp");
-                    json.addProperty("otherdetails", "{}");
-                    json.addProperty("src", "m");
-                    json.addProperty("imei", telephonyManager.getDeviceId());
+                    json.addProperty("v_username", edtUserName.getText().toString());
+                    json.addProperty("v_password", edtPassword.getText().toString());
+                    json.addProperty("v_device_token", token);
+//                    json.addProperty("type", "emp");
+//                    json.addProperty("otherdetails", "{}");
+                    json.addProperty("device", "ANDROID");
+                    json.addProperty("v_imei_number", telephonyManager.getDeviceId());
                     Global.showProgress(loader);
                     Ion.with(this)
                             .load(Global.urls.getlogin.value)
@@ -170,36 +165,51 @@ public class login extends AppCompatActivity implements View.OnClickListener {
                                     // do stuff with the result or error
                                     try {
                                         if (result != null) Log.v("result", result.toString());
-//                                    JsonObject Data=  result.get("data").getAsJsonObject();
-//                                    EnttId=Data.get("enttid").toString();
-                                        // JSONObject jsnobject = new JSONObject(jsond);
-                                        Gson gson = new Gson();
-                                        Type listType = new TypeToken<List<model_loginusr>>() {
-                                        }.getType();
-                                        List<model_loginusr> login = (List<model_loginusr>) gson.fromJson(result.get("data"), listType);
-                                        if (login.size() > 0) {
-                                            Global.loginusr = login.get(0);
-                                            if (Global.loginusr.getStatus() == 1) {
-                                                SHP.set(login.this, SHP.ids.uid, Global.loginusr.getDriverid() + "");
-                                                SHP.set(login.this, SHP.ids.hsid, Global.loginusr.getHsid() + "");
-                                                String g = Global.loginusr.getSessiondetails().toString();
-                                                if (!g.equals("null")) {
-                                                    String s = ((LinkedTreeMap) Global.loginusr.getSessiondetails()).get("sessionid").toString();
-                                                    Global.loginusr.setSessiondetails(s.replace(".0", ""));
-                                                    SHP.set(login.this, SHP.ids.sessionid, Global.loginusr.getSessiondetails().toString());
-                                                }
 
-                                                //Toast.makeText(login.this, "Login Successfully!", Toast.LENGTH_SHORT).show();
+                                        // JSONObject jsnobject = new JSONObject(jsond);
+//                                        Gson gson = new Gson();
+//                                        Type listType = new TypeToken<List<model_loginusr>>() {
+//                                        }.getType();
+//                                        List<model_loginusr> login = (List<model_loginusr>) gson.fromJson(result.get("data"), listType);
+                                        JsonObject Data=  result.get("data").getAsJsonObject();
+                                        String message=result.get("message").getAsString();
+//                                       JsonObject o= result.get("data").getAsJsonArray().get(0).getAsJsonObject().get("funsave_taginfo").getAsJsonObject();
+//                                        if (Data.equals("{}")) {
+
+//                                            Global.loginusr = login.get(0);
+                                            if (result.get("status").getAsInt() == 1) {
+
+                                                Preferences.setValue(getApplicationContext(), Preferences.USER_NAME, Data.get("v_name").getAsString());
+                                                Preferences.setValue(getApplicationContext(), Preferences.USER_ID, Data.get("id").getAsString());
+                                                Preferences.setValue(getApplicationContext(), Preferences.USER_AUTH_TOKEN, Data.get("v_token").getAsString());
+                                                Preferences.setValue(getApplicationContext(), Preferences.V_ID, Data.get("v_id").getAsString());
+                                                Preferences.setValue(getApplicationContext(), Preferences.CITY, Data.get("city").getAsString());
+
                                                 Intent i = new Intent(login.this, dashboard.class);
                                                 startActivity(i);
                                                 login.this.finish();
+
+//                                                SHP.set(login.this, SHP.ids.uid, Global.loginusr.getDriverid() + "");
+//                                                SHP.set(login.this, SHP.ids.hsid, Global.loginusr.getHsid() + "");
+//                                                String g = Global.loginusr.getSessiondetails().toString();
+//                                                if (!g.equals("null")) {
+//                                                    String s = ((LinkedTreeMap) Global.loginusr.getSessiondetails()).get("sessionid").toString();
+//                                                    Global.loginusr.setSessiondetails(s.replace(".0", ""));
+//                                                    SHP.set(login.this, SHP.ids.sessionid, Global.loginusr.getSessiondetails().toString());
+//                                                }
+
+                                                //Toast.makeText(login.this, "Login Successfully!", Toast.LENGTH_SHORT).show();
+
                                             } else {
-                                                Toast.makeText(login.this, "Login Failed! " + Global.loginusr.getErrmsg(), Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(login.this, "Login Failed! " +message, Toast.LENGTH_SHORT).show();
                                                 edtPassword.setText("");
+//                                                Toast.makeText(login.this, "Oops there is some issue! please login later!", Toast.LENGTH_SHORT).show();
                                             }
-                                        } else {
-                                            Toast.makeText(login.this, "Oops there is some issue! please login later!", Toast.LENGTH_SHORT).show();
-                                        }
+//                                        }
+//                                        else {
+////
+////
+////                                        }
 
                                     } catch (Exception ea) {
                                         Toast.makeText(login.this, "Error: " + ea.getMessage(), Toast.LENGTH_LONG).show();

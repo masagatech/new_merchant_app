@@ -21,7 +21,7 @@ public class About_us extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Element adsElement = new Element();
-        adsElement.setTitle("Travel Tracker");
+        adsElement.setTitle("GoYo Parent");
         try {
             VersionCode = getApplicationContext().getPackageManager().getPackageInfo(getApplicationContext().getPackageName(), 0).versionCode;
         } catch (PackageManager.NameNotFoundException e) {

@@ -26,6 +26,27 @@
         app:cardElevation="1dp"
         app:contentPadding="1dp">
 
+        <ImageButton
+            android:layout_marginRight="10dp"
+            android:layout_gravity="right"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="10dp"
+            android:id="@+id/Btn_Call"
+            android:background="@drawable/circle" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:layout_gravity="right"
+            android:id="@+id/Custmer_name"
+            android:layout_marginTop="15dp"
+            android:layout_marginRight="21dp"
+            android:layout_width="wrap_content"
+            android:textSize="15dp"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            tools:text="1" />
+
+
         <RelativeLayout
             android:clickable="true"
             android:background="?android:attr/selectableItemBackground"
@@ -84,15 +105,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
-                        <android.support.v7.widget.AppCompatTextView
-                            android:id="@+id/text_timeline_title"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_vertical"
-                            android:layout_weight="1"
-                            android:textSize="13dp"
-                            android:drawableLeft="@drawable/times"
-                            tools:text="25-jul-2017" />
+
+
 
                         <ToggleButton
                             android:visibility="gone"
@@ -109,35 +123,46 @@
 
                         <android.support.v7.widget.AppCompatTextView
                             android:textSize="13dp"
-                        android:id="@+id/Time"
+                            android:id="@+id/Time"
                             android:visibility="gone"
                             android:layout_weight="1"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:drawableLeft="@drawable/esitmated_time"
-                        android:gravity="center_vertical"
-                        android:textColor="@android:color/black"
-                        tools:text=" 08.00 PM" />
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:drawableLeft="@drawable/esitmated_time"
+                            android:gravity="center_vertical"
+                            android:textColor="@android:color/black"
+                            tools:text=" 08.00 PM" />
 
                     </LinearLayout>
 
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
 
-    <android.support.v7.widget.AppCompatTextView
-        android:id="@+id/text_marchent"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:drawableLeft="@drawable/order_id"
-        android:gravity="center_vertical"
-        android:textColor="@android:color/black"
-        android:textStyle="bold"
-        tools:text="Calibration! " />
+                        <android.support.v7.widget.AppCompatTextView
+                            android:id="@+id/text_marchent"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:drawableLeft="@drawable/announces"
+                            android:gravity="center_vertical"
+                            android:textColor="@android:color/black"
+                            android:textStyle="bold"
+                            tools:text="Calibration! " />
 
 
-    </LinearLayout>
+                    </LinearLayout>
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:layout_marginLeft="10dp"
+                        android:id="@+id/text_timeline_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:textSize="13dp"
+                        android:textStyle="italic"
+                        tools:text="25-jul-2017" />
 
                     <LinearLayout
                         android:id="@+id/ClickToHide"
@@ -145,15 +170,6 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
 
-                        <android.support.v7.widget.AppCompatTextView
-                            android:padding="5dp"
-                            android:id="@+id/Custmer_name"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_vertical"
-                            android:textColor="@android:color/black"
-                            android:textStyle="italic"
-                            tools:text="We are Announcing New ewvent at towhall at 5 pm please do come with your kid. aloso meet them at 5.PM" />
 
                         <android.support.v7.widget.AppCompatTextView
                             android:id="@+id/Deliver_at"
@@ -198,14 +214,6 @@
                                 android:layout_height="wrap_content"
                                 >
 
-                                <ImageButton
-                                    android:layout_gravity="center"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="5dp"
-                                    android:id="@+id/Btn_Call"
-                                    android:background="@android:color/white"
-                                    android:src="@drawable/att_img" />
 
                                 <ImageButton
                                     android:scaleType="fitCenter"
@@ -353,19 +361,19 @@
 
 
 
-                    <EditText
-                        android:visibility="gone"
-                        android:inputType="number"
-                        android:id="@+id/Collected_Cash"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:padding="10dp"
-                        android:background="@drawable/border_cash_collection"
-                        android:hint="Enter collected cash"
-                        android:textColor="@android:color/black"
-                        android:textSize="15dp" />
-                </LinearLayout>
+                        <EditText
+                            android:visibility="gone"
+                            android:inputType="number"
+                            android:id="@+id/Collected_Cash"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:padding="10dp"
+                            android:background="@drawable/border_cash_collection"
+                            android:hint="Enter collected cash"
+                            android:textColor="@android:color/black"
+                            android:textSize="15dp" />
+                    </LinearLayout>
                 </LinearLayout>
 
                 <LinearLayout

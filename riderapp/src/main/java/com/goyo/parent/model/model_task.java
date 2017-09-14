@@ -1,5 +1,6 @@
 package com.goyo.parent.model;
 
+import com.google.gson.annotations.SerializedName;
 import com.goyo.parent.forms.OrderStatus;
 
 /**
@@ -7,6 +8,18 @@ import com.goyo.parent.forms.OrderStatus;
  */
 
 public class model_task {
+
+    @SerializedName("title")
+    public String title;
+    @SerializedName("desc")
+    public String desc;
+    @SerializedName("createdon")
+    public String createdon;
+    @SerializedName("createdby")
+    public String createdby;
+
+
+
     int _id;
     String _is_server_send;
     String _title;

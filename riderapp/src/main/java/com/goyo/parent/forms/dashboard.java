@@ -19,7 +19,6 @@ import android.location.LocationManager;
 import android.net.Uri;
 import android.os.BatteryManager;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.ActionBar;
@@ -54,12 +53,11 @@ import com.google.gson.reflect.TypeToken;
 import com.goyo.parent.R;
 import com.goyo.parent.Service.RiderStatus;
 import com.goyo.parent.common.Checker;
+import com.goyo.parent.common.Preferences;
 import com.goyo.parent.database.SQLBase;
 import com.goyo.parent.database.Tables;
 import com.goyo.parent.gloabls.Global;
 import com.goyo.parent.initials.splash_screen;
-import com.goyo.parent.model.model_loginusr;
-import com.goyo.parent.utils.SHP;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
@@ -98,6 +96,8 @@ public class dashboard extends AppCompatActivity {
     FrameLayout All_Order;
     @BindView(R.id.Holyday)
     FrameLayout Holyday;
+    @BindView(R.id.Announcment)
+    FrameLayout Announcment;
 
     private PopupWindow OrderPopup;
     private Button Btn_Accept, Btn_Reject;
@@ -131,10 +131,10 @@ public class dashboard extends AppCompatActivity {
         setContentView(R.layout.activity_dashboard);
 
         //checking app version
-        AppVerCheck();
+//        AppVerCheck();
 
         //getting Last TripId
-        TripId=PreferenceManager.getDefaultSharedPreferences(dashboard.this).getString("tripid", "0");
+//        TripId=PreferenceManager.getDefaultSharedPreferences(dashboard.this).getString("tripid", "0");
 
 
         //counts
@@ -245,8 +245,8 @@ public class dashboard extends AppCompatActivity {
 
 
 
-        //showing rider name in actionbar
-        RiderName.setText("     "+Global.loginusr.getFullname());
+//        showing name in actionbar
+        RiderName.setText("     "+Preferences.getValue_String(getApplicationContext(), Preferences.USER_NAME));
 
 //
 //        Logout.setOnClickListener(new View.OnClickListener() {
@@ -348,12 +348,12 @@ public class dashboard extends AppCompatActivity {
 
     private void  Logout(){
 
-        String sessionid = SHP.get(dashboard.this, SHP.ids.sessionid, "-1").toString();
-        String uid = SHP.get(dashboard.this, SHP.ids.uid, "-1").toString();
+//        String sessionid = SHP.get(dashboard.this, SHP.ids.sessionid, "-1").toString();
+//        String uid = SHP.get(dashboard.this, SHP.ids.uid, "-1").toString();
         JsonObject json = new JsonObject();
-        json.addProperty("sessionid", sessionid);
-        json.addProperty("email", uid);
-        json.addProperty("flag", "rider");
+        json.addProperty("login_id", Preferences.getValue_String(getApplicationContext(), Preferences.USER_ID));
+        json.addProperty("v_token", Preferences.getValue_String(getApplicationContext(), Preferences.USER_AUTH_TOKEN));
+        json.addProperty("device", "ANDROID");
         Ion.with(dashboard.this)
                 .load(Global.urls.getlogout.value)
                 .setJsonObjectBody(json)
@@ -365,23 +365,16 @@ public class dashboard extends AppCompatActivity {
                         try {
                             if (result != null)
                                 Log.v("result", result.toString());
-                            Gson gson = new Gson();
-                            Type listType = new TypeToken<List<model_loginusr>>() {
-                            }.getType();
-                            List<model_loginusr> login = (List<model_loginusr>) gson.fromJson(result.get("data"), listType);
-                            if (login.size() > 0) {
-                                model_loginusr m = login.get(0);
-                                if (m.getStatus() == 1) {
-                                    SHP.set(dashboard.this, SHP.ids.uid, "");
-                                    SHP.set(dashboard.this, SHP.ids.sessionid, "");
-                                    Intent i = new Intent(dashboard.this, com.goyo.parent.initials.login.class);
-                                    startActivity(i);
-                                    dashboard.this.finish();
-                                } else {
-                                    Toast.makeText(dashboard.this, "Faild to logout " + m.getErrcode() + " " + m.getErrmsg(), Toast.LENGTH_LONG).show();
-                                }
+
+                            String message=result.get("message").getAsString();
+                            if (result.get("status").getAsInt() == 1) {
+                            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                            Preferences.setValue(getApplicationContext(), Preferences.USER_ID, "");
+                             Intent i = new Intent(dashboard.this, com.goyo.parent.initials.login.class);
+                                startActivity(i);
+                                dashboard.this.finish();
                             } else {
-                                Toast.makeText(dashboard.this, "Oops there is some issue! please logout later!", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(dashboard.this, "Logout Failed! "+message, Toast.LENGTH_SHORT).show();
                             }
                         } catch (Exception ea) {
                             Toast.makeText(dashboard.this, "Oops there is some issue! Error: " + ea.getMessage(), Toast.LENGTH_LONG).show();
@@ -393,11 +386,11 @@ public class dashboard extends AppCompatActivity {
     }
 
     //adding user name,Hotspot ID and Rider ID to fabric crash
-    public static void registerCrashReport() {
+    public void registerCrashReport() {
         // TODO: Use the current user's information
-        Crashlytics.setUserIdentifier("Hotspot ID: "+Global.loginusr.getHsid() + "");
-        Crashlytics.setUserEmail("Name: "+Global.loginusr.getFullname() + "");
-        Crashlytics.setUserName("Rider ID: " +Global.loginusr.getDriverid() + "");
+//        Crashlytics.setUserIdentifier("Hotspot ID: "+Global.loginusr.getHsid() + "");
+//        Crashlytics.setUserEmail("Name: "+Global.loginusr.getFullname() + "");
+        Crashlytics.setUserName("MOB/Email: " + Preferences.getValue_String(dashboard.this, Preferences.USER_ID) + "");
     }
 
 
@@ -799,8 +792,6 @@ public class dashboard extends AppCompatActivity {
 
     @OnClick(R.id.Complated_Orders)
     void click3() {
-        Intent intent = new Intent(this, complated_order.class);
-        startActivity(intent);
     }
 
     @OnClick(R.id.Rejected_Orders)
@@ -838,6 +829,15 @@ public class dashboard extends AppCompatActivity {
     @OnClick(R.id.Holyday)
     void click9() {
         Intent intent = new Intent(this, Holyday.class);
+        startActivity(intent);
+    }
+
+    @OnClick(R.id.Announcment)
+    void click10() {
+//        Intent intent = new Intent(this, complated_order.class);
+//        startActivity(intent);
+
+        Intent intent = new Intent(this, Announcment.class);
         startActivity(intent);
     }
 
@@ -1014,37 +1014,8 @@ public class dashboard extends AppCompatActivity {
                 startActivity(intent);
                 return true;
             case R.id.logout:
-
-                String LogoutMessage = getString(R.string.logout_msg_with_online);
-                if (Global.isOnline) {
-                    isCallLogout = true;
-
-                }
-                else {
-                    LogoutMessage = getString(R.string.logout_msg_normal);
-                    isCallLogout = false;
-                }
-                new AlertDialog.Builder(dashboard.this)
-                        .setTitle(getResources().getString(R.string.logout))
-                        .setMessage(LogoutMessage)
-                        .setPositiveButton(R.string.alert_ok_text, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                if(isCallLogout==false)
-                                    //calling logout api
-                                    Logout();
-                                else
-                                    //turning switch off
-                                    SwitchTurnedOnOFF("false");
-                            }
-                        })
-                        .setNegativeButton(R.string.alert_no_text, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                isCallLogout=false;
-                            }
-                        })
-                        .setCancelable(false)
-                        .setIcon(android.R.drawable.ic_lock_lock).show();
-
+                //calling logout api
+                Logout();
                 return true;
             case R.id.contact_us:
                 Intent intent2 = new Intent(this, ContactDashBoard.class);
@@ -1084,6 +1055,6 @@ public class dashboard extends AppCompatActivity {
         //Update Pending order Counts
 //        PendingCountOnCheck();
         //Check App Version
-        AppVerCheck();
+//        AppVerCheck();
     }
 }

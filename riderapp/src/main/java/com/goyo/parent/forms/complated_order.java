@@ -1,27 +1,39 @@
 package com.goyo.parent.forms;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 import com.goyo.parent.R;
 import com.goyo.parent.adapters.ComplatedOrderAdapter;
+import com.goyo.parent.common.Preferences;
 import com.goyo.parent.database.SQLBase;
 import com.goyo.parent.database.Tables;
-import com.goyo.parent.model.model_completed;
 import com.goyo.parent.model.model_task;
+import com.koushikdutta.async.future.FutureCallback;
+import com.koushikdutta.ion.Ion;
 
+import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
+
+import static com.goyo.parent.gloabls.Global.urls.getAnnouncement;
 
 public class complated_order extends AppCompatActivity {
 
@@ -32,6 +44,11 @@ public class complated_order extends AppCompatActivity {
     private ProgressDialog loader;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private ArrayList<model_task> data;
+    private Spinner Group;
+    List<String> GroupName;
+    List<String> GroupID;
+    List<String> GroupCount;
+    String GrpID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,13 +68,27 @@ public class complated_order extends AppCompatActivity {
         mOrientation = Orientation.VERTICAL;
         mWithLinePadding = true;
 
-        setTitle(getResources().getString(R.string.Complated_Order));
+        //getting Group Id and Name
+        Intent intent = getIntent();
+        String GrpName = intent.getExtras().getString("GrpName");
+        GrpID=intent.getExtras().getString("GrpID");
+
+        setTitle(GrpName);
 
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         mRecyclerView.setLayoutManager(getLinearLayoutManager());
         mRecyclerView.setHasFixedSize(true);
 
         mSwipeRefreshLayout=(SwipeRefreshLayout) findViewById(R.id.Refresh);
+        Group=(Spinner)findViewById(R.id.Groups);
+//        GetGroupData();
+
+//        Group.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//
+//            }
+//        });
 
        //refresh data at first time
         mSwipeRefreshLayout.post(new Runnable() {
@@ -81,59 +112,80 @@ public class complated_order extends AppCompatActivity {
     }
 
 
-    private void DataFromServer(){
-//
-//            loader = new ProgressDialog(this);
-//            loader.setCancelable(false);
-//            loader.setMessage(getResources().getString(R.string.wait_msg));
-//            loader.show();
+    private void DataFromServer() {
 
-
-        data= populateList();
-
-        if (data.size() > 0) {
-            mRecyclerView.setVisibility(View.VISIBLE);
-            findViewById(R.id.txtNodata).setVisibility(View.GONE);
-            mTimeLineAdapter = new ComplatedOrderAdapter(data, mOrientation, mWithLinePadding);
-            mRecyclerView.setAdapter(mTimeLineAdapter);
-            mTimeLineAdapter.notifyDataSetChanged();
-        } else {
-            mRecyclerView.setVisibility(View.INVISIBLE);
-            findViewById(R.id.txtNodata).setVisibility(View.VISIBLE);
-        }
-        mSwipeRefreshLayout.setRefreshing(false);
-
-//        JsonObject json = new JsonObject();
-//        json.addProperty("uid", Global.loginusr.getDriverid());
-//        json.addProperty("flag", "uid");
-//        Ion.with(this)
-//                .load(getTripStops.value)
-//                .setJsonObjectBody(json)
-//                .asJsonObject()
-//                .setCallback(new FutureCallback<JsonObject>() {
-//                    @Override
-//                    public void onCompleted(Exception e, JsonObject result) {
-//                        // do stuff with the result or error
-//                        try {
-//                            if (result != null) Log.v("result", result.toString());
-//                            // JSONObject jsnobject = new JSONObject(jsond);
-//                            Gson gson = new Gson();
-//                            Type listType = new TypeToken<List<model_completed>>() {
-//                            }.getType();
-//                            List<model_completed> events = (List<model_completed>) gson.fromJson(result.get("data"), listType);
-//                            bindCurrentTrips(events);
-//                        }
-//                        catch (Exception ea) {
-//                            ea.printStackTrace();
-//                        }
-////                        if(flag==1){
-////                            loader.hide();
-////                        }else {
-//                        mSwipeRefreshLayout.setRefreshing(false);
-//                        }
-
+        JsonObject json = new JsonObject();
+        json.addProperty("flag", "details");
+        json.addProperty("grpid", GrpID);
+        json.addProperty("uid", Preferences.getValue_String(getApplicationContext(), Preferences.USER_ID));
+        Ion.with(this)
+                .load(getAnnouncement.value)
+                .setJsonObjectBody(json)
+                .asJsonObject()
+                .setCallback(new FutureCallback<JsonObject>() {
+                    @Override
+                    public void onCompleted(Exception e, JsonObject result) {
+                        // do stuff with the result or error
+                        try {
+                            if (result != null) Log.v("result", result.toString());
+                            // JSONObject jsnobject = new JSONObject(jsond);
+                            Gson gson = new Gson();
+                            Type listType = new TypeToken<List<model_task>>() {
+                            }.getType();
+                            List<model_task> events = (List<model_task>) gson.fromJson(result.get("data"), listType);
+                            bindCurrentTrips(events);
+                        } catch (Exception ea) {
+                            ea.printStackTrace();
+                        }
+//                        if(flag==1){
+//                            loader.hide();
+//                        }else {
+                        mSwipeRefreshLayout.setRefreshing(false);
                     }
-//                });
+
+//                    }
+                });
+    }
+
+
+    private void GetGroupData(){
+        JsonObject json = new JsonObject();
+        json.addProperty("flag", "summary");
+        json.addProperty("uid", Preferences.getValue_String(getApplicationContext(), Preferences.USER_ID));
+        Ion.with(this)
+                .load(getAnnouncement.value)
+                .setJsonObjectBody(json)
+                .asJsonObject()
+                .setCallback(new FutureCallback<JsonObject>() {
+                    @Override
+                    public void onCompleted(Exception e, JsonObject result) {
+                        // do stuff with the result or error
+                        try {
+                            if (result != null) Log.v("result", result.toString());
+                            GroupName = new ArrayList<String>();
+                            GroupID = new ArrayList<String>();
+                            GroupCount = new ArrayList<String>();
+                            for(int i=0;i<result.get("data").getAsJsonArray().size();i++){
+                                GroupName.add(result.get("data").getAsJsonArray().get(i).getAsJsonObject().get("grpname").getAsString()+"  ( "+result.get("data").getAsJsonArray().get(i).getAsJsonObject().get("countannc").getAsString()+" )");
+                                GroupID.add(result.get("data").getAsJsonArray().get(i).getAsJsonObject().get("grpid").getAsString());
+                                GroupCount.add(result.get("data").getAsJsonArray().get(i).getAsJsonObject().get("countannc").getAsString());
+                            }
+                            SetGroup(GroupName);
+                        }
+                        catch (Exception ea) {
+                            ea.printStackTrace();
+                        }
+                    }
+                });
+    }
+    private void SetGroup(List<String> lst) {
+        if (lst.size() > 0) {
+
+            ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, lst);
+            dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            Group.setAdapter(dataAdapter);
+        }
+    }
 
     private ArrayList<model_task> populateList(){
         SQLBase db = new SQLBase(this);
@@ -189,17 +241,17 @@ public class complated_order extends AppCompatActivity {
     private LinearLayoutManager getLinearLayoutManager() {
         return new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
     }
-    private void bindCurrentTrips(List<model_completed> lst) {
-//        if (lst.size() > 0) {
-//            mRecyclerView.setVisibility(View.VISIBLE);
-//            findViewById(R.id.txtNodata).setVisibility(View.GONE);
-//            mTimeLineAdapter = new ComplatedOrderAdapter(lst, mOrientation, mWithLinePadding);
-//            mRecyclerView.setAdapter(mTimeLineAdapter);
-//            mTimeLineAdapter.notifyDataSetChanged();
-//        } else {
-//            mRecyclerView.setVisibility(View.INVISIBLE);
-//            findViewById(R.id.txtNodata).setVisibility(View.VISIBLE);
-//        }
+    private void bindCurrentTrips(List<model_task> lst) {
+        if (lst.size() > 0) {
+            mRecyclerView.setVisibility(View.VISIBLE);
+            findViewById(R.id.txtNodata).setVisibility(View.GONE);
+            mTimeLineAdapter = new ComplatedOrderAdapter(lst, mOrientation, mWithLinePadding);
+            mRecyclerView.setAdapter(mTimeLineAdapter);
+            mTimeLineAdapter.notifyDataSetChanged();
+        } else {
+            mRecyclerView.setVisibility(View.INVISIBLE);
+            findViewById(R.id.txtNodata).setVisibility(View.VISIBLE);
+        }
     }
 
 
