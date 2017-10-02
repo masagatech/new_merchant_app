@@ -9,78 +9,35 @@ import com.goyo.parent.forms.OrderStatus;
 
 public class model_pending {
 
-    @SerializedName("orddid")
-    public int orderdetailid;
+    @SerializedName("studentname")
+    public String studentname;
 
-    @SerializedName("tskid")
-    public String tskid;
+    @SerializedName("studentphoto")
+    public String studentphoto;
 
-    @SerializedName("task")
-    public String task;
+    @SerializedName("gender")
+    public String gender;
 
-    @SerializedName("frmdt")
-    public String frmdt;
+    @SerializedName("schoolname")
+    public String schoolname;
 
-    @SerializedName("cuid")
-    public String cuid;
+    @SerializedName("enrollmentno")
+    public String enrollmentno;
 
-    @SerializedName("todt")
-    public String todt;
+    @SerializedName("classname")
+    public String classname;
 
-    @SerializedName("tntype")
-    public String tntype;
+    @SerializedName("mothername")
+    public String mothername;
 
-    @SerializedName("value")
-    public String value;
+    @SerializedName("fathername")
+    public String fathername;
 
-    @SerializedName("tstype")
-    public String tstype;
+    @SerializedName("mobileno1")
+    public String mobileno1;
 
-
-    @SerializedName("ordid")
-    public int ordid;
-
-    @SerializedName("ordno")
-    public String ordno;
-
-    @SerializedName("remark")
-    public String remark;
-
-    @SerializedName("olnm")
-    public String olnm;
-
-    @SerializedName("cnm")
-    public String custname;
-
-    @SerializedName("mob")
-    public String custmob;
-
-    @SerializedName("cadr")
-    public String custaddr;
-
-    @SerializedName("orddate")
-    public String orddate;
-
-    @SerializedName("amt")
-    public Double amtcollect;
-
-    @SerializedName("pctm")
-    public String picktime;
-
-    @SerializedName("deldate")
-    public String deldate;
-
-    @SerializedName("dtm")
-    public String deltime;
-
-    @SerializedName("dltm")
-    public String dltm;
-
-    @SerializedName("trpid")
-    public String tripid;
-
-    @SerializedName("stsi")
-    public String stats;
+    @SerializedName("mobileno2")
+    public String mobileno2;
 
 
     public OrderStatus status = OrderStatus.ACTIVE;

@@ -8,7 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import com.goyo.parent.R;
 import com.goyo.parent.common.Checker;
 import com.goyo.parent.common.Preferences;
-import com.goyo.parent.forms.dashboard;
+import com.goyo.parent.forms.PushOrder;
 import com.goyo.parent.utils.common;
 
 public class sessionchecker extends AppCompatActivity {
@@ -33,7 +33,7 @@ public class sessionchecker extends AppCompatActivity {
         if (!Preferences.getValue_String(getApplicationContext(), Preferences.USER_ID).isEmpty()) {
             loader.setMessage("Auto Login...");
             loader.hide();
-            Intent i = new Intent(sessionchecker.this, dashboard.class);
+            Intent i = new Intent(sessionchecker.this, PushOrder.class);
             startActivity(i);
 
             finish();

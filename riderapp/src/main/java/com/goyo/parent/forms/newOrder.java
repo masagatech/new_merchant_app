@@ -35,6 +35,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import static com.goyo.parent.R.id.txtNodata;
+import static com.goyo.parent.forms.dashboard.SclId;
 
 public class newOrder extends AppCompatActivity {
     private RecyclerView mRecyclerView;
@@ -124,6 +125,7 @@ public class newOrder extends AppCompatActivity {
 
         JsonObject json = new JsonObject();
         json.addProperty("flag", "byparents");
+        json.addProperty("enttid", SclId+"");
         json.addProperty("uid", Preferences.getValue_String(getApplicationContext(), Preferences.USER_ID));
         Ion.with(this)
                 .load(Global.urls.getNotification.value)

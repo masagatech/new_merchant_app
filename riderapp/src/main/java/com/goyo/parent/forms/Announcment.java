@@ -24,6 +24,7 @@ import com.koushikdutta.ion.Ion;
 import java.lang.reflect.Type;
 import java.util.List;
 
+import static com.goyo.parent.forms.dashboard.SclId;
 import static com.goyo.parent.gloabls.Global.urls.getAnnouncement;
 
 public class Announcment extends AppCompatActivity {
@@ -84,6 +85,7 @@ public class Announcment extends AppCompatActivity {
         JsonObject json = new JsonObject();
         json.addProperty("flag", "summary");
         json.addProperty("uid", Preferences.getValue_String(getApplicationContext(), Preferences.USER_ID));
+        json.addProperty("enttid", SclId+"");
         Ion.with(this)
                 .load(getAnnouncement.value)
                 .setJsonObjectBody(json)
@@ -94,7 +96,7 @@ public class Announcment extends AppCompatActivity {
                         // do stuff with the result or error
                         try {
                             if (result != null) Log.v("result", result.toString());
-                            // JSONObject jsnobject = new JSONObject(jsond);
+                            // JSONObj                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           ect jsnobject = new JSONObject(jsond);
                             Gson gson = new Gson();
                             Type listType = new TypeToken<List<modal_data>>() {
                             }.getType();

@@ -1,38 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:orientation="horizontal"
     xmlns:tools="http://schemas.android.com/tools"
     >
 
-        <TextView
-            android:visibility="gone"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/offline_switch_text"
-            android:id="@+id/online"
-            android:layout_marginTop="4dp"
-            android:layout_below="@+id/compatSwitch"
-            />
+    <ImageView
+        android:layout_marginLeft="5dp"
+        android:layout_width="35dp"
+        android:layout_height="30dp"
+        android:id="@+id/Images"/>
+
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="     Anket Sharma"
+        android:text="Anket Sharma"
+        android:paddingRight="35dp"
         android:id="@+id/nameRider"
-        android:textSize="16dp"
+        android:textSize="12dp"
+        android:gravity="center"
         android:fontFamily="sans-serif-light"
         android:layout_marginTop="6dp"
        android:layout_centerHorizontal="true" />
 
-        <android.support.v7.widget.SwitchCompat
-            android:id="@+id/compatSwitch"
-            android:visibility="gone"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:theme="@style/Switch"
-            />
 
 
-</RelativeLayout>
+
+</LinearLayout>

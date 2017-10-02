@@ -21,7 +21,7 @@ import com.google.gson.JsonObject;
 import com.goyo.parent.R;
 import com.goyo.parent.common.Checker;
 import com.goyo.parent.common.Preferences;
-import com.goyo.parent.forms.dashboard;
+import com.goyo.parent.forms.PushOrder;
 import com.goyo.parent.gloabls.Global;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
@@ -185,7 +185,7 @@ public class login extends AppCompatActivity implements View.OnClickListener {
                                                 Preferences.setValue(getApplicationContext(), Preferences.V_ID, Data.get("v_id").getAsString());
                                                 Preferences.setValue(getApplicationContext(), Preferences.CITY, Data.get("city").getAsString());
 
-                                                Intent i = new Intent(login.this, dashboard.class);
+                                                Intent i = new Intent(login.this, PushOrder.class);
                                                 startActivity(i);
                                                 login.this.finish();
 

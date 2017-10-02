@@ -25,16 +25,15 @@
     <TextView
         android:layout_marginTop="80dp"
         android:id="@+id/txtNodata"
-        android:drawableTop="@drawable/nonoti"
+android:visibility="gone"
+        android:drawableTop="@drawable/nostud"
         android:layout_width="match_parent"
         android:gravity="center"
-        android:visibility="gone"
+        android:fontFamily="sans-serif-light"
         android:textColor="@color/blue_light"
         android:layout_height="wrap_content"
-        android:fontFamily="sans-serif-light"
-        android:text="@string/notification_emthy_msg"
+        android:text="There is no data to fetch!"
         android:textSize="16sp"
-        android:layout_centerInParent="true"
         />
 
     <include layout="@layout/content_new_order" />

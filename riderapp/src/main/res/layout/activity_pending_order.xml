@@ -9,19 +9,18 @@
     tools:context="com.goyo.parent.forms.pending_order">
 
     <TextView
-        android:visibility="gone"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="40dp"
         android:id="@+id/txtNodata"
-        android:drawableTop="@drawable/notask"
+        android:visibility="gone"
+        android:drawableTop="@drawable/nostud"
         android:layout_width="match_parent"
         android:gravity="center"
+        android:fontFamily="sans-serif-light"
         android:textColor="@color/blue_light"
         android:layout_height="wrap_content"
-        android:text="@string/pending_empthy_msg"
-        android:textSize="15sp"
-        android:layout_centerInParent="true"
+        android:text="There is no data to fetch!"
+        android:textSize="16sp"
         />
-
     <include layout="@layout/content_pending_orders" />
 
 

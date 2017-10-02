@@ -25,32 +25,30 @@
     </android.support.design.widget.AppBarLayout>
 
     <com.github.badoualy.datepicker.DatePickerTimeline
-        android:layout_marginTop="56dp"
         android:id="@+id/DatePicker"
+        android:visibility="gone"
         app:mti_primaryColor="@color/orange_light"
         app:mti_primaryDarkColor="@color/white"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
     <TextView
-        android:layout_marginTop="200dp"
+        android:layout_marginTop="80dp"
         android:id="@+id/txtNodata"
-        android:drawableTop="@drawable/noleave"
+ android:visibility="gone"
+        android:drawableTop="@drawable/nostud"
         android:layout_width="match_parent"
         android:gravity="center"
-        android:visibility="gone"
         android:fontFamily="sans-serif-light"
         android:textColor="@color/blue_light"
         android:layout_height="wrap_content"
-        android:text="@string/returned_empthy_msg"
-        android:textSize="15sp"
-
-        android:layout_centerInParent="true"
+        android:text="There is no data to fetch!"
+        android:textSize="16sp"
         />
 
     <include layout="@layout/content_rejected_orders" />
-    <include layout="@layout/footer_expense"
-        />
+    <!--<include layout="@layout/footer_expense"-->
+        <!--/>-->
 
 
 </android.support.design.widget.CoordinatorLayout>

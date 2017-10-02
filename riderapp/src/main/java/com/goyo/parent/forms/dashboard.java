@@ -30,11 +30,13 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
@@ -98,6 +100,10 @@ public class dashboard extends AppCompatActivity {
     FrameLayout Holyday;
     @BindView(R.id.Announcment)
     FrameLayout Announcment;
+    @BindView(R.id.Schadule)
+    FrameLayout Schedule;
+    @BindView(R.id.Gallery)
+    FrameLayout Gallery;
 
     private PopupWindow OrderPopup;
     private Button Btn_Accept, Btn_Reject;
@@ -106,6 +112,7 @@ public class dashboard extends AppCompatActivity {
     private TextView PopUp_CountText;
     private TextView Online, RiderName;
     private ImageButton Logout;
+    private ImageView SclLogo;
     private SwitchCompat RiderStatusSwitch;
     Intent mServiceIntent;
     protected static final int REQUEST_CHECK_SETTINGS = 0x1;
@@ -121,6 +128,7 @@ public class dashboard extends AppCompatActivity {
     TextView Count_Pending,Count_TodayVisits;
     private Boolean isCallLogout=false;
     private LinearLayout PushOrderTL;
+    public static String SclId="";
 
 
     @Override
@@ -139,7 +147,7 @@ public class dashboard extends AppCompatActivity {
 
         //counts
         Count_Pending=(TextView)findViewById(R.id.Count);
-        Count_TodayVisits=(TextView)findViewById(R.id.Count_Todayvisit);
+//        Count_TodayVisits=(TextView)findViewById(R.id.Count_Todayvisit);
         ButterKnife.bind(this);
 
         //setting cutom actionbar
@@ -206,9 +214,9 @@ public class dashboard extends AppCompatActivity {
 
 
 
-        RiderStatusSwitch = (SwitchCompat) findViewById(R.id.compatSwitch);
-        Online = (TextView) findViewById(R.id.online);
+
         RiderName = (TextView) findViewById(R.id.nameRider);
+        SclLogo=(ImageView)findViewById(R.id.Images) ;
 //        Logout = (ImageButton) findViewById(R.id.Logout);
 
 
@@ -243,10 +251,20 @@ public class dashboard extends AppCompatActivity {
 //                               });
 
 
+        //getting Group Id and Name
+        Intent intent = getIntent();
+        String SclName = intent.getExtras().getString("SclName");
+        SclId=intent.getExtras().getString("SclId");
+        String SclLogoURL=intent.getExtras().getString("SclLogo");
 
 
+        //loading Logo
+        Glide.with(this).load(SclLogoURL)
+                .thumbnail(0.5f)
+                .placeholder(R.drawable.scho)
+                .into(SclLogo);
 //        showing name in actionbar
-        RiderName.setText("     "+Preferences.getValue_String(getApplicationContext(), Preferences.USER_NAME));
+        RiderName.setText(SclName);
 
 //
 //        Logout.setOnClickListener(new View.OnClickListener() {
@@ -796,7 +814,7 @@ public class dashboard extends AppCompatActivity {
 
     @OnClick(R.id.Rejected_Orders)
     void click4() {
-        Intent intent = new Intent(this, Leave.class);
+        Intent intent = new Intent(this, Ann.class);
         startActivity(intent);
     }
 
@@ -823,12 +841,12 @@ public class dashboard extends AppCompatActivity {
     }
     @OnClick(R.id.All_Order_details)
     void click8() {
-        Intent intent = new Intent(this, AllOrderDetails.class);
+        Intent intent = new Intent(this, Attentence.class);
         startActivity(intent);
     }
     @OnClick(R.id.Holyday)
     void click9() {
-        Intent intent = new Intent(this, Holyday.class);
+        Intent intent = new Intent(this, rejected_order.class);
         startActivity(intent);
     }
 
@@ -838,6 +856,18 @@ public class dashboard extends AppCompatActivity {
 //        startActivity(intent);
 
         Intent intent = new Intent(this, Announcment.class);
+        startActivity(intent);
+    }
+
+    @OnClick(R.id.Schadule)
+    void click11() {
+        Intent intent = new Intent(this, SchodulActivity.class);
+        startActivity(intent);
+    }
+
+    @OnClick(R.id.Gallery)
+    void click12() {
+        Intent intent = new Intent(this, Album.class);
         startActivity(intent);
     }
 

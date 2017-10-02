@@ -1769,7 +1769,7 @@ public void Leave_UPDATE_Status(String _created_by, String status){
 //            db.execSQL(Procedures.tblofflinetask.CREATE);
 //            db.execSQL(Procedures.tbltask.CREATE);
 //            db.execSQL(Procedures.tblexpense.CREATE);
-//            db.execSQL(Procedures.tblleave.CREATE);
+            db.execSQL(Procedures.tblleave.CREATE);
 //            db.execSQL(Procedures.tblexpense_all.CREATE);
         }
 

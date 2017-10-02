@@ -33,6 +33,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
+import static com.goyo.parent.forms.dashboard.SclId;
 import static com.goyo.parent.gloabls.Global.urls.getAnnouncement;
 
 public class complated_order extends AppCompatActivity {
@@ -117,6 +118,7 @@ public class complated_order extends AppCompatActivity {
         JsonObject json = new JsonObject();
         json.addProperty("flag", "details");
         json.addProperty("grpid", GrpID);
+        json.addProperty("enttid", SclId+"");
         json.addProperty("uid", Preferences.getValue_String(getApplicationContext(), Preferences.USER_ID));
         Ion.with(this)
                 .load(getAnnouncement.value)

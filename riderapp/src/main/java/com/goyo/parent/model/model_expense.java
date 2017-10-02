@@ -9,7 +9,17 @@ import com.goyo.parent.forms.OrderStatus;
 
 public class model_expense {
 
+    @SerializedName("hldnm")
+    public String hldnm;
 
+    @SerializedName("hlddesc")
+    public String hlddesc;
+
+    @SerializedName("hlddate")
+    public String hlddate;
+
+    @SerializedName("todt")
+    public String todt;
 
 
     @SerializedName("expcd")
@@ -35,6 +45,19 @@ public class model_expense {
 
     @SerializedName("appramt")
     public String appramt;
+
+    @SerializedName("name")
+    public String name;
+
+    @SerializedName("schoolid")
+    public String schoolid;
+
+    @SerializedName("schoolname")
+    public String schoolname;
+
+    @SerializedName("schoollogo")
+    public String schoollogo;
+
 
 
 

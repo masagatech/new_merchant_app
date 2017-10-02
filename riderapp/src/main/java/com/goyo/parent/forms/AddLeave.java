@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.google.gson.JsonObject;
 import com.goyo.parent.R;
+import com.goyo.parent.common.Preferences;
 import com.goyo.parent.database.SQLBase;
 import com.goyo.parent.gloabls.Global;
 import com.goyo.parent.model.modal_leave;
@@ -31,16 +32,22 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import static com.goyo.parent.R.id.leave_from;
+import static com.goyo.parent.R.id.leave_to;
 import static com.goyo.parent.Service.NetworkStateReceiver.IsMobailConnected;
+import static com.goyo.parent.forms.dashboard.SclId;
 
 public class AddLeave extends AppCompatActivity {
     EditText Leave_From,Leave_To,Details;
     Calendar myCalendar,myCalendar1;
     List<String> Leave_Type;
-    Spinner LeaveType;
+    List<String> Student_Name;
+    List<String> Student_Id;
+    Spinner LeaveType,Student;
     Button ApplyLeave;
     private  List<Date> Dates;
     private ProgressDialog loader;
+    String Stud_ID="";
 
 
     @Override
@@ -52,10 +59,16 @@ public class AddLeave extends AppCompatActivity {
         this.setTitle("Apply Leave");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        Leave_From = (EditText) findViewById(R.id.leave_from);
+
+        Intent intent = getIntent();
+        Stud_ID=intent.getExtras().getString("ID");
+
+        Leave_From = (EditText) findViewById(leave_from);
         Details = (EditText) findViewById(R.id.leave_details);
-        Leave_To = (EditText) findViewById(R.id.leave_to);
+        Leave_To = (EditText) findViewById(leave_to);
         LeaveType = (Spinner) findViewById(R.id.leave_type);
+        Student = (Spinner) findViewById(R.id.student);
+
 
 
         Calendar c = Calendar.getInstance();
@@ -66,17 +79,12 @@ public class AddLeave extends AppCompatActivity {
         Leave_To.setText(formattedDate);
 
 
-        Leave_Type = new ArrayList<String>();
-        Leave_Type.add("Physical Reason");
-        Leave_Type.add("Emergency");
-        Leave_Type.add("Other Reasons");
+        //get student(s)
+        GetStudent();
 
-        if (Leave_Type.size() > 0) {
+        //Get Type
+        GetType();
 
-            ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, Leave_Type);
-            dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            LeaveType.setAdapter(dataAdapter);
-        }
 
         ApplyLeave = (Button) findViewById(R.id.leave_apply);
         ApplyLeave.setOnClickListener(new View.OnClickListener() {
@@ -96,7 +104,7 @@ public class AddLeave extends AppCompatActivity {
                         loader.setCancelable(false);
                         loader.setMessage(AddLeave.this.getString(R.string.wait_msg));
                         loader.show();
-                        SavetoDb();
+//                        SavetoDb();
                         SentToServer();
                     }
                 }
@@ -202,25 +210,13 @@ public class AddLeave extends AppCompatActivity {
     }
 
 
-    private void SentToServer(){
-        String  details,leave_from,leave_to,selected_leave_type,currentDateTimeString;
-        selected_leave_type=LeaveType.getSelectedItem().toString();
-        currentDateTimeString = java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
-        leave_from=Leave_From.getText().toString();
-        leave_to=Leave_To.getText().toString();
-        details=Details.getText().toString();
-
+    private void GetStudent(){
         JsonObject json = new JsonObject();
-        json.addProperty("empid",Global.loginusr.getDriverid()+"");
-        json.addProperty("frmdt", leave_from);
-        json.addProperty("todt", leave_to);
-        json.addProperty("restype", selected_leave_type);
-        json.addProperty("cuid", Global.loginusr.getUcode());
-        json.addProperty("mob_createdon", currentDateTimeString);
-        json.addProperty("enttid", Global.loginusr.getEnttid()+"");
-        json.addProperty("reason",details);
+        json.addProperty("uid", Preferences.getValue_String(getApplicationContext(), Preferences.USER_ID));
+        json.addProperty("flag", "student");
+        json.addProperty("enttid", SclId+"");
         Ion.with(this)
-                .load(Global.urls.saveEmployeeLeave.value)
+                .load(Global.urls.getParentDetails.value)
                 .setJsonObjectBody(json)
                 .asJsonObject()
                 .setCallback(new FutureCallback<JsonObject>() {
@@ -228,10 +224,114 @@ public class AddLeave extends AppCompatActivity {
                     public void onCompleted(Exception e, JsonObject result) {
                         // do stuff with the result or error
                         try {
-                            JsonObject o= result.get("data").getAsJsonArray().get(0).getAsJsonObject().get("funsave_employeeleave").getAsJsonObject();
+                            Student_Name= new ArrayList<String>();
+                            Student_Id= new ArrayList<String>();
+                            for(int i=0;i<result.get("data").getAsJsonArray().size();i++){
+                                Student_Name.add(result.get("data").getAsJsonArray().get(i).getAsJsonObject().get("studentname").getAsString());
+                                Student_Id.add(result.get("data").getAsJsonArray().get(i).getAsJsonObject().get("autoid").getAsString());
+                            }
+                            SetStudent(Student_Name,Student_Id);
+
+                        } catch (Exception ea) {
+                            ea.printStackTrace();
+                        }
+
+
+                    }
+                });
+
+    }
+
+    private void SetStudent(List<String> lst,List<String> ID) {
+        int Pos=0;
+        if (lst.size() > 0) {
+            ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, lst);
+            dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            Student.setAdapter(dataAdapter);
+
+            for(int i=0;i<ID.size();i++){
+                if(ID.get(i).equals(Stud_ID)){
+                    Pos=i;
+                }
+                Student.setSelection(Pos);
+            }
+
+        }
+    }
+
+
+    private void GetType(){
+        JsonObject json = new JsonObject();
+        json.addProperty("uid", Preferences.getValue_String(getApplicationContext(), Preferences.USER_ID));
+        json.addProperty("flag", "dropdown");
+        Ion.with(this)
+                .load(Global.urls.getPassengerLeave.value)
+                .setJsonObjectBody(json)
+                .asJsonObject()
+                .setCallback(new FutureCallback<JsonObject>() {
+                    @Override
+                    public void onCompleted(Exception e, JsonObject result) {
+                        // do stuff with the result or error
+                        try {
+                            Leave_Type = new ArrayList<String>();
+                            for(int i=0;i<result.get("data").getAsJsonArray().size();i++){
+                                Leave_Type.add(result.get("data").getAsJsonArray().get(i).getAsJsonObject().get("val").getAsString());
+                            }
+                            SetType(Leave_Type);
+
+                        } catch (Exception ea) {
+                            ea.printStackTrace();
+                        }
+
+
+                    }
+                });
+
+    }
+
+    private void SetType(List<String> lst) {
+        if (lst.size() > 0) {
+            ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, lst);
+            dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            LeaveType.setAdapter(dataAdapter);
+        }
+    }
+
+
+    private void SentToServer(){
+        String  details,leave_from,leave_to,selected_leave_type,currentDateTimeString,StudentId;
+        selected_leave_type=LeaveType.getSelectedItem().toString();
+        currentDateTimeString = java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
+        leave_from=Leave_From.getText().toString();
+        leave_to=Leave_To.getText().toString();
+        details=Details.getText().toString();
+
+        int pos=Student.getSelectedItemPosition();
+        StudentId=Student_Id.get(pos);
+
+        JsonObject json = new JsonObject();
+        json.addProperty("psngrid",StudentId);
+        json.addProperty("frmdt", leave_from);
+        json.addProperty("todt", leave_to);
+        json.addProperty("lvtype", selected_leave_type);
+//        json.addProperty("cuid", Global.loginusr.getUcode());
+        json.addProperty("mob_createdon", currentDateTimeString);
+        json.addProperty("lvfor","student");
+        json.addProperty("reason",details);
+        json.addProperty("enttid", SclId+"");
+        Ion.with(this)
+                .load(Global.urls.savePassengerLeave.value)
+                .setJsonObjectBody(json)
+                .asJsonObject()
+                .setCallback(new FutureCallback<JsonObject>() {
+                    @Override
+                    public void onCompleted(Exception e, JsonObject result) {
+                        // do stuff with the result or error
+                        try {
+                            JsonObject o= result.get("data").getAsJsonArray().get(0).getAsJsonObject().get("funsave_studentleave").getAsJsonObject();
                             Toast.makeText(AddLeave.this, o.get("msg").toString(), Toast.LENGTH_SHORT).show();
                             finish();
-                            Intent intent=new Intent(AddLeave.this,Leave.class);
+                            Intent intent=new Intent(AddLeave.this,Ann.class);
                             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             startActivity(intent);
@@ -264,7 +364,7 @@ public class AddLeave extends AppCompatActivity {
             if (!db.ISLeave_ALREDY_EXIST(currentDateTimeString)) {
                 db.ADDLeave(new modal_leave(leave_from, leave_to, selected_leave_type, details, currentDateTimeString, "1", "Pending"));
                 finish();
-                Intent intent = new Intent(AddLeave.this, Leave.class);
+                Intent intent = new Intent(AddLeave.this, Student_Leave.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);

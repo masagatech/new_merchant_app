@@ -14,27 +14,25 @@
         android:layout_height="match_parent"
         app:line="@android:color/holo_blue_dark"
         app:linePadding="5dp"
+        android:visibility="gone"
         app:lineSize="3dp"
         app:markerSize="20dp" />
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
         android:layout_gravity="center_vertical"
+        android:layout_marginBottom="2dp"
         app:cardElevation="1dp"
-        app:contentPadding="10dp">
+        app:contentPadding="1dp"
+       >
 
         <RelativeLayout
             android:id="@+id/border"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/cir"
-            android:paddingBottom="15dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="15dp"
-            android:paddingTop="15dp">
+            android:layout_margin="5dp">
 
             <LinearLayout
                 android:id="@+id/pending_orders"
@@ -49,12 +47,7 @@
                     android:layout_weight="1"
                     android:orientation="vertical">
 
-                    <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/text_timeline_date"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textSize="12sp"
-                        tools:text="24 JAN" />
+
 
                     <ImageButton
                         android:id="@+id/Btn_AcceptReject"
@@ -80,20 +73,135 @@
 
                     <android.support.v7.widget.AppCompatTextView
                         android:id="@+id/text_marchent"
-                        android:layout_width="225dp"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:drawableLeft="@drawable/pending_outlets"
+                        android:drawableLeft="@drawable/assa"
                         android:gravity="center_vertical"
                         android:textColor="@android:color/black"
                         android:textStyle="bold"
-                        tools:text="Dirubhani school" />
+                        android:textSize="16dp"
+                        tools:text="Assignment 2" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        >
+
+                        <android.support.v7.widget.AppCompatTextView
+                            android:id="@+id/Custmer_name"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:drawableLeft="@drawable/st"
+                            android:gravity="center_vertical"
+                            android:layout_weight="1"
+                            android:textColor="@android:color/black"
+                            tools:text="Krishna " />
+
+                        <android.support.v7.widget.AppCompatTextView
+                            android:id="@+id/Deliver_at"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:drawableLeft="@drawable/order_id"
+                            android:gravity="center_vertical"
+                            android:layout_weight="1"
+                            android:textColor="@android:color/black"
+                            tools:text="II (A)" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        >
+
+
+
+
+                        <android.support.v7.widget.AppCompatTextView
+                            android:id="@+id/text_timeline_date"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="12sp"
+                            android:layout_weight="1"
+                            android:textColor="@android:color/black"
+                            android:gravity="center_vertical"
+                            android:drawableLeft="@drawable/bo"
+                            tools:text="Mathematics" />
+
+
+
+
+
+                        <ImageView
+                            android:id="@+id/remarkhide"
+                            android:layout_width="wrap_content"
+                            android:layout_height="40dp"
+                            android:layout_weight="1"
+                            android:src="@drawable/click_hide"
+                            android:visibility="gone" />
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/Remark"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="12sp"
+                        android:layout_weight="1"
+                        android:padding="1dp"
+                        android:gravity="center_vertical"
+                        android:textColor="@android:color/black"
+                        android:drawableLeft="@drawable/time_up_rider"
+                        tools:text="21/Sep/2017" />
+</LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        >
+
+                        <android.support.v7.widget.AppCompatTextView
+                            android:layout_weight="1"
+                            android:id="@+id/Time"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:drawableLeft="@drawable/det"
+                            android:gravity="center_vertical"
+                            android:textSize="12dp"
+                            android:fontFamily="sans-serif-light"
+                            android:textColor="@android:color/black"
+                            tools:text="Please solve Mathematics within time. See attached file for more info" />
+
+                        <FrameLayout
+                        android:id="@+id/Expense"
+                            android:background="@color/orange_light"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp">
+                        <ImageView
+                            android:layout_margin="2dp"
+                            android:src="@drawable/download"
+                            android:id="@+id/imageView2"
+                            android:scaleType="fitCenter"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" />
+
+                        <TextView
+                            android:visibility="gone"
+                            android:layout_marginTop="25dp"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Download" />
+                    </FrameLayout>
+
+                        </LinearLayout>
 
                     <LinearLayout
                         android:id="@+id/ClickToHide"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:visibility="gone">
+                        >
 
                         <co.lujun.androidtagview.TagContainerLayout
                             android:layout_width="match_parent"
@@ -110,58 +218,7 @@
                             app:tag_clickable="false"
                             app:tag_theme="pure_teal" />
 
-                        <android.support.v7.widget.AppCompatTextView
-                            android:id="@+id/Custmer_name"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:drawableLeft="@drawable/order_id"
-                            android:gravity="center_vertical"
-                            android:textColor="@android:color/black"
-                            tools:text="Sector 15, Navi mumbai" />
 
-                        <android.support.v7.widget.AppCompatTextView
-                            android:id="@+id/Deliver_at"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:drawableLeft="@drawable/order_id"
-                            android:gravity="center_vertical"
-                            android:textColor="@android:color/black"
-                            tools:text="Sector 15, Navi mumbai" />
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:visibility="gone">
-
-                            <android.support.v7.widget.AppCompatTextView
-                                android:id="@+id/Remark"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="31dp"
-                                android:layout_marginStart="31dp"
-                                android:layout_weight="1"
-                                android:gravity="center_vertical"
-                                android:textColor="@android:color/black"
-                                tools:text="Remark :hsdgddhdddgddgdgdgdgdgdgdgdgdg" />
-
-                            <ImageButton
-                                android:id="@+id/remarkhide"
-                                android:layout_width="wrap_content"
-                                android:layout_height="40dp"
-                                android:layout_weight="1"
-                                android:src="@drawable/click_hide"
-                                android:visibility="gone" />
-                        </LinearLayout>
-
-                        <android.support.v7.widget.AppCompatTextView
-                            android:id="@+id/Time"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:drawableLeft="@drawable/order_id"
-                            android:gravity="center_vertical"
-                            android:textColor="@android:color/black"
-                            tools:text=" sector 17" />
 
 
                         <LinearLayout
@@ -221,27 +278,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                    <FrameLayout
-                        android:visibility="gone"
-                        android:id="@+id/Expense"
-                        android:layout_margin="10dp"
-                        android:layout_weight="1"
-                        android:layout_width="10dp"
-                        android:layout_height="45dp">
-                        <ImageView
-                            android:src="@drawable/expense"
-                            android:id="@+id/imageView2"
-                            android:scaleType="fitCenter"
-                            android:layout_width="match_parent"
-                            android:layout_height="30dp" />
 
-                        <TextView
-                            android:layout_marginTop="25dp"
-                            android:layout_gravity="center_horizontal"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Expense" />
-                    </FrameLayout>
 
 
 
@@ -281,6 +318,7 @@
                         android:visibility="gone" />
 
                     <ToggleButton
+                        android:visibility="gone"
                         android:id="@+id/hideButton"
                         android:layout_width="30dp"
                         android:layout_height="30dp"

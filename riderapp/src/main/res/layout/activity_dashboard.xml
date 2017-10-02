@@ -12,76 +12,68 @@
     tools:context="com.goyo.parent.forms.dashboard">
 
     <LinearLayout
-        android:layout_marginTop="10dp"
         android:id="@+id/first"
+        android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
+        android:orientation="horizontal">
 
-        <FrameLayout
-            android:layout_weight="2.5"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent">
 
         <android.support.v7.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
             app:cardElevation="1dp"
             android:background="@color/white"
-            android:layout_marginTop="10dp"
             android:layout_marginLeft="15dp"
-            android:layout_marginRight="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="90dp"
+            android:orientation="vertical"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="5dp"
             android:layout_marginBottom="5dp"
-            android:layout_weight="2.5"
-            android:clickable="true"
-            android:orientation="vertical">
+            android:layout_weight="1"
+            android:clickable="true">
 
             <FrameLayout
-                android:layout_width="match_parent"
                 android:id="@+id/Complated_Orders"
-                android:background="?android:attr/selectableItemBackground"
-                android:layout_height="match_parent">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="?android:attr/selectableItemBackground">
 
                 <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="45dp"
-                    android:gravity="center"
-                    android:src="@drawable/exams" />
+
+                    android:id="@+id/imageView4"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_gravity="center_horizontal"
+                    android:src="@drawable/exam" />
 
                 <TextView
                     android:id="@+id/textView23"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="bottom"
-                    android:layout_marginBottom="50dp"
+                   android:layout_gravity="bottom"
+                    android:layout_marginBottom="10dp"
                     android:fontFamily="sans-serif-light"
                     android:gravity="center"
-                    android:text="@string/Complated_Order"
-                    />
-
+                    android:text="     Exams      " />
             </FrameLayout>
 
 
         </android.support.v7.widget.CardView>
 
-            <TextView
-                android:visibility="gone"
-                android:id="@+id/Count_Todayvisit"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_gravity="right"
-                android:layout_marginEnd="5dp"
-                android:layout_marginRight="5dp"
-                android:layout_marginTop="5dp"
-             android:background="@drawable/count_today"
-                android:gravity="center"
-                android:text="0"
-                android:textColor="@color/white" />
-        </FrameLayout>
+            <!--<TextView-->
+                <!--android:visibility="gone"-->
+                <!--android:id="@+id/Count_Todayvisit"-->
+                <!--android:layout_width="40dp"-->
+                <!--android:layout_height="40dp"-->
+                <!--android:layout_gravity="right"-->
+                <!--android:layout_marginEnd="5dp"-->
+                <!--android:layout_marginRight="5dp"-->
+                <!--android:layout_marginTop="5dp"-->
+             <!--android:background="@drawable/count_today"-->
+                <!--android:gravity="center"-->
+                <!--android:text="0"-->
+                <!--android:textColor="@color/white" />-->
 
 
         <android.support.v7.widget.CardView
@@ -101,11 +93,11 @@
                 android:background="?android:attr/selectableItemBackground"
                 android:layout_height="match_parent">
                 <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/notif"
-                    android:gravity="center"
-                    android:layout_marginTop="50dp"
+                    android:src="@drawable/schoolbell"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_gravity="center_horizontal"
                     />
 
                 <TextView
@@ -115,8 +107,9 @@
                     android:gravity="center"
                     android:text="@string/New_Order"
                     android:layout_gravity="bottom"
+                    android:layout_marginBottom="10dp"
                     android:fontFamily="sans-serif-light"
-                    android:layout_marginBottom="50dp"/>
+                   />
             </FrameLayout>
         </android.support.v7.widget.CardView>
 
@@ -125,7 +118,7 @@
     </LinearLayout>
 
 
-    <FrameLayout
+    <LinearLayout
         android:layout_below="@+id/first"
         android:id="@+id/second"
         android:layout_width="match_parent"
@@ -139,11 +132,12 @@
         app:cardElevation="1dp"
         android:background="@color/white"
             android:layout_marginLeft="15dp"
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_width="wrap_content"
+            android:layout_height="90dp"
             android:orientation="vertical"
+
+            android:layout_marginRight="5dp"
             android:layout_marginBottom="5dp"
-            android:layout_marginRight="15dp"
             android:layout_weight="1"
             android:clickable="true">
 
@@ -153,28 +147,65 @@
                 android:layout_height="match_parent"
                 android:background="?android:attr/selectableItemBackground">
 
+                <ImageView
+                    android:id="@+id/pending"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_gravity="center_horizontal"
+                    android:src="@drawable/studenthat" />
+
                 <TextView
                     android:id="@+id/textView19"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
-                    android:layout_marginBottom="70dp"
+                    android:layout_marginBottom="10dp"
                     android:fontFamily="sans-serif-light"
                     android:gravity="center"
                     android:text="@string/Pending_Order" />
 
-                <ImageView
-                    android:id="@+id/pending"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="4dp"
-                    android:layout_marginTop="40dp"
-                    android:gravity="center"
-                    android:src="@drawable/children" />
-
             </FrameLayout>
 
         </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            app:cardElevation="1dp"
+            android:background="@color/white"
+            android:layout_marginRight="15dp"
+            android:layout_marginBottom="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="90dp"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:clickable="true">
+            <FrameLayout
+                android:id="@+id/fees"
+                android:layout_width="match_parent"
+                android:background="?android:attr/selectableItemBackground"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/textView40"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Fees"
+                    android:layout_gravity="bottom"
+                    android:layout_marginBottom="10dp"
+                    android:fontFamily="sans-serif-light" />
+
+                <ImageView
+                    android:id="@+id/imageView6"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_gravity="center_horizontal"
+                    android:src="@drawable/euro" />
+            </FrameLayout>
+        </android.support.v7.widget.CardView>
+
+
         <TextView
             android:visibility="gone"
             android:id="@+id/Task_Count"
@@ -198,7 +229,7 @@
             android:gravity="center"
             android:text="0"
             android:textColor="@color/white" />
-    </FrameLayout>
+    </LinearLayout>
 
     <LinearLayout
         android:layout_below="@+id/second"
@@ -220,7 +251,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginLeft="10dp"
-            android:layout_weight="1.2"
+            android:layout_weight="1.4"
             android:orientation="vertical"
             android:clickable="true">
             <FrameLayout
@@ -230,11 +261,12 @@
             android:layout_height="match_parent">
 
             <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:src="@drawable/assignment"
-                android:gravity="center"
-                android:layout_marginTop="30dp"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_marginTop="5dp"
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/documents"
+
                 />
 
             <TextView
@@ -245,7 +277,7 @@
                 android:gravity="center"
                 android:text="@string/All_Order"
                 android:layout_gravity="bottom"
-                android:layout_marginBottom="45dp"
+                android:layout_marginBottom="5dp"
                 />
         </FrameLayout>
         </android.support.v7.widget.CardView>
@@ -268,11 +300,11 @@
                     android:layout_height="match_parent">
 
                     <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/att"
-                        android:gravity="center"
-                        android:layout_marginTop="45dp"
+                        android:layout_width="45dp"
+                        android:layout_height="45dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_gravity="center_horizontal"
+                        android:src="@drawable/attt"
                         />
 
                     <TextView
@@ -282,7 +314,7 @@
                         android:fontFamily="sans-serif-light"
                         android:text="@string/order_details"
                         android:layout_gravity="bottom"
-                        android:layout_marginBottom="55dp"
+                        android:layout_marginBottom="10dp"
                         />
                 </FrameLayout>
             </android.support.v7.widget.CardView>
@@ -293,7 +325,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="20dp"
                 android:layout_marginLeft="10dp"
-                android:layout_weight="0.7"
+                android:layout_weight="1"
                 android:layout_marginBottom="5dp"
                 android:orientation="vertical"
                 android:clickable="true">
@@ -304,21 +336,22 @@
                     android:layout_height="match_parent">
 
                     <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/schedule"
-                        android:gravity="center"
-                        android:layout_marginTop="30dp"
+                        android:layout_width="45dp"
+                        android:layout_height="45dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_gravity="center_horizontal"
+                        android:src="@drawable/shod"
                         />
+
                     <TextView
+                        android:id="@+id/textView34"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:fontFamily="sans-serif-light"
-                        android:text="Schedule"
                         android:layout_gravity="bottom"
-                        android:layout_marginBottom="40dp"
-                        />
+                        android:layout_marginBottom="5dp"
+                        android:fontFamily="sans-serif-light"
+                        android:gravity="center"
+                        android:text="Schedule" />
                 </FrameLayout>
             </android.support.v7.widget.CardView>
 
@@ -346,22 +379,23 @@
                 android:layout_height="match_parent"
                 android:background="?android:attr/selectableItemBackground">
 
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="40dp"
-                    android:gravity="center"
-                    android:src="@drawable/results" />
-
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
-                    android:layout_marginBottom="60dp"
+                    android:layout_marginBottom="5dp"
                     android:gravity="center"
                     android:fontFamily="sans-serif-light"
                     android:text="@string/Cash_Collection"
                     />
+
+                <ImageView
+                    android:id="@+id/imageView8"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="10dp"
+                    android:src="@drawable/browser" />
             </FrameLayout>
 
         </android.support.v7.widget.CardView>
@@ -373,7 +407,7 @@
             android:layout_width="match_parent"
             android:layout_height="00dp"
             android:layout_marginRight="5dp"
-            android:layout_weight="0.9"
+            android:layout_weight="1.2"
             android:layout_marginBottom="5dp"
             android:layout_marginStart="5dp"
             android:layout_marginLeft="5dp"
@@ -387,21 +421,22 @@
                 android:background="?android:attr/selectableItemBackground">
 
                 <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="25dp"
-                    android:gravity="center"
-                    android:src="@drawable/connect"
-                    />
+                    android:id="@+id/imageView7"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="5dp"
+                    android:src="@drawable/worldwide" />
 
                 <TextView
 
+                    android:id="@+id/textView33"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
-                    android:layout_marginBottom="35dp"
-                    android:gravity="center"
+                    android:layout_marginBottom="5dp"
                     android:fontFamily="sans-serif-light"
+                    android:gravity="center"
                     android:text="@string/Push_Order" />
             </FrameLayout>
 
@@ -426,23 +461,23 @@
                 android:layout_height="match_parent"
                 android:background="?android:attr/selectableItemBackground">
 
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="45dp"
-                    android:gravity="center"
-                    android:src="@drawable/announce"
-                    />
-
                 <TextView
 
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
-                    android:layout_marginBottom="55dp"
+                    android:layout_marginBottom="7dp"
                     android:gravity="center"
                     android:fontFamily="sans-serif-light"
                     android:text="Announcement" />
+
+                <ImageView
+                    android:id="@+id/imageView5"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_gravity="center_horizontal"
+                    android:src="@drawable/megaphone" />
             </FrameLayout>
 
         </android.support.v7.widget.CardView>
@@ -470,24 +505,23 @@
                     android:background="?android:attr/selectableItemBackground"
                     android:layout_height="match_parent">
 
+                    <ImageView
+                        android:id="@+id/imageView"
+                        android:layout_width="45dp"
+                        android:layout_height="45dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_gravity="center_horizontal"
+                        android:src="@drawable/cale" />
+
                     <TextView
-                        android:fontFamily="sans-serif-light"
                         android:id="@+id/textView24"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:layout_marginBottom="5dp"
+                        android:fontFamily="sans-serif-light"
                         android:gravity="center"
-                        android:text="@string/Rejected_Order"
-                        android:layout_marginBottom="45dp"
-                        android:layout_gravity="bottom"/>
-
-                    <ImageView
-                        android:id="@+id/imageView"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
-                        android:layout_marginTop="40dp"
-                        android:gravity="center"
-                        android:src="@drawable/leave" />
+                        android:text="@string/Rejected_Order" />
                 </FrameLayout>
             </android.support.v7.widget.CardView>
 
@@ -514,11 +548,11 @@
                     android:background="?android:attr/selectableItemBackground">
 
                     <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="40dp"
-                        android:gravity="center"
-                        android:src="@drawable/holydays"
+                        android:layout_width="45dp"
+                        android:layout_height="45dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_gravity="center_horizontal"
+                        android:src="@drawable/sunbed"
                        />
 
                     <TextView
@@ -526,7 +560,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="bottom"
-                        android:layout_marginBottom="50dp"
+                        android:layout_marginBottom="7dp"
                         android:gravity="center"
                         android:text="@string/holidays"
                         android:fontFamily="sans-serif-light" />
@@ -537,7 +571,7 @@
                 app:cardElevation="1dp"
                 android:background="@color/white"
                 android:layout_width="match_parent"
-                android:layout_height="70dp"
+                android:layout_height="80dp"
                 android:layout_marginBottom="5dp"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="10dp"
@@ -556,21 +590,22 @@
                         android:fontFamily="sans-serif-light"
                         android:text="Gallery"
                         android:layout_gravity="bottom"
-                        android:layout_marginBottom="45dp"
+                        android:layout_marginBottom="5dp"
                         />
 
                     <ImageView
                         android:id="@+id/imageView3"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="30dp"
-                        android:gravity="center"
-                        android:src="@drawable/gallery" />
+                        android:layout_width="45dp"
+                        android:layout_height="45dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_gravity="center_horizontal"
+                        android:src="@drawable/ga" />
                 </FrameLayout>
             </android.support.v7.widget.CardView>
 
         </LinearLayout>
     </LinearLayout>
+
     <android.support.design.widget.FloatingActionButton
         android:layout_alignParentBottom="true"
         android:layout_margin="20dp"

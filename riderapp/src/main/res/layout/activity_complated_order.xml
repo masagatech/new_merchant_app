@@ -49,18 +49,17 @@
     </FrameLayout>
 
     <TextView
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="80dp"
         android:id="@+id/txtNodata"
-        android:drawableTop="@drawable/novisits"
+   android:visibility="gone"
+        android:drawableTop="@drawable/nostud"
         android:layout_width="match_parent"
         android:gravity="center"
+        android:fontFamily="sans-serif-light"
         android:textColor="@color/blue_light"
         android:layout_height="wrap_content"
-        android:text="@string/complated_empthy_msg"
+        android:text="There is no data to fetch!"
         android:textSize="16sp"
-        android:visibility="gone"
-        android:fontFamily="sans-serif-light"
-        android:layout_centerInParent="true"
         />
 
     <include

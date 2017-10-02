@@ -5,8 +5,8 @@
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginLeft="5dp"
-    android:layout_marginRight="5dp">
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp">
 
     <com.github.vipulasri.timelineview.TimelineView
         android:id="@+id/time_marker"
@@ -14,6 +14,7 @@
         android:layout_height="match_parent"
         app:line="@android:color/holo_blue_dark"
         app:linePadding="2dp"
+        android:visibility="gone"
         app:lineSize="2dp"
         app:markerSize="10dp" />
 
@@ -21,9 +22,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:layout_marginBottom="2dp"
+        android:layout_margin="3dp"
         app:cardElevation="1dp"
-        app:contentPadding="7dp">
+        app:contentPadding="1dp"
+       >
 
         <RelativeLayout
 
@@ -31,7 +33,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/cir"
-           android:padding="5dp">
+         >
 
             <FrameLayout
                 android:id="@+id/Expense"
@@ -58,6 +60,7 @@
 
 
             <LinearLayout
+                android:layout_marginBottom="5dp"
                 android:clickable="true"
                 android:background="?android:attr/selectableItemBackground"
                 android:id="@+id/pending_orders"
@@ -65,6 +68,173 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+
+                    <LinearLayout
+                        android:id="@+id/cover"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/remark_form"
+                        android:background="@drawable/border_cash_collection"
+                        android:orientation="horizontal"
+                        android:visibility="gone">
+
+
+                        <com.pchmn.materialchips.ChipsInput
+                            android:id="@+id/chip"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/remark_form"
+                            android:layout_margin="4dp"
+                            app:deletable="true"
+                            app:hint="  Enter Tags" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <android.support.v7.widget.AppCompatTextView
+                            android:id="@+id/text_timeline_date"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:drawableLeft="@drawable/dates"
+                            android:fontFamily="sans-serif-light"
+                            android:gravity="center_vertical"
+                            android:text="12-AUG-17"
+                            android:textColor="@android:color/black"
+                            android:textSize="13dp" />
+
+                        <android.support.v7.widget.AppCompatTextView
+                            android:id="@+id/Deliver_at"
+                            android:visibility="gone"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:drawableLeft="@drawable/dates"
+                            android:fontFamily="sans-serif-light"
+                            android:gravity="center_vertical"
+                            android:text="12-AUG-17"
+                            android:textColor="@android:color/black"
+                            android:textSize="13dp"  />
+
+                    </LinearLayout>
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/text_timeline_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:drawableLeft="@drawable/ho"
+                        android:gravity="center_vertical"
+                        android:textColor="@android:color/black"
+                        android:textStyle="bold"
+                        tools:text=" Independent Day" />
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/text_marchent"
+                        android:layout_width="225dp"
+                        android:layout_height="wrap_content"
+                        android:drawableLeft="@drawable/order_id"
+                        android:gravity="center_vertical"
+                        android:textColor="@android:color/black"
+                        android:visibility="gone"
+                        tools:text="25" />
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/Time"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="35dp"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:textSize="11dp"
+                        android:textStyle="italic"
+                        tools:text="For food and travel" />
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/Custmer_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableLeft="@drawable/cash_amount"
+                        android:gravity="center_vertical"
+                        android:textColor="@android:color/black"
+                        android:visibility="gone"
+                        tools:text="Approved Amount : 300" />
+
+                    <co.lujun.androidtagview.TagContainerLayout
+                        android:id="@+id/Tags"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="0dp"
+                        android:padding="10dp"
+                        android:visibility="gone"
+                        app:container_background_color="#00000000"
+                        app:container_border_color="#33666666"
+                        app:container_enable_drag="false"
+                        app:horizontal_interval="10dp"
+                        app:tag_background_color="@color/orange_light"
+                        app:tag_border_color="@color/white"
+                        app:tag_clickable="false"
+                        app:tag_text_color="@color/white"
+                        app:tag_theme="none"
+                        app:vertical_interval="10dp" />
+
+                    <LinearLayout
+                        android:id="@+id/ClickToHide"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <android.support.v7.widget.AppCompatTextView
+                                android:id="@+id/Remark"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="31dp"
+                                android:layout_marginStart="31dp"
+                                android:layout_weight="1"
+                                android:gravity="center_vertical"
+                                android:textColor="@android:color/black"
+                                tools:text="Remark :hsdgddhdddgddgdgdgdgdgdgdgdgdg" />
+
+                            <ImageView
+                                android:id="@+id/remarkhide"
+                                android:layout_width="wrap_content"
+                                android:layout_height="40dp"
+                                android:layout_weight="1"
+                                android:src="@drawable/click_hide"
+                                android:visibility="gone" />
+                        </LinearLayout>
+
+
+                        <EditText
+                            android:id="@+id/Collected_Cash"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:background="@drawable/border_cash_collection"
+                            android:hint="Enter collected cash"
+                            android:inputType="number"
+                            android:padding="10dp"
+                            android:textColor="@android:color/black"
+                            android:textSize="15dp" />
+                    </LinearLayout>
+                </LinearLayout>
 
                 <Spinner
                     android:id="@+id/nature_of_work"
@@ -100,167 +270,6 @@
                     android:textColor="@android:color/black"
                     android:textSize="15dp"
                     android:visibility="gone" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-
-                    <LinearLayout
-                        android:id="@+id/cover"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/remark_form"
-                        android:background="@drawable/border_cash_collection"
-                        android:orientation="horizontal"
-                        android:visibility="gone">
-
-
-                        <com.pchmn.materialchips.ChipsInput
-                            android:id="@+id/chip"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@+id/remark_form"
-                            android:layout_margin="4dp"
-                            app:deletable="true"
-                            app:hint="  Enter Tags" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        >
-
-                        <android.support.v7.widget.AppCompatTextView
-                            android:id="@+id/text_timeline_date"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:gravity="center_vertical"
-                            android:text="12-AUG-17"
-                            android:drawableLeft="@drawable/esitmated_time"
-                            android:textColor="@android:color/black" />
-
-                        <android.support.v7.widget.AppCompatTextView
-                            android:id="@+id/Deliver_at"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:drawableLeft="@drawable/times"
-                            android:gravity="center_vertical"
-                            android:textColor="@android:color/black"
-                            tools:text="03:40 AM" />
-
-                    </LinearLayout>
-
-                    <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/text_timeline_title"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:drawableLeft="@drawable/pending_outlets"
-                        android:gravity="center_vertical"
-                        android:textColor="@android:color/black"
-                        android:textStyle="bold"
-                        tools:text=" Expense 4" />
-
-                    <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/text_marchent"
-                        android:layout_width="225dp"
-                        android:layout_height="wrap_content"
-                        android:drawableLeft="@drawable/order_id"
-                        android:gravity="center_vertical"
-                        android:textColor="@android:color/black"
-                        tools:text="25" />
-
-                    <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/Time"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:drawableLeft="@drawable/det"
-                        android:gravity="center_vertical"
-                        android:textColor="@android:color/black"
-                        tools:text="For food and travel" />
-
-                    <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/Custmer_name"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:drawableLeft="@drawable/cash_amount"
-                        android:gravity="center_vertical"
-                        android:textColor="@android:color/black"
-                        tools:text="Approved Amount : 300" />
-
-                    <co.lujun.androidtagview.TagContainerLayout
-                        android:id="@+id/Tags"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="0dp"
-                        android:padding="10dp"
-                        app:container_background_color="#00000000"
-                        app:container_border_color="#33666666"
-                        app:container_enable_drag="false"
-                        app:horizontal_interval="10dp"
-                        app:tag_background_color="@color/orange_light"
-                        app:tag_border_color="@color/white"
-                        app:tag_clickable="false"
-                        app:tag_text_color="@color/white"
-                        app:tag_theme="none"
-                        app:vertical_interval="10dp" />
-
-                    <LinearLayout
-                        android:id="@+id/ClickToHide"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:visibility="gone">
-
-
-
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal">
-
-                            <android.support.v7.widget.AppCompatTextView
-                                android:id="@+id/Remark"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="31dp"
-                                android:layout_marginStart="31dp"
-                                android:layout_weight="1"
-                                android:gravity="center_vertical"
-                                android:textColor="@android:color/black"
-                                tools:text="Remark :hsdgddhdddgddgdgdgdgdgdgdgdgdg" />
-
-                            <ImageButton
-                                android:id="@+id/remarkhide"
-                                android:layout_width="wrap_content"
-                                android:layout_height="40dp"
-                                android:layout_weight="1"
-                                android:src="@drawable/click_hide"
-                                android:visibility="gone" />
-                        </LinearLayout>
-
-
-                        <EditText
-                            android:id="@+id/Collected_Cash"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="5dp"
-                            android:background="@drawable/border_cash_collection"
-                            android:hint="Enter collected cash"
-                            android:inputType="number"
-                            android:padding="10dp"
-                            android:textColor="@android:color/black"
-                            android:textSize="15dp" />
-                    </LinearLayout>
-                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="wrap_content"

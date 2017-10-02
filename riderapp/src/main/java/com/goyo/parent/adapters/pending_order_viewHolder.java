@@ -6,6 +6,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
@@ -47,7 +48,7 @@ public class pending_order_viewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.Btn_map)
     ImageButton Btn_Map;
     @BindView(R.id.remarkhide)
-    ImageButton ArrowRemark;
+    ImageView ArrowRemark;
     @BindView(R.id.Btn_Return)
     Button Btn_Return;
     @BindView(R.id.Btn_AcceptReject)

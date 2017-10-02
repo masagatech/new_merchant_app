@@ -23,6 +23,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import static com.goyo.parent.forms.dashboard.SclId;
+
 public class Holyday extends AppCompatActivity {
   private ArrayList<String> FromDates;
     private ArrayList<String> ToDates;
@@ -82,10 +84,8 @@ public class Holyday extends AppCompatActivity {
 
     private void GetHolyDays(){
         JsonObject json = new JsonObject();
-
-        json.addProperty("empid",Global.loginusr.getDriverid()+"");
-        json.addProperty("flag", "byemp");
-        json.addProperty("enttid", Global.loginusr.getEnttid()+"");
+        json.addProperty("flag", "byentt");
+        json.addProperty("enttid", SclId+"");
         Ion.with(this)
                 .load(Global.urls.getHoliday.value)
                 .setJsonObjectBody(json)

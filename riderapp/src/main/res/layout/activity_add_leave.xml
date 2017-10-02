@@ -9,8 +9,27 @@ xmlns:android="http://schemas.android.com/apk/res/android"
     tools:context="com.goyo.parent.forms.AddLeave"
 android:orientation="vertical">
 
+
     <TextView
         android:layout_marginTop="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_width="match_parent"
+        android:text="Select Student"
+        android:textStyle="bold"
+        android:textColor="@color/blue_light"
+        android:layout_height="wrap_content" />
+    <Spinner
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:padding="10dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginBottom="20dp"
+        android:id="@+id/student" />
+
+    <TextView
         android:layout_marginRight="20dp"
         android:layout_marginLeft="20dp"
         android:layout_width="match_parent"

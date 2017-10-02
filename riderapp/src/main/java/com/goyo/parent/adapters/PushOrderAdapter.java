@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -16,12 +17,14 @@ import android.widget.Filter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.goyo.parent.R;
 import com.goyo.parent.forms.Orientation;
 import com.goyo.parent.forms.PendingOrdersView;
+import com.goyo.parent.forms.dashboard;
 import com.goyo.parent.gloabls.Global;
 import com.goyo.parent.model.model_expense;
 import com.goyo.parent.model.model_push_order;
@@ -38,6 +41,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import static com.goyo.parent.gloabls.Global.IMAGE_URL;
 import static com.goyo.parent.gloabls.Global.urls.getAvailRider;
 import static com.goyo.parent.gloabls.Global.urls.setStatus;
 
@@ -97,17 +101,40 @@ public class PushOrderAdapter extends RecyclerView.Adapter<PushOrderViewHolder>{
 
 //        OrderNo=timeLineModel.ordno.size();
 
-        holder.mOrderID.setText(timeLineModel._exp_id);
-        holder.mMarchant.setText(timeLineModel._name);
-        holder.mAddr.setText(timeLineModel._disc);
-        holder.mTime.setText(timeLineModel._code);
+        holder.mOrderID.setText(timeLineModel.schoolid);
+        holder.mMarchant.setText(timeLineModel.schoolname);
+//        holder.mAddr.setText(timeLineModel._disc);
+//        holder.mTime.setText(timeLineModel._code);
+
+        String imgUrl = IMAGE_URL+timeLineModel.schoollogo;
+
+        Glide.with(mContext).load(imgUrl)
+                .thumbnail(0.5f)
+                .placeholder(R.drawable.scho)
+                .into(holder.Logo);
 
 
-       if(timeLineModel._is_active.equals("true")){
-            holder.Cardview.setVisibility(View.VISIBLE);
-       }else {
-           holder.Cardview.setVisibility(View.GONE);
-       }
+        holder.Clicks.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, dashboard.class);
+                intent.putExtra("SclName", timeLineModel.schoolname);
+                intent.putExtra("SclId", timeLineModel.schoolid);
+                intent.putExtra("SclLogo", IMAGE_URL+timeLineModel.schoollogo);
+                mContext.startActivity(intent);
+            }
+        });
+
+//        String url = myUrls.get(position);
+
+
+
+
+//       if(timeLineModel._is_active.equals("true")){
+//            holder.Cardview.setVisibility(View.VISIBLE);
+//       }else {
+//           holder.Cardview.setVisibility(View.GONE);
+//       }
     }
 //        holder.mCash.setText("₹ "+timeLineModel.totamt+"");
 //        PushLat=timeLineModel.geoloc.lat;
@@ -250,7 +277,7 @@ public class PushOrderAdapter extends RecyclerView.Adapter<PushOrderViewHolder>{
 
     public void onClickRider(final PushOrderViewHolder holder, final model_push_order timeLineModel) {
 
-        GetRiderList(timeLineModel.rdrid);
+//        GetRiderList(timeLineModel.rdrid);
 
         dialogOut = new Dialog(mContext);
         dialogOut.setContentView(R.layout.rider_list);

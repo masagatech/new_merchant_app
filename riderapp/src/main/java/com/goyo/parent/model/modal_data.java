@@ -18,6 +18,21 @@ public class modal_data {
     @SerializedName("createdon")
     public String createdon;
 
+    @SerializedName("frmdt")
+    public String frmdt;
+
+    @SerializedName("todt")
+    public String todt;
+
+    @SerializedName("lvtype")
+    public String lvtype;
+
+    @SerializedName("reason")
+    public String reason;
+
+    @SerializedName("appldate")
+    public String appldate;
+
     public boolean isEnabled = false;
 
 

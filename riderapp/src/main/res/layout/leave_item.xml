@@ -1,0 +1,435 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
+    android:layout_marginLeft="5dp"
+    android:layout_marginRight="5dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <com.github.vipulasri.timelineview.TimelineView
+        android:id="@+id/time_marker"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        app:line="@android:color/holo_blue_dark"
+        app:linePadding="5dp"
+        app:lineSize="3dp"
+        android:visibility="gone"
+        app:markerSize="20dp" />
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginBottom="2dp"
+        app:cardElevation="1dp"
+        app:contentPadding="1dp">
+
+        <ImageButton
+            android:visibility="gone"
+            android:layout_marginRight="10dp"
+            android:layout_gravity="right"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="10dp"
+            android:id="@+id/Btn_Call"
+            android:background="@drawable/circle" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:visibility="gone"
+            android:layout_gravity="right"
+            android:id="@+id/Custmer_name"
+            android:layout_marginTop="15dp"
+            android:layout_marginRight="21dp"
+            android:layout_width="wrap_content"
+            android:textSize="15dp"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            tools:text="1" />
+
+
+        <RelativeLayout
+            android:clickable="true"
+            android:background="?android:attr/selectableItemBackground"
+            android:id="@+id/border"
+            android:padding="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+
+            <LinearLayout
+                android:id="@+id/pending_orders"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:orientation="horizontal">
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <FrameLayout
+                        android:visibility="gone"
+                        android:id="@+id/Expense"
+                        android:layout_margin="10dp"
+                        android:layout_weight="1"
+                        android:layout_width="10dp"
+                        android:layout_height="45dp">
+                        <ImageView
+                            android:src="@drawable/expense"
+                            android:id="@+id/imageView2"
+                            android:scaleType="fitCenter"
+                            android:layout_width="match_parent"
+                            android:layout_height="30dp" />
+
+                        <TextView
+                            android:layout_marginTop="25dp"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Expense" />
+                    </FrameLayout>
+
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/text_timeline_date"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="12sp"
+                        tools:text="06-Sep-2017 04:08:PM" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <android.support.v7.widget.AppCompatTextView
+                            android:id="@+id/Remark"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            tools:text="From : 25-Oct"
+                            android:textSize="13dp"
+                            android:drawableLeft="@drawable/times"
+                            android:gravity="center_vertical"
+                            android:textColor="@android:color/black" />
+
+                        <android.support.v7.widget.AppCompatTextView
+                            android:id="@+id/Time"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:drawableLeft="@drawable/time_up_rider"
+                            android:gravity="center_vertical"
+                            android:textColor="@android:color/black"
+                            android:textSize="13dp"
+                            tools:text="To : 31-Oct" />
+
+
+
+                        <ToggleButton
+                            android:visibility="gone"
+                            android:background="@drawable/expand_arrow"
+                            android:id="@+id/hideButton"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:textOn=""
+                            android:textOff=""
+                            android:focusable="false"
+                            android:focusableInTouchMode="false"
+                            android:layout_centerVertical="true"/>
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <android.support.v7.widget.AppCompatTextView
+                            android:id="@+id/text_marchent"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:drawableLeft="@drawable/order_id"
+                            android:gravity="center_vertical"
+                            android:textColor="@android:color/black"
+                            android:textStyle="bold"
+
+                            tools:text="Permanent Disability " />
+
+
+                    </LinearLayout>
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:layout_marginLeft="10dp"
+                        android:id="@+id/text_timeline_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:textSize="13dp"
+                        android:textStyle="italic"
+                        tools:text="Urgent Leave needed. Kid is getting hospitalized" />
+
+
+
+
+                    <LinearLayout
+                        android:id="@+id/ClickToHide"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+
+                        <android.support.v7.widget.AppCompatTextView
+                            android:id="@+id/Deliver_at"
+                            android:visibility="gone"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:layout_marginStart="31dp"
+                            android:layout_marginLeft="31dp"
+                            android:textColor="@android:color/black"
+                            tools:text="Sector 15, Navi mumbai" />
+
+                        <co.lujun.androidtagview.TagContainerLayout
+                            android:visibility="gone"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="0dp"
+                            android:padding="10dp"
+                            android:id="@+id/Tags"
+                            app:tag_border_color="@color/white"
+                            app:container_enable_drag="false"
+                            app:container_background_color="#00000000"
+                            app:container_border_color="#33666666"
+                            app:horizontal_interval="10dp"
+                            app:tag_text_color="@color/white"
+                            app:tag_background_color="@color/blue_light"
+                            app:vertical_interval="10dp"
+                            app:tag_clickable="false"
+                            app:tag_theme="none"
+                            />
+
+                        <LinearLayout
+                            android:visibility="gone"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/hr"
+                            android:layout_marginTop="10dp"
+                            android:orientation="horizontal">
+                            <FrameLayout
+                                android:layout_weight="1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                >
+
+
+                                <ImageButton
+                                    android:scaleType="fitCenter"
+                                    android:layout_gravity="right"
+                                    android:layout_width="17dp"
+                                    android:layout_height="17dp"
+                                    android:layout_marginEnd="42dp"
+                                    android:layout_marginRight="5dp"
+                                    android:background="@drawable/dash_count"
+                                    android:src="@drawable/ic_done"
+                                    android:text="0"
+                                    android:id="@+id/Btn_AcceptReject"
+                                    android:textColor="@color/white" />
+                            </FrameLayout>
+
+                            <FrameLayout
+                                android:layout_weight="1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content">
+                                <ImageButton
+                                    android:layout_marginTop="5dp"
+                                    android:layout_gravity="center"
+                                    android:id="@+id/Btn_map"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:background="@android:color/white"
+                                    android:src="@drawable/expense" />
+
+                                <ImageButton
+                                    android:scaleType="fitCenter"
+                                    android:layout_gravity="right"
+                                    android:layout_width="17dp"
+                                    android:layout_height="17dp"
+                                    android:layout_marginEnd="42dp"
+                                    android:layout_marginRight="5dp"
+                                    android:background="@drawable/dash_count"
+                                    android:src="@drawable/ic_done"
+                                    android:text="0"
+                                    android:id="@+id/remarkhide"
+                                    android:textColor="@color/white" />
+                            </FrameLayout>
+
+
+                            <Spinner
+                                android:visibility="gone"
+                                android:id="@+id/nature_of_work"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="5dp"
+                                android:layout_weight="1"
+                                android:padding="10dp" />
+
+                            <Spinner
+                                android:visibility="gone"
+                                android:layout_gravity="end"
+                                android:layout_weight="1"
+                                android:id="@+id/status"
+                                android:layout_margin="5dp"
+                                android:layout_width="200dp"
+                                android:layout_height="wrap_content"
+                                android:padding="10dp"/>
+
+                            <EditText
+                                android:visibility="gone"
+                                android:drawableLeft="@drawable/cash_amount"
+                                android:id="@+id/nature_value"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5dp"
+                                android:background="@drawable/border_cash_collection"
+                                android:hint="Enter value"
+                                android:imeOptions="actionDone"
+                                android:inputType="number"
+                                android:maxLines="1"
+                                android:padding="10dp"
+                                android:textColor="@android:color/black"
+                                android:textSize="15dp" />
+
+                            <Button
+                                android:visibility="gone"
+                                android:id="@+id/Btn_Delivery"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="15dp"
+                                android:layout_marginRight="15dp"
+                                android:layout_weight="1"
+                                android:background="@android:color/holo_green_dark"
+                                android:text="@string/msg_delivered"
+                                android:textColor="@color/cardview_light_background" />
+
+                            <Button
+                                android:visibility="gone"
+                                android:id="@+id/Btn_Return"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="15dp"
+                                android:layout_marginRight="15dp"
+                                android:layout_weight="1"
+                                android:background="@android:color/holo_red_dark"
+                                android:text="@string/msg_returned"
+                                android:textColor="@color/cardview_light_background" />
+                        </LinearLayout>
+                        <LinearLayout
+                            android:visibility="gone"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+
+                            <LinearLayout
+                                android:visibility="gone"
+                                android:id="@+id/cover"
+                                android:background="@drawable/border_cash_collection"
+                                android:layout_width="match_parent"
+                                android:layout_below="@+id/remark_form"
+                                android:layout_height="wrap_content">
+                                <com.pchmn.materialchips.ChipsInput
+                                    android:layout_margin="4dp"
+                                    android:layout_width="match_parent"
+                                    android:layout_below="@+id/remark_form"
+                                    android:layout_height="wrap_content"
+                                    android:id="@+id/chip"
+                                    app:deletable="true"
+                                    app:hint="  Enter Tags" />
+                            </LinearLayout>
+
+
+                            <ImageButton
+                                android:layout_width="wrap_content"
+                                android:layout_height="40dp"
+                                android:layout_weight="1"
+                                android:src="@drawable/click_hide"
+                                android:visibility="gone" />
+                        </LinearLayout>
+
+
+
+                        <EditText
+                            android:visibility="gone"
+                            android:inputType="number"
+                            android:id="@+id/Collected_Cash"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:padding="10dp"
+                            android:background="@drawable/border_cash_collection"
+                            android:hint="Enter collected cash"
+                            android:textColor="@android:color/black"
+                            android:textSize="15dp" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/DeliverText"
+                        android:drawableLeft="@drawable/del"
+                        android:textColor="#fff"
+                        android:gravity="center"
+                        android:visibility="gone"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:background="@color/green_light"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/msg_delivered"/>
+
+                    <ImageButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_weight="1"
+                        android:visibility="gone"
+
+                        android:src="@drawable/complated_orders"
+                        android:background="@color/green_light"/>
+
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+            <View
+                android:id="@+id/hr"
+                android:layout_width="match_parent"
+                android:layout_height="2px"
+                android:visibility="gone"
+                android:layout_below="@+id/pending_orders"
+                android:layout_marginTop="10dp"
+                android:background="@color/colorPrimary">
+
+            </View>
+
+
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+
+</LinearLayout>

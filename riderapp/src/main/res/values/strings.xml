@@ -76,7 +76,7 @@
     <string name="play_again" translatable="false">Play Again</string>
 
     <string name="Pending_Order" translatable="false">Children</string>
-    <string name="Complated_Order" translatable="false">Exams</string>
+    <string name="Complated_Order" translatable="false">Exams      </string>
     <string name="Cash_Collection" translatable="false">Results</string>
     <string name="All_Order" translatable="false">Assignment</string>
     <string name="New_Order" translatable="false">Notifications</string>
@@ -119,13 +119,13 @@
     <string name="stoptrip_head" translatable="false">Stop Trip</string>
     <string name="stoptrip_body" translatable="false">Are you sure you want Stop Trip?</string>
     <string name="stoptrip_msg" translatable="false">You have Deliverd all food.   \nPress Stop to continue..</string>
-    <string name="allorder_empthy_msg" translatable="false">Oops! No tracking summery!</string>
-    <string name="complated_empthy_msg" translatable="false">You dont visited any places today!</string>
+    <string name="allorder_empthy_msg" translatable="false">There is no data to fetch!</string>
+    <string name="complated_empthy_msg" translatable="false">There is no data to fetch!</string>
     <string name="exit_map" translatable="false">exit</string>
-    <string name="notification_emthy_msg" translatable="false">You dont have any notification!</string>
-    <string name="pending_empthy_msg" translatable="false">You dont have any Task right now!</string>
-    <string name="push_empthy_msg" translatable="false">No Expense Data!</string>
-    <string name="returned_empthy_msg" translatable="false">No Expense data!</string>
+    <string name="notification_emthy_msg" translatable="false">There is no data to fetch!</string>
+    <string name="pending_empthy_msg" translatable="false">There is no data to fetch!</string>
+    <string name="push_empthy_msg" translatable="false">There is no data to fetch!</string>
+    <string name="returned_empthy_msg" translatable="false">There is no data to fetch!</string>
     <string name="orderdetails_date" translatable="false">DATE</string>
     <string name="orderdetails_total" translatable="false">TOTAL</string>
     <string name="return_msg" translatable="false">Are you sure you want return delivery? Tell us why!</string>
