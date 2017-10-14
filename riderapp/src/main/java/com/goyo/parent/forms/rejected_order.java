@@ -16,7 +16,6 @@ import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.github.badoualy.datepicker.DatePickerTimeline;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
@@ -41,7 +40,6 @@ public class rejected_order extends AppCompatActivity {
     private ProgressDialog loader;
     private ArrayList<model_expense> data;
     private SwipeRefreshLayout mSwipeRefreshLayout;
-    private DatePickerTimeline timeline;
    private String SelectedDate;
     private  ArrayList<model_expense> datas;
     TextView Exp,Stops,Tasks,Totals;

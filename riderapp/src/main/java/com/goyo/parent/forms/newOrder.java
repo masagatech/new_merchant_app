@@ -1,7 +1,6 @@
 package com.goyo.parent.forms;
 
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -11,18 +10,13 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 import com.goyo.parent.R;
 import com.goyo.parent.adapters.NewOrderAdapter;
 import com.goyo.parent.common.Preferences;
-import com.goyo.parent.database.SQLBase;
-import com.goyo.parent.database.Tables;
 import com.goyo.parent.gloabls.Global;
 import com.goyo.parent.model.model_notification;
 import com.koushikdutta.async.future.FutureCallback;
@@ -30,8 +24,6 @@ import com.koushikdutta.ion.Ion;
 
 import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 
 import static com.goyo.parent.R.id.txtNodata;
@@ -44,7 +36,6 @@ public class newOrder extends AppCompatActivity {
     private Orientation mOrientation;
     private boolean mWithLinePadding;
     private SwipeRefreshLayout mSwipeRefreshLayout;
-    SQLBase db;
     private ProgressDialog loader;
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss.SSS");
 
@@ -54,25 +45,10 @@ public class newOrder extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         //getting if user starts activity from app or push notification and show actionbar accordigly
-        Intent intent = getIntent();
-        int isFromDashboard = intent.getExtras().getInt("FromDashboard");
-        if(isFromDashboard==0){
-            requestWindowFeature(Window.FEATURE_NO_TITLE);
-            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                    WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-            Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-            setSupportActionBar(toolbar);
-
-            if(getSupportActionBar()!=null) {
-                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-                getSupportActionBar().hide();
-            }
-        }
 
         setContentView(R.layout.activity_new_order);
 
-        if(isFromDashboard==1) {
             Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
             setSupportActionBar(toolbar);
 
@@ -83,10 +59,7 @@ public class newOrder extends AppCompatActivity {
             }
 
             setTitle(getResources().getString(R.string.New_Order));
-        }
 
-        //starting database
-         db= new SQLBase(this) ;
 
 
         mOrientation = Orientation.VERTICAL;
@@ -157,7 +130,7 @@ public class newOrder extends AppCompatActivity {
         if (lst.size() > 0) {
             mRecyclerView.setVisibility(View.VISIBLE);
             findViewById(txtNodata).setVisibility(View.GONE);
-            mTimeLineAdapter = new NewOrderAdapter(lst, mOrientation, mWithLinePadding, db);
+            mTimeLineAdapter = new NewOrderAdapter(lst, mOrientation, mWithLinePadding);
             mRecyclerView.setAdapter(mTimeLineAdapter);
             mTimeLineAdapter.notifyDataSetChanged();
 
@@ -174,56 +147,6 @@ public class newOrder extends AppCompatActivity {
 
     private LinearLayoutManager getLinearLayoutManager() {
         return new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-    }
-
-    private void initView() {
-        if (lst.size() > 0) {
-            findViewById(txtNodata).setVisibility(View.GONE);
-            mTimeLineAdapter = new NewOrderAdapter(lst, mOrientation, mWithLinePadding, db);
-            mRecyclerView.setAdapter(mTimeLineAdapter);
-
-        } else {
-            findViewById(txtNodata).setVisibility(View.VISIBLE);
-        }
-    }
-
-    private void setDataListItems(){
-
-        lst.clear();
-        JsonParser parser = new JsonParser();
-        List<HashMap<String,String>> d = db.NOTIFICATION_GET();
-        for (int i=0;i<=d.size() -1; i++){
-            try{
-                String autoid = "", createon = "", data = "";
-                Integer expTm = 3;
-                autoid =  d.get(i).get(Tables.tblnotification.autoid);
-                createon = d.get(i).get(Tables.tblnotification.createon);
-                data = d.get(i).get(Tables.tblnotification.data);
-                expTm = Integer.parseInt(d.get(i).get(Tables.tblnotification.exp));
-                Date date2 = simpleDateFormat.parse(createon);
-                Date date1  = new Date();
-                long difference = date1.getTime() - date2.getTime();
-                Integer minutes = (int) (difference / (1000 * 60));
-                long milisec = (long) (difference);
-                if(minutes > expTm){
-                    db.NOTIFICATION_DELETE(autoid);
-                }else {
-                    JsonObject obj = parser.parse(data).getAsJsonObject();
-                    Gson gson = new Gson();
-                    Type listType = new TypeToken<model_notification>() {
-                    }.getType();
-                    model_notification m = gson.fromJson(obj, listType);
-//                    m.autoid = Integer.parseInt(autoid);
-//                    m.createdon = date2;
-//                    m.remaintime = (expTm * 60* 1000) - milisec;
-                    lst.add(m);
-                }
-
-            }catch (Exception e){
-                e.printStackTrace();
-            }
-        }
-
     }
 
     @Override

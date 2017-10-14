@@ -1,17 +1,13 @@
 package com.goyo.parent.forms;
 
-import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.AlertDialog;
-import android.app.Notification;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Criteria;
@@ -20,7 +16,6 @@ import android.net.Uri;
 import android.os.BatteryManager;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SwitchCompat;
@@ -38,45 +33,16 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.crashlytics.android.Crashlytics;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.PendingResult;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.LocationSettingsRequest;
-import com.google.android.gms.location.LocationSettingsResult;
-import com.google.android.gms.location.LocationSettingsStates;
-import com.google.android.gms.location.LocationSettingsStatusCodes;
-import com.google.api.client.repackaged.com.google.common.base.Joiner;
-import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import com.google.gson.reflect.TypeToken;
 import com.goyo.parent.R;
-import com.goyo.parent.Service.RiderStatus;
-import com.goyo.parent.common.Checker;
 import com.goyo.parent.common.Preferences;
-import com.goyo.parent.database.SQLBase;
-import com.goyo.parent.database.Tables;
 import com.goyo.parent.gloabls.Global;
-import com.goyo.parent.initials.splash_screen;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
-
-import java.io.File;
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-
-import static android.preference.PreferenceManager.getDefaultSharedPreferences;
-import static com.goyo.parent.Service.RiderStatus.handler;
-import static com.goyo.parent.gloabls.Global.urls.getEmpStatus;
-import static com.goyo.parent.gloabls.Global.urls.mobileupload;
 
 public class dashboard extends AppCompatActivity {
 
@@ -104,6 +70,8 @@ public class dashboard extends AppCompatActivity {
     FrameLayout Schedule;
     @BindView(R.id.Gallery)
     FrameLayout Gallery;
+    @BindView(R.id.fees)
+    FrameLayout Fees;
 
     private PopupWindow OrderPopup;
     private Button Btn_Accept, Btn_Reject;
@@ -116,7 +84,6 @@ public class dashboard extends AppCompatActivity {
     private SwitchCompat RiderStatusSwitch;
     Intent mServiceIntent;
     protected static final int REQUEST_CHECK_SETTINGS = 0x1;
-    public static GoogleApiClient mGoogleApiClient;
     private String latitude, longitude;
     public Criteria criteria;
     public String bestProvider;
@@ -415,145 +382,8 @@ public class dashboard extends AppCompatActivity {
 
     boolean isStatusDbCheck = false;
 
-    private void getStatus() {
-        Ion.with(this)
-                .load("GET", getEmpStatus.value)
-                .addQuery("flag", "getchkinout")
-                .addQuery("uid", Global.loginusr.getDriverid() + "")
-                .asJsonObject()
-                .setCallback(new FutureCallback<JsonObject>() {
-                    @Override
-                    public void onCompleted(Exception e, JsonObject result) {
-
-                        try {
-                            if (result != null) Log.v("result", result.toString());
-//                            JsonObject o = result.get("data").getAsJsonObject();
-                            JsonObject o= result.get("data").getAsJsonArray().get(0).getAsJsonObject().get("funget_api_getuserstate").getAsJsonObject();
-                            boolean avail = o.get("state").getAsBoolean();
-                            TripId=o.get("tripid").getAsString();
-                            isStatusDbCheck = true;
-                            RiderStatusSwitch.setChecked(avail);
-                            isStatusDbCheck = false;
-                            if (avail){
-//                                showNotification();
-                                Online.setText(R.string.switch_online_text);
-                                SwitchTurnedOnOFF("true");
-                            }
-                            Global.isOnline=avail;
-                            StatusRider();
-                        } catch (Exception ea) {
-                            ea.printStackTrace();
-                        }
-                    }
-                });
-
-    }
-
-    public void showNotification() {
-        PendingIntent pi = PendingIntent.getActivity(this, 0, new Intent(this, splash_screen.class), 0);
-        Notification notification = new NotificationCompat.Builder(this)
-                .setTicker("Online!")
-                .setSmallIcon(R.drawable.rider)
-                .setContentTitle("Your Online!")
-                .setContentIntent(pi)
-                .setAutoCancel(false)
-                .setOngoing(true)
-                .build();
-
-        notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        notificationManager.notify(0, notification);
-    }
 
 
-    private void SwitchTurnedOnOFF(final String state) {
-//        Global.showProgress(loader);
-        if (latitude == null) {
-            latitude = "0.0";
-            longitude = "0.0";
-        }
-        JsonObject json = new JsonObject();
-        json.addProperty("tripid", TripId);
-        json.addProperty("uid", Global.loginusr.getDriverid());
-        json.addProperty("lat", latitude);
-        json.addProperty("lon", longitude);
-        json.addProperty("enttid", Global.loginusr.getEnttid());
-        json.addProperty("btr", getBatteryLevel() + "");
-        Ion.with(this)
-                .load((state == "true" ? Global.urls.starttripswitch.value :Global.urls.stoptripswitch.value))
-                .setJsonObjectBody(json)
-                .asJsonObject()
-                .setCallback(new FutureCallback<JsonObject>() {
-                    @Override
-                    public void onCompleted(Exception e, JsonObject result) {
-
-                        // do stuff with the result or error
-                        try {
-                            String Status = (result.get("data").getAsJsonObject()).get("resstatus").toString();
-                            if (state == "true") {
-                                if (result != null) Log.v("result", result.toString());
-                                if (Boolean.parseBoolean(Status)) {
-                                    TripId = (result.get("data").getAsJsonObject()).get("tripid").toString();
-                                    getDefaultSharedPreferences(dashboard.this).edit().putString("tripid",TripId ).apply();
-//                                    Toast.makeText(dashboard.this, (result.get("data").getAsJsonObject()).get("resmessage").toString(), Toast.LENGTH_LONG).show();
-                                    if (!isMyServiceRunning(RiderStatus.class)) {
-                                        //Notification
-//                                        showNotification();
-                                        Online.setText(R.string.switch_online_text);
-                                        mServiceIntent = new Intent(dashboard.this, RiderStatus.class);
-                                        dashboard.this.startService(mServiceIntent);
-                                    }
-                                } else {
-                                    Toast.makeText(dashboard.this, (result.get("data").getAsJsonObject()).get("resmessage").toString(), Toast.LENGTH_LONG).show();
-                                    isStatusDbCheck=true;
-                                    RiderStatusSwitch.setChecked(false);
-                                    isStatusDbCheck=false;
-                            }
-                        } else {
-                            if (Boolean.parseBoolean(Status)) {
-//                                    notificationManager.cancel(0);
-                                Online.setText(R.string.offline_switch_text);
-                                handler.removeMessages(0);
-                                if (isMyServiceRunning(RiderStatus.class)) {
-                                    if (mServiceIntent != null) stopService(mServiceIntent);
-                                    else
-                                        stopService(new Intent(dashboard.this, RiderStatus.class));
-                                }
-                                TripId="0";
-                                getDefaultSharedPreferences(dashboard.this).edit().putString("tripid",TripId ).apply();
-                                if(isCallLogout){
-                                    Logout();
-                                }
-                            } else {
-                                Toast.makeText(getApplicationContext(), result.get("data").getAsJsonObject().get("msg").toString(), Toast.LENGTH_SHORT).show();
-                                isStatusDbCheck=true;
-                                RiderStatusSwitch.setChecked(true);
-                                isStatusDbCheck=false;
-
-                            }
-                        }
-                        } catch (Exception ea) {
-                            if (state == "true") {
-                                isStatusDbCheck = true;
-                                RiderStatusSwitch.setChecked(false);
-                                isStatusDbCheck = false;
-                            }else {
-                                isStatusDbCheck = true;
-                                RiderStatusSwitch.setChecked(true);
-                                isStatusDbCheck = false;
-                            }
-                            new Checker(dashboard.this).pass(new Checker.Pass() {
-                                @Override
-                                public void pass() {
-
-                                }
-
-                            }).check(Checker.Resource.NETWORK);
-                            Toast.makeText(dashboard.this, "There was an error", Toast.LENGTH_SHORT).show();
-                            ea.printStackTrace();
-                        }
-//                        Global.hideProgress(loader);
-                    }
-                });
 
 //
 //        Ion.with(this)
@@ -624,75 +454,10 @@ public class dashboard extends AppCompatActivity {
 //                        }
 //                    }
 //                });
-    }
-
-    public void SendOfflineStopstoServer() {
-        SQLBase db = new SQLBase(this);
-        final List<HashMap<String,String>> d = db. Get_Tasks_Offline();
-
-        if(d.size()>0) {
-            for (int i = 0; i <= d.size() - 1; i++) {
-                Gson gson = new Gson();
-                Type type = new TypeToken<ArrayList<String>>() {}.getType();
-                ArrayList<String> TagsArray = gson.fromJson(d.get(i).get(Tables.tblofflinetask.Task_Tags), type);
 
 
-                String tag= Joiner.on(",").join(TagsArray);
-                final int pos=i;
-
-                Ion.with(this)
-                        .load(mobileupload.value)
-                        .setMultipartParameter("enttid", Global.loginusr.getEnttid()+"")
-                        .setMultipartParameter("uid",  Global.loginusr.getDriverid()+"")
-                        .setMultipartParameter("stpnm",  d.get(i).get(Tables.tblofflinetask.Task_Title))
-                        .setMultipartParameter("stpdesc", d.get(i).get(Tables.tblofflinetask.Task_Body))
-                        .setMultipartParameter("lat", d.get(i).get(Tables.tblofflinetask.Task_Lat))
-                        .setMultipartParameter("lng", d.get(i).get(Tables.tblofflinetask.Task_Lon))
-                        .setMultipartParameter("trpid", TripId)
-                        .setMultipartParameter("cuid", d.get(i).get(Tables.tblofflinetask.Task_Creat_On)+", "+d.get(i).get(Tables.tblofflinetask.Task_Time))
-                        .setMultipartParameter("tag","{" + tag + "}")
-                        .setMultipartParameter("expid", d.get(i).get(Tables.tblofflinetask.EXP_ID))
-                        .setMultipartParameter("expval",  d.get(i).get(Tables.tblofflinetask.EXP_Value))
-                        .setMultipartParameter("expdesc",  d.get(i).get(Tables.tblofflinetask.EXP_Disc))
-                        .setMultipartFile("uploadimg", new File( d.get(i).get(Tables.tblofflinetask.Task_Images_Paths)))
-                        .asJsonObject()
-                        .setCallback(new FutureCallback<JsonObject>() {
-//               String tag= Joiner.on("','").join(TagsArray);
-//                JsonObject json = new JsonObject();
-//                json.addProperty("stpnm", d.get(i).get(Tables.tblofflinetask.Task_Title));
-//                json.addProperty("stpdesc", d.get(i).get(Tables.tblofflinetask.Task_Body));
-//                json.addProperty("lat", d.get(i).get(Tables.tblofflinetask.Task_Lat));
-//                json.addProperty("lng", d.get(i).get(Tables.tblofflinetask.Task_Lon));
-//                json.addProperty("uid", Global.loginusr.getDriverid()+"");
-//                json.addProperty("cuid",d.get(i).get(Tables.tblofflinetask.Task_Creat_On)+", "+d.get(i).get(Tables.tblofflinetask.Task_Time) );
-//                json.addProperty("enttid", Global.loginusr.getEnttid()+"");
-//                json.addProperty("trpid",TripId);
-//                json.addProperty("tag","{'" + tag + "'}");
-//                Ion.with(this)
-//                        .load(Global.urls.saveTagInfo.value)
-//                        .setJsonObjectBody(json)
-//                        .asJsonObject()
-//                        .setCallback(new FutureCallback<JsonObject>() {
-                            @Override
-                            public void onCompleted(Exception e, JsonObject result) {
-                                // do stuff with the result or error
-                                try {
-//                                    Toast.makeText(dashboard.this,"Success!", Toast.LENGTH_SHORT).show();
-                                    SQLBase db = new SQLBase(dashboard.this);
-                                    db. OFFLINE_TASK_UPDATE(d.get(pos).get(Tables.tblofflinetask.Task_Title),"0");
-
-                                } catch (Exception ea) {
-                                    ea.printStackTrace();
-                                }
-
-
-                            }
-                        });
-            }
-        }
 
 //        return data;
-    }
 
     private boolean isMyServiceRunning(Class<?> serviceClass) {
         ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
@@ -718,81 +483,9 @@ public class dashboard extends AppCompatActivity {
     }
 
 
-    public void settingsrequest() {
-        LocationRequest locationRequest = LocationRequest.create();
-        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        locationRequest.setInterval(30 * 1000);
-        locationRequest.setFastestInterval(5 * 1000);
-        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
-                .addLocationRequest(locationRequest);
-        builder.setAlwaysShow(true); //this is the key ingredient
-
-        PendingResult<LocationSettingsResult> result =
-                LocationServices.SettingsApi.checkLocationSettings(mGoogleApiClient, builder.build());
-        result.setResultCallback(new ResultCallback<LocationSettingsResult>() {
-            @Override
-            public void onResult(LocationSettingsResult result) {
-                final Status status = result.getStatus();
-                final LocationSettingsStates state = result.getLocationSettingsStates();
-                switch (status.getStatusCode()) {
-                    case LocationSettingsStatusCodes.SUCCESS:
-                        // All location settings are satisfied. The client can initialize location
-                        // requests here.
-                        break;
-                    case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
-                        // Location settings are not satisfied. But could be fixed by showing the user
-                        // a dialog.
-                        try {
-                            // Show the dialog by calling startResolutionForResult(),
-                            // and check the result in onActivityResult().
-                            status.startResolutionForResult(dashboard.this, REQUEST_CHECK_SETTINGS);
-                        } catch (IntentSender.SendIntentException e) {
-                            // Ignore the error.
-                        }
-                        break;
-                    case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
-                        // Location settings are not satisfied. However, we have no way to fix the
-                    // settings so we won't show the dialog.
-                        break;
-                }
-            }
-        });
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode) {
-            // Check for the integer request code originally supplied to startResolutionForResult().
-            case REQUEST_CHECK_SETTINGS:
-                switch (resultCode) {
-                    case Activity.RESULT_OK:
-                        break;
-                    case Activity.RESULT_CANCELED:
-                        settingsrequest();//keep asking if imp or do whatever
-                        break;
-                }
-                break;
-        }
-    }
 
 
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
-        switch (requestCode) {
-            case 1: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
-                } else {
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
-                }
-                return;
-            }
-            // other 'case' lines to check for other
-            // permissions this app might request
-        }
-    }
 
 
     @OnClick(R.id.Pending_Order)
@@ -803,18 +496,20 @@ public class dashboard extends AppCompatActivity {
 
     @OnClick(R.id.Cash_Collection)
     void click2() {
-    Intent intent = new Intent(this, rejected_order.class);
+        Intent intent = new Intent(this, ResultActivity.class);
         startActivity(intent);
 
     }
 
     @OnClick(R.id.Complated_Orders)
     void click3() {
+        Intent intent = new Intent(this, SemesterList.class);
+        startActivity(intent);
     }
 
     @OnClick(R.id.Rejected_Orders)
     void click4() {
-        Intent intent = new Intent(this, Ann.class);
+        Intent intent = new Intent(this, StudentLeaveActivity.class);
         startActivity(intent);
     }
 
@@ -830,13 +525,12 @@ public class dashboard extends AppCompatActivity {
     void click6() {
         int flag = 1;
         Intent intent = new Intent(this, newOrder.class);
-        intent.putExtra("FromDashboard", flag);
         startActivity(intent);
     }
 
     @OnClick(R.id.pushOrder)
     void click7() {
-        Intent intent = new Intent(this, PushOrder.class);
+        Intent intent = new Intent(this, StillDev.class);
         startActivity(intent);
     }
     @OnClick(R.id.All_Order_details)
@@ -861,13 +555,19 @@ public class dashboard extends AppCompatActivity {
 
     @OnClick(R.id.Schadule)
     void click11() {
-        Intent intent = new Intent(this, SchodulActivity.class);
+        Intent intent = new Intent(this, Schedule.class);
         startActivity(intent);
     }
 
     @OnClick(R.id.Gallery)
     void click12() {
         Intent intent = new Intent(this, Album.class);
+        startActivity(intent);
+    }
+
+    @OnClick(R.id.fees)
+    void click13() {
+        Intent intent = new Intent(this, StillDev.class);
         startActivity(intent);
     }
 
@@ -1047,14 +747,10 @@ public class dashboard extends AppCompatActivity {
                 //calling logout api
                 Logout();
                 return true;
-            case R.id.contact_us:
-                Intent intent2 = new Intent(this, ContactDashBoard.class);
-                startActivity(intent2);
-                return true;
 
             case R.id.my_profile:
-                Intent intent3 = new Intent(this, Profile_Page.class);
-                startActivity(intent3);
+//                Intent intent3 = new Intent(this, Profile_Page.class);
+//                startActivity(intent3);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

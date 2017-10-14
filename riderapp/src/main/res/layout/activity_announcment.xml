@@ -25,7 +25,7 @@
     <TextView
         android:layout_marginTop="80dp"
         android:id="@+id/txtNodata"
-android:visibility="gone"
+        android:visibility="gone"
         android:drawableTop="@drawable/nostud"
         android:layout_width="match_parent"
         android:gravity="center"

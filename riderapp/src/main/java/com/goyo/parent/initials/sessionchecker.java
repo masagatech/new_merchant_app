@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import com.goyo.parent.R;
-import com.goyo.parent.common.Checker;
 import com.goyo.parent.common.Preferences;
 import com.goyo.parent.forms.PushOrder;
 import com.goyo.parent.utils.common;
@@ -22,6 +21,7 @@ public class sessionchecker extends AppCompatActivity {
         isLanguageShow = !common.setLanguage(getApplicationContext(), getBaseContext());
         loader = new ProgressDialog(sessionchecker.this);
         setTitle("Login Checking...");
+        checkLogin();
     }
 
     private void checkLogin() {
@@ -37,7 +37,7 @@ public class sessionchecker extends AppCompatActivity {
             startActivity(i);
 
             finish();
-        }else {
+        } else {
             loader.hide();
             nextScreen();
 
@@ -117,7 +117,7 @@ public class sessionchecker extends AppCompatActivity {
 //                    });
 
 
-        }
+    }
 
     private void nextScreen() {
         Intent i;
@@ -129,12 +129,5 @@ public class sessionchecker extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-        new Checker(this).pass(new Checker.Pass() {
-            @Override
-            public void pass() {
-                checkLogin();
-            }
-
-        }).check(Checker.Resource.NETWORK);
     }
 }

@@ -1,36 +1,19 @@
 package com.goyo.parent.adapters;
 
-import android.app.Activity;
-import android.app.Notification;
 import android.content.Context;
 import android.os.CountDownTimer;
-import android.support.v4.app.NotificationCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
-import com.google.gson.JsonObject;
 import com.goyo.parent.R;
-import com.goyo.parent.database.SQLBase;
 import com.goyo.parent.forms.Orientation;
 import com.goyo.parent.forms.PendingOrdersView;
-import com.goyo.parent.gloabls.Global;
 import com.goyo.parent.model.model_notification;
-import com.koushikdutta.async.future.FutureCallback;
-import com.koushikdutta.ion.Ion;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import static android.content.Context.BIND_IMPORTANT;
-import static com.goyo.parent.Service.RiderStatus.mBuilder;
-import static com.goyo.parent.Service.RiderStatus.notificationManager;
-import static com.goyo.parent.gloabls.Global.urls.setStatus;
 
 /**
  * Created by fajar on 02-Jun-17.
@@ -44,13 +27,11 @@ public class NewOrderAdapter extends RecyclerView.Adapter<NewOrderAdapterViewHol
     private boolean mWithLinePadding;
     private LayoutInflater mLayoutInflater;
     static HashMap<Integer, CountDownTimer> thread = new HashMap<>();
-    SQLBase sb;
 
-    public NewOrderAdapter(List<model_notification> feedList, Orientation orientation, boolean withLinePadding, SQLBase _sb) {
+    public NewOrderAdapter(List<model_notification> feedList, Orientation orientation, boolean withLinePadding) {
         mFeedList = feedList;
         mOrientation = orientation;
         mWithLinePadding = withLinePadding;
-        sb = _sb;
     }
 
     @Override
@@ -183,131 +164,6 @@ public class NewOrderAdapter extends RecyclerView.Adapter<NewOrderAdapterViewHol
 //        }.start();
     }
 
-
-
-    //showing notification
-    private void setNoti(String s){
-
-        if(s.equals("reject")){
-            s=mContext.getString(R.string.rejectorder_notifi);
-        }else {
-            s=mContext.getString(R.string.acceptorder_notifi);
-        }
-        mBuilder =
-                new NotificationCompat.Builder(mContext)
-                        .setSmallIcon(R.drawable.rider)
-                        .setContentTitle(s)
-                        .setDefaults(Notification.DEFAULT_ALL) // must requires VIBRATE permission
-                        .setPriority(NotificationCompat.PRIORITY_HIGH)
-                        .setVisibility(BIND_IMPORTANT)
-                        .setOngoing(false);
-        Notification note = mBuilder.build();
-        if(notificationManager!=null) {
-            notificationManager.notify(0, note);
-        }
-    }
-
-
-    //service api
-
-    private void setStatus(final String flag, String ordid, final int position, final int autoid,final NewOrderAdapterViewHolder holder,String feedabck) {
-        if(feedabck==null){
-            feedabck="";
-        }
-        JsonObject json = new JsonObject();
-        json.addProperty("flag", flag);
-        json.addProperty("ordid", ordid);
-        json.addProperty("rdid", Global.loginusr.getDriverid() + "");
-        json.addProperty("remark",feedabck);
-
-        Ion.with(mContext)
-                .load(setStatus.value)
-                .setJsonObjectBody(json)
-                .asJsonObject()
-                .setCallback(new FutureCallback<JsonObject>() {
-                    @Override
-                    public void onCompleted(Exception e, JsonObject result) {
-
-                        try {
-                            if (result != null) {
-                                JsonObject data = result.get("data").getAsJsonObject();
-                                if (data.get("status").getAsBoolean()) {
-                                    String msg = data.get("msg").toString();
-                                    Toast.makeText(mContext, msg, Toast.LENGTH_SHORT).show();
-                                    if(flag=="accord" ){
-                                        holder.popup_counter.setText(mContext.getResources().getString(R.string.notification_accept)) ;
-                                        holder.timer.cancel();
-                                        holder.timer= null;
-                                        LastOrderCheck();
-                                        mFeedList.remove(position);
-                                        notifyItemRemoved(position);
-                                        notifyItemRangeChanged(position, getItemCount());
-//                                        notifyItemRemoved(position);
-
-                                    }else{
-                                        holder.popup_counter.setText(mContext.getResources().getString(R.string.notification_reject)) ;
-                                        LastOrderCheck();
-                                        holder.timer.cancel();
-                                        holder.timer= null;
-                                        mFeedList.remove(position);
-                                        notifyItemRemoved(position);
-                                        notifyItemRangeChanged(position, getItemCount());
-                                    }
-                                } else {
-                                    holder.popup_counter.setText(mContext.getResources().getString(R.string.notification_alredyassign));
-                                    LastOrderCheck();
-                                    mFeedList.remove(position);
-                                    notifyItemRemoved(position);
-                                    notifyItemRangeChanged(position, getItemCount());
-                                    String msg = data.get("msg").toString();
-                                    Toast.makeText(mContext, msg, Toast.LENGTH_SHORT).show();
-                                }
-                                sb.NOTIFICATION_DELETE(autoid + "");
-
-                            } else {
-                                Toast.makeText(mContext, result.toString(), Toast.LENGTH_SHORT).show();
-                            }
-
-                        } catch (Exception ea) {
-                            ea.printStackTrace();
-                        }
-                    }
-                });
-
-    }
-
-    private void LastOrderCheck(){
-        if(mFeedList.size()==1){
-            ((Activity) mContext).finish();
-        }
-    }
-
-    public void Kill() {
-        Set<Map.Entry<Integer, CountDownTimer>> s = thread.entrySet();
-        if (s != null) {
-            Iterator it = s.iterator();
-            while (it.hasNext()) {
-                try {
-
-                    Map.Entry pairs = (Map.Entry) it.next();
-                    CountDownTimer r = (CountDownTimer) pairs.getValue();
-                    r.cancel();
-                    r = null;
-                } catch (Exception x) {
-
-                }
-            }
-            s = null;
-            it = null;
-            thread.clear();
-        }
-
-
-    }
-
-    public void KillTimer(CountDownTimer tmr) {
-        tmr.cancel();
-    }
 
     @Override
     public int getItemCount() {

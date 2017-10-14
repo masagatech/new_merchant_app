@@ -6,11 +6,6 @@ package com.goyo.parent.firebasemessaging;
 
 
 import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.Context;
-import android.content.Intent;
-import android.media.RingtoneManager;
-import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.Button;
@@ -19,8 +14,6 @@ import android.widget.TextView;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
-import com.goyo.parent.R;
-import com.goyo.parent.initials.splash_screen;
 
 public class APPFirebaseMessagingService extends FirebaseMessagingService {
 
@@ -74,7 +67,6 @@ public class APPFirebaseMessagingService extends FirebaseMessagingService {
 
         // Check if message contains a notification payload.
         if (remoteMessage.getNotification() != null) {
-            sendNotification(remoteMessage);
             //Log.d(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
 //            processData(remoteMessage);
             //sendNotification(remoteMessage.getNotification().getBody());
@@ -312,24 +304,4 @@ public class APPFirebaseMessagingService extends FirebaseMessagingService {
 //     * Create and show a simple notification containing the received FCM message.
 //     *
 
-    private void sendNotification(RemoteMessage _msg) {
-        Intent intent = new Intent(this, splash_screen.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
-                PendingIntent.FLAG_ONE_SHOT);
-
-        Uri defaultSoundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
-                .setSmallIcon(R.drawable.tracker_ic)
-                .setAutoCancel(true)
-                .setContentText(_msg.getNotification().getBody())
-                .setContentTitle(_msg.getNotification().getTitle())
-                .setSound(defaultSoundUri)
-                .setContentIntent(pendingIntent);
-
-        NotificationManager notificationManager =
-                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
-        notificationManager.notify(66 /* ID of notification */, notificationBuilder.build());
-    }
 }

@@ -1,0 +1,21 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.goyo.parent.forms.AudioGallery">
+
+    <!-- TODO: Update blank fragment layout -->
+    <TextView
+        android:layout_marginTop="80dp"
+        android:id="@+id/txtNodata"
+        android:drawableTop="@drawable/nostud"
+        android:layout_width="match_parent"
+        android:gravity="center"
+        android:fontFamily="sans-serif-light"
+        android:textColor="@color/blue_light"
+        android:layout_height="wrap_content"
+        android:text="Stay Tuned! This is still in development.."
+        android:textSize="16sp"
+        />
+
+</FrameLayout>

@@ -19,7 +19,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.goyo.parent.R;
-import com.goyo.parent.forms.ContactUS;
 
 public class SliderScreen extends AppCompatActivity {
 
@@ -80,8 +79,8 @@ public class SliderScreen extends AppCompatActivity {
         @Override
         public void onClick(View v) {
 
-            Intent intent=new Intent(SliderScreen.this, ContactUS.class);
-            startActivity(intent);
+//            Intent intent=new Intent(SliderScreen.this, ContactUS.class);
+//            startActivity(intent);
 //            launchHomeScreen();
         }
     });

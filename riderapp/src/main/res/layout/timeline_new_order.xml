@@ -31,6 +31,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:paddingLeft="10dp"
+
                 >
 
                 <ImageView
@@ -46,13 +47,14 @@
 
                 <TextView
                     android:id="@+id/outlets_new_order"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:layout_weight="1"
                     android:textStyle="bold"
                     android:paddingLeft="5dp"
-                    android:text="Pralhad nagar"
+                    android:paddingBottom="5dp"
+                    android:text="Pralhad nagar Pralhad nagar Pralhad nagar Pralhad nagar Pralhad nagar Pralhad nagar"
                     android:textColor="#000" />
                 <TextView
                     android:paddingTop="5dp"
@@ -72,9 +74,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:paddingLeft="30dp"
-                android:paddingTop="5dp"
                 android:paddingBottom="5dp">
-
                 <!--<ImageView-->
                     <!--android:layout_width="50px"-->
                     <!--android:layout_height="50px"-->
@@ -176,8 +176,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="?android:attr/selectableItemBackground"
-                        android:text="@string/accept_notification"
-                        android:textColor="@color/common_google_signin_btn_text_dark_default" />
+                        android:text="@string/accept_notification" />
                 </FrameLayout>
 
                 <FrameLayout
@@ -193,8 +192,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="?android:attr/selectableItemBackground"
-                        android:text="@string/reject_notification"
-                        android:textColor="@color/common_google_signin_btn_text_dark_default" />
+                        android:text="@string/reject_notification" />
                 </FrameLayout>
             </LinearLayout>
 

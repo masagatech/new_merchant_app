@@ -17,9 +17,7 @@ import android.widget.Toast;
 import com.google.gson.JsonObject;
 import com.goyo.parent.R;
 import com.goyo.parent.common.Preferences;
-import com.goyo.parent.database.SQLBase;
 import com.goyo.parent.gloabls.Global;
-import com.goyo.parent.model.modal_leave;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
@@ -34,7 +32,6 @@ import java.util.Locale;
 
 import static com.goyo.parent.R.id.leave_from;
 import static com.goyo.parent.R.id.leave_to;
-import static com.goyo.parent.Service.NetworkStateReceiver.IsMobailConnected;
 import static com.goyo.parent.forms.dashboard.SclId;
 
 public class AddLeave extends AppCompatActivity {
@@ -328,10 +325,10 @@ public class AddLeave extends AppCompatActivity {
                     public void onCompleted(Exception e, JsonObject result) {
                         // do stuff with the result or error
                         try {
-                            JsonObject o= result.get("data").getAsJsonArray().get(0).getAsJsonObject().get("funsave_studentleave").getAsJsonObject();
+                            JsonObject o= result.get("data").getAsJsonArray().get(0).getAsJsonObject().get("funsave_leaveinfo").getAsJsonObject();
                             Toast.makeText(AddLeave.this, o.get("msg").toString(), Toast.LENGTH_SHORT).show();
                             finish();
-                            Intent intent=new Intent(AddLeave.this,Ann.class);
+                            Intent intent=new Intent(AddLeave.this,StudentLeaveActivity.class);
                             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             startActivity(intent);
@@ -346,33 +343,6 @@ public class AddLeave extends AppCompatActivity {
                 });
 
     }
-
-    private void SavetoDb(){
-        String  details,leave_from,leave_to,selected_leave_type,currentDateTimeString;
-        selected_leave_type=LeaveType.getSelectedItem().toString();
-        currentDateTimeString = java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
-        leave_from=Leave_From.getText().toString();
-        leave_to=Leave_To.getText().toString();
-        details=Details.getText().toString();
-
-        SQLBase db = new SQLBase(this);
-        if(IsMobailConnected){
-            if (!db.ISLeave_ALREDY_EXIST(currentDateTimeString)) {
-                db.ADDLeave(new modal_leave(leave_from, leave_to, selected_leave_type, details, currentDateTimeString, "0", "Pending"));
-            }
-        }else {
-            if (!db.ISLeave_ALREDY_EXIST(currentDateTimeString)) {
-                db.ADDLeave(new modal_leave(leave_from, leave_to, selected_leave_type, details, currentDateTimeString, "1", "Pending"));
-                finish();
-                Intent intent = new Intent(AddLeave.this, Student_Leave.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
-                Toast.makeText(AddLeave.this, "Saved successfully", Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
-
 
 
     //action bar menu button click

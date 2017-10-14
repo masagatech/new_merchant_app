@@ -23,6 +23,7 @@ public class GalleryInfo extends AppCompatActivity {
       if (getSupportActionBar() != null){
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayUseLogoEnabled(true);
+          getSupportActionBar().setElevation(0);
     }
 
     setTitle("Gallery");
@@ -34,7 +35,7 @@ public class GalleryInfo extends AppCompatActivity {
                 getSupportFragmentManager(), FragmentPagerItems.with(this)
                 .add("Image", ImageGallery.class)
                 .add("Video", VideoGallery.class)
-                .add("Audio", Schedule.class)
+                .add("Audio", AudioGallery.class)
                 .create());
 
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);

@@ -112,7 +112,6 @@ public class MyKidsRegListAdapter extends BaseAdapter {
 
                                 Toast.makeText(context, res.get("resmessage").toString(), Toast.LENGTH_SHORT).show();
                             }
-
                             // JSONObject jsnobject = new JSONObject(jsond);
 //                            Gson gson = new Gson();
 //                            Type listType = new TypeToken<List<MyKidsModel>>() {

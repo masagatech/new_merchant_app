@@ -149,8 +149,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="?android:attr/selectableItemBackground"
-                    android:text="@string/accept_notification"
-                    android:textColor="@color/common_google_signin_btn_text_dark_default" />
+                    android:text="@string/accept_notification" />
             </FrameLayout>
 
             <FrameLayout
@@ -167,7 +166,7 @@
                     android:layout_height="match_parent"
                     android:background="?android:attr/selectableItemBackground"
                     android:text="@string/reject_notification"
-                    android:textColor="@color/common_google_signin_btn_text_dark_default" />
+                     />
             </FrameLayout>
         </LinearLayout>
 

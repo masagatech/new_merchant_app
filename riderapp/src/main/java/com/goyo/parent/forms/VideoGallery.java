@@ -1,21 +1,28 @@
 package com.goyo.parent.forms;
 
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.google.android.youtube.player.YouTubeApiServiceUtil;
+import com.google.android.youtube.player.YouTubeInitializationResult;
+import com.google.android.youtube.player.YouTubeStandalonePlayer;
 import com.google.gson.JsonObject;
 import com.goyo.parent.R;
 import com.goyo.parent.adapters.VideoListAdapter;
+import com.goyo.parent.adapters.YouTubeVideo;
 import com.goyo.parent.gloabls.Global;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static com.goyo.parent.R.id.txtNodata;
 import static com.goyo.parent.forms.GalleryInfo.AlbumID;
@@ -26,11 +33,15 @@ import static com.goyo.parent.forms.dashboard.SclId;
  */
 public class VideoGallery extends Fragment {
 
+    private List<YouTubeVideo> ITEMS ;
+
+    /**
+     * A map of YouTube videos, by ID.
+     */
+
     ListView listView;
     private View view;
 
-    ArrayList<String> videoUrls;
-    ArrayList<String> videoThumbs;
 
     public VideoGallery() {
         // Required empty public constructor
@@ -44,7 +55,31 @@ public class VideoGallery extends Fragment {
         view= inflater.inflate(R.layout.fragment_video_gallery, container, false);
         listView = (ListView) view.findViewById(R.id.listview);
 
+        //Check for any issues
+        final YouTubeInitializationResult result = YouTubeApiServiceUtil.isYouTubeApiServiceAvailable(getActivity());
+
+        if (result != YouTubeInitializationResult.SUCCESS) {
+            //If there are any issues we can show an error dialog.
+            result.getErrorDialog(getActivity(), 0).show();
+        }
+
+
         GetImages();
+
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                final Context context = getActivity();
+                final String DEVELOPER_KEY = getString(R.string.DEVELOPER_KEY);
+                final YouTubeVideo video = ITEMS.get(position);
+                startActivity(YouTubeStandalonePlayer.createVideoIntent(getActivity(),
+                        DEVELOPER_KEY, video.id, 0, true, true));
+
+
+            }
+        });
+
 
         return view;
     }
@@ -61,36 +96,30 @@ public class VideoGallery extends Fragment {
                 .setCallback(new FutureCallback<JsonObject>() {
                     @Override
                     public void onCompleted(Exception e, JsonObject result) {
+                        ITEMS = new ArrayList<>();
                         // do stuff with the result or error
                         try {
-                           final String YoutubeURL="http://img.youtube.com/vi/";
-                            videoUrls = new ArrayList<String>();
-                            videoThumbs = new ArrayList<String>();
                             for (int i = 0; i < result.get("data").getAsJsonArray().size(); i++) {
                                 if(result.get("data").getAsJsonArray().get(i).getAsJsonObject().get("ghead").getAsString().equals("video")) {
-                                    videoUrls.add(result.get("data").getAsJsonArray().get(i).getAsJsonObject().get("gurl").getAsString());
-                                    videoThumbs.add(YoutubeURL+result.get("data").getAsJsonArray().get(i).getAsJsonObject().get("thumb").getAsString());
+                                    ITEMS.add(new YouTubeVideo(result.get("data").getAsJsonArray().get(i).getAsJsonObject().get("thumbid").getAsString()));
                                 }
                             }
-                            SetImage(videoUrls,videoThumbs);
 
                         } catch (Exception ea) {
                             ea.printStackTrace();
                         }
-
+                        SetImage(ITEMS);
 
                     }
                 });
     }
 
-    private void SetImage(ArrayList<String> videoUrls,ArrayList<String> videoThumbs) {
+    private void SetImage(List<YouTubeVideo> ITEMS) {
 
-        if(videoUrls.size()>0) {
+        if(ITEMS.size()>0) {
             view.findViewById(txtNodata).setVisibility(View.GONE);
             listView.setVisibility(View.VISIBLE);
-            listView.setAdapter(new VideoListAdapter(getActivity(),
-                    videoUrls,
-                    videoThumbs));
+            listView.setAdapter(new VideoListAdapter(getActivity(),ITEMS));
         }else {
             listView.setVisibility(View.GONE);
             view.findViewById(txtNodata).setVisibility(View.VISIBLE);

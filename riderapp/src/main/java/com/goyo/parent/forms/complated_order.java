@@ -20,17 +20,12 @@ import com.google.gson.reflect.TypeToken;
 import com.goyo.parent.R;
 import com.goyo.parent.adapters.ComplatedOrderAdapter;
 import com.goyo.parent.common.Preferences;
-import com.goyo.parent.database.SQLBase;
-import com.goyo.parent.database.Tables;
 import com.goyo.parent.model.model_task;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
 import java.lang.reflect.Type;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
 
 import static com.goyo.parent.forms.dashboard.SclId;
@@ -189,23 +184,6 @@ public class complated_order extends AppCompatActivity {
         }
     }
 
-    private ArrayList<model_task> populateList(){
-        SQLBase db = new SQLBase(this);
-
-        Calendar c = Calendar.getInstance();
-        SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
-        String formattedDate = df.format(c.getTime());
-
-        ArrayList<model_task> data = new ArrayList<model_task>();
-        List<HashMap<String,String>> d = db.Get_Today_Stops(formattedDate);
-        if(d.size()>0) {
-            for (int i = 0; i <= d.size() - 1; i++) {
-                data.add(new model_task(d.get(i).get(Tables.tblofflinetask.Task_Title),d.get(i).get(Tables.tblofflinetask.Task_Body),d.get(i).get(Tables.tblofflinetask.Task_Lat),d.get(i).get(Tables.tblofflinetask.Task_Lon),d.get(i).get(Tables.tblofflinetask.Task_Tags),d.get(i).get(Tables.tblofflinetask.Task_Creat_On),d.get(i).get(Tables.tblofflinetask.Is_Server_Send),d.get(i).get(Tables.tblofflinetask.Task_Time),d.get(i).get(Tables.tblofflinetask.Task_Images_Paths),d.get(i).get(Tables.tblofflinetask.EXP_ID),d.get(i).get(Tables.tblofflinetask.EXP_Type),d.get(i).get(Tables.tblofflinetask.EXP_Value),d.get(i).get(Tables.tblofflinetask.EXP_Disc)));
-            }
-        }
-
-        return data;
-    }
 
 //        Ion.with(this)
 //                .load("GET", getOrders.value)

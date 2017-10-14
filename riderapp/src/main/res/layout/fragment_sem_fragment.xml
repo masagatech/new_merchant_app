@@ -1,0 +1,41 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:fitsSystemWindows="true"
+android:background="@color/colorBackground"
+tools:context="com.goyo.parent.forms.sem_fragment">
+
+<TextView
+    android:layout_marginTop="40dp"
+    android:id="@+id/txtNodata"
+    android:visibility="gone"
+    android:drawableTop="@drawable/nostud"
+    android:layout_width="match_parent"
+    android:gravity="center"
+    android:fontFamily="sans-serif-light"
+    android:textColor="@color/blue_light"
+    android:layout_height="wrap_content"
+    android:text="There is no data to fetch!"
+    android:textSize="16sp"
+    />
+
+<android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/Refresh"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:clipToPadding="false"/>
+
+</android.support.v4.widget.SwipeRefreshLayout>
+
+</RelativeLayout>

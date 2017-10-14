@@ -19,7 +19,6 @@ import android.widget.Toast;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.JsonObject;
 import com.goyo.parent.R;
-import com.goyo.parent.common.Checker;
 import com.goyo.parent.common.Preferences;
 import com.goyo.parent.forms.PushOrder;
 import com.goyo.parent.gloabls.Global;
@@ -28,14 +27,6 @@ import com.koushikdutta.ion.Ion;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static android.Manifest.permission.ADD_VOICEMAIL;
-import static android.Manifest.permission.CALL_PHONE;
-import static android.Manifest.permission.PROCESS_OUTGOING_CALLS;
-import static android.Manifest.permission.READ_CALL_LOG;
-import static android.Manifest.permission.READ_PHONE_STATE;
-import static android.Manifest.permission.USE_SIP;
-import static android.Manifest.permission.WRITE_CALL_LOG;
 
 public class login extends AppCompatActivity implements View.OnClickListener {
     /* form variable */
@@ -64,34 +55,15 @@ public class login extends AppCompatActivity implements View.OnClickListener {
     }
 
     private  boolean checkAndRequestPermissions() {
-        int Phone = ContextCompat.checkSelfPermission(this, PROCESS_OUTGOING_CALLS);
         int phone_state = ContextCompat.checkSelfPermission(this,  android.Manifest.permission.READ_PHONE_STATE);
         int storage = ContextCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        int loc = ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION);
-        int loc2 = ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION);
         List<String> listPermissionsNeeded = new ArrayList<>();
 
-        if (Phone != PackageManager.PERMISSION_GRANTED) {
-            listPermissionsNeeded.add(PROCESS_OUTGOING_CALLS);
-            listPermissionsNeeded.add(READ_PHONE_STATE);
-                    listPermissionsNeeded.add(CALL_PHONE);
-                            listPermissionsNeeded.add(READ_CALL_LOG);
-                                    listPermissionsNeeded.add(WRITE_CALL_LOG);
-                                            listPermissionsNeeded.add(ADD_VOICEMAIL);
-                                                    listPermissionsNeeded.add(USE_SIP);
-
-        }
         if (storage != PackageManager.PERMISSION_GRANTED) {
             listPermissionsNeeded.add(android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
         }
         if (phone_state != PackageManager.PERMISSION_GRANTED) {
             listPermissionsNeeded.add(android.Manifest.permission.READ_PHONE_STATE);
-        }
-        if (loc2 != PackageManager.PERMISSION_GRANTED) {
-            listPermissionsNeeded.add(android.Manifest.permission.ACCESS_FINE_LOCATION);
-        }
-        if (loc != PackageManager.PERMISSION_GRANTED) {
-            listPermissionsNeeded.add(android.Manifest.permission.ACCESS_COARSE_LOCATION);
         }
         if (!listPermissionsNeeded.isEmpty())
         {
@@ -254,13 +226,6 @@ public class login extends AppCompatActivity implements View.OnClickListener {
     @Override
     public void onResume() {
         super.onResume();
-        new Checker(this).pass(new Checker.Pass() {
-            @Override
-            public void pass() {
-
-            }
-
-        }).check(Checker.Resource.NETWORK);
     }
 }
 

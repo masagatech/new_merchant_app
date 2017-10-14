@@ -182,24 +182,6 @@
                             android:textColor="@android:color/black"
                             tools:text="Sector 15, Navi mumbai" />
 
-                        <co.lujun.androidtagview.TagContainerLayout
-                            android:visibility="gone"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="0dp"
-                            android:padding="10dp"
-                            android:id="@+id/Tags"
-                            app:tag_border_color="@color/white"
-                            app:container_enable_drag="false"
-                            app:container_background_color="#00000000"
-                            app:container_border_color="#33666666"
-                            app:horizontal_interval="10dp"
-                            app:tag_text_color="@color/white"
-                            app:tag_background_color="@color/blue_light"
-                            app:vertical_interval="10dp"
-                            app:tag_clickable="false"
-                            app:tag_theme="none"
-                            />
 
                         <LinearLayout
                             android:visibility="gone"
@@ -223,7 +205,6 @@
                                     android:layout_marginEnd="42dp"
                                     android:layout_marginRight="5dp"
                                     android:background="@drawable/dash_count"
-                                    android:src="@drawable/ic_done"
                                     android:text="0"
                                     android:id="@+id/Btn_AcceptReject"
                                     android:textColor="@color/white" />
@@ -250,7 +231,6 @@
                                     android:layout_marginEnd="42dp"
                                     android:layout_marginRight="5dp"
                                     android:background="@drawable/dash_count"
-                                    android:src="@drawable/ic_done"
                                     android:text="0"
                                     android:id="@+id/remarkhide"
                                     android:textColor="@color/white" />
@@ -330,14 +310,6 @@
                                 android:layout_width="match_parent"
                                 android:layout_below="@+id/remark_form"
                                 android:layout_height="wrap_content">
-                                <com.pchmn.materialchips.ChipsInput
-                                    android:layout_margin="4dp"
-                                    android:layout_width="match_parent"
-                                    android:layout_below="@+id/remark_form"
-                                    android:layout_height="wrap_content"
-                                    android:id="@+id/chip"
-                                    app:deletable="true"
-                                    app:hint="  Enter Tags" />
                             </LinearLayout>
 
                             <android.support.v7.widget.AppCompatTextView

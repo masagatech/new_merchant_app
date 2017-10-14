@@ -10,7 +10,10 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -18,6 +21,7 @@ import com.google.gson.reflect.TypeToken;
 import com.goyo.parent.R;
 import com.goyo.parent.adapters.PushOrderAdapter;
 import com.goyo.parent.common.Preferences;
+import com.goyo.parent.gloabls.Global;
 import com.goyo.parent.model.model_expense;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
@@ -172,7 +176,79 @@ public class PushOrder extends AppCompatActivity {
 //        mSwipeRefreshLayout.setRefreshing(false);
 //    }
 
+    private void  Logout(){
 
+//        String sessionid = SHP.get(dashboard.this, SHP.ids.sessionid, "-1").toString();
+//        String uid = SHP.get(dashboard.this, SHP.ids.uid, "-1").toString();
+        JsonObject json = new JsonObject();
+        json.addProperty("login_id", Preferences.getValue_String(getApplicationContext(), Preferences.USER_ID));
+        json.addProperty("v_token", Preferences.getValue_String(getApplicationContext(), Preferences.USER_AUTH_TOKEN));
+        json.addProperty("device", "ANDROID");
+        Ion.with(this)
+                .load(Global.urls.getlogout.value)
+                .setJsonObjectBody(json)
+                .asJsonObject()
+                .setCallback(new FutureCallback<JsonObject>() {
+                    @Override
+                    public void onCompleted(Exception e, JsonObject result) {
+                        // do stuff with the result or error
+                        try {
+                            if (result != null)
+                                Log.v("result", result.toString());
+
+                            String message=result.get("message").getAsString();
+                            if (result.get("status").getAsInt() == 1) {
+                                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                                Preferences.setValue(getApplicationContext(), Preferences.USER_ID, "");
+                                Intent i = new Intent(PushOrder.this, com.goyo.parent.initials.login.class);
+                                startActivity(i);
+                                PushOrder.this.finish();
+                            } else {
+                                Toast.makeText(PushOrder.this, "Logout Failed! "+message, Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (Exception ea) {
+                            Toast.makeText(PushOrder.this, "Oops there is some issue! Error: " + ea.getMessage(), Toast.LENGTH_LONG).show();
+                            ea.printStackTrace();
+                        }
+//                                                Global.hideProgress(loader);
+                    }
+                });
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_settings, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        switch (item.getItemId()) {
+            case R.id.about_us:
+                Intent intent = new Intent(this, About_us.class);
+                startActivity(intent);
+                return true;
+            case R.id.logout:
+                //calling logout api
+                Logout();
+                return true;
+
+            case R.id.my_profile:
+//                Intent intent3 = new Intent(this, Profile_Page.class);
+//                startActivity(intent3);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
+
+    }
 
 
     //action bar menu button click

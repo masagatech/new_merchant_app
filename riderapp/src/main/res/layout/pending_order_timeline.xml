@@ -35,7 +35,6 @@
             android:thicknessRatio="1">
 
             <ImageView
-            android:background="@drawable/transparent"
             android:layout_height="90dp"
             android:layout_width="match_parent"
             android:layout_gravity="center_horizontal"
@@ -258,14 +257,6 @@
                                 android:background="@drawable/border_cash_collection"
                                 android:visibility="gone">
 
-                                <com.pchmn.materialchips.ChipsInput
-                                    android:id="@+id/chip"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_below="@+id/remark_form"
-                                    android:layout_margin="4dp"
-                                    app:deletable="true"
-                                    app:hint="  Select Tags" />
                             </LinearLayout>
 
                             <EditText
@@ -315,7 +306,6 @@
                                         android:layout_marginRight="5dp"
                                         android:background="@drawable/dash_count"
                                         android:scaleType="fitCenter"
-                                        android:src="@drawable/ic_done"
                                         android:text="0"
                                         android:textColor="@color/white"
                                         android:visibility="gone" />
@@ -350,20 +340,6 @@
                                 android:orientation="vertical"
                                 android:visibility="gone">
 
-                                <co.lujun.androidtagview.TagContainerLayout
-                                    android:id="@+id/Tags"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_margin="0dp"
-                                    android:padding="10dp"
-                                    android:visibility="gone"
-                                    app:container_enable_drag="false"
-                                    app:horizontal_interval="10dp"
-                                    app:tag_background_color="@color/blue_light"
-                                    app:tag_clickable="false"
-                                    app:tag_text_color="@color/white"
-                                    app:tag_theme="pure_teal"
-                                    app:vertical_interval="10dp" />
 
                                 <ImageView
                                     android:layout_width="20dp"

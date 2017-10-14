@@ -1,7 +1,6 @@
 package com.goyo.parent.forms;
 
 import android.os.Bundle;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -12,10 +11,6 @@ import com.goyo.parent.common.Preferences;
 import com.goyo.parent.gloabls.Global;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
-import com.ogaclejapan.smarttablayout.SmartTabLayout;
-import com.ogaclejapan.smarttablayout.utils.v4.Bundler;
-import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItemAdapter;
-import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItems;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +30,7 @@ public class SchodulActivity extends AppCompatActivity {
         if (getSupportActionBar() != null){
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayUseLogoEnabled(true);
+            getSupportActionBar().setElevation(0);
         }
 
         setTitle("Schedule");
@@ -77,81 +73,82 @@ public class SchodulActivity extends AppCompatActivity {
 
     private void SetStudent(List<String> lst,List<String> ID){
 
-        if(lst.size()==1) {
-            FragmentPagerItemAdapter adapter = new FragmentPagerItemAdapter(
-                    getSupportFragmentManager(), FragmentPagerItems.with(this)
-                    .add(lst.get(0),Schedule.class,new Bundler().putString("ID", ID.get(0)).get())
-                    .create());
-
-            ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
-            viewPager.setAdapter(adapter);
-
-            SmartTabLayout viewPagerTab = (SmartTabLayout) findViewById(R.id.viewpagertab);
-            viewPagerTab.setViewPager(viewPager);
-        }
-
-
-        if(lst.size()==2) {
-            FragmentPagerItemAdapter adapter = new FragmentPagerItemAdapter(
-                    getSupportFragmentManager(), FragmentPagerItems.with(this)
-                    .add(lst.get(0), Schedule.class,new Bundler().putString("ID", ID.get(0)).get())
-                    .add(lst.get(1), Schedule.class,new Bundler().putString("ID", ID.get(1)).get())
-                    .create());
-
-            ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
-            viewPager.setAdapter(adapter);
-
-            SmartTabLayout viewPagerTab = (SmartTabLayout) findViewById(R.id.viewpagertab);
-            viewPagerTab.setViewPager(viewPager);
-        }
-
-        if(lst.size()==3) {
-            FragmentPagerItemAdapter adapter = new FragmentPagerItemAdapter(
-                    getSupportFragmentManager(), FragmentPagerItems.with(this)
-                    .add(lst.get(0), Schedule.class,new Bundler().putString("ID", ID.get(0)).get())
-                    .add(lst.get(1), Schedule.class,new Bundler().putString("ID", ID.get(1)).get())
-                    .add(lst.get(2), Schedule.class,new Bundler().putString("ID", ID.get(2)).get())
-                    .create());
-
-            ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
-            viewPager.setAdapter(adapter);
-
-            SmartTabLayout viewPagerTab = (SmartTabLayout) findViewById(R.id.viewpagertab);
-            viewPagerTab.setViewPager(viewPager);
-        }
-
-        if(lst.size()==4) {
-            FragmentPagerItemAdapter adapter = new FragmentPagerItemAdapter(
-                    getSupportFragmentManager(), FragmentPagerItems.with(this)
-                    .add(lst.get(0), Schedule.class,new Bundler().putString("ID", ID.get(0)).get())
-                    .add(lst.get(1), Schedule.class,new Bundler().putString("ID", ID.get(1)).get())
-                    .add(lst.get(2), Schedule.class,new Bundler().putString("ID", ID.get(2)).get())
-                    .add(lst.get(3), Schedule.class,new Bundler().putString("ID", ID.get(3)).get())
-                    .create());
-
-            ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
-            viewPager.setAdapter(adapter);
-
-            SmartTabLayout viewPagerTab = (SmartTabLayout) findViewById(R.id.viewpagertab);
-            viewPagerTab.setViewPager(viewPager);
-        }
-
-        if(lst.size()==5) {
-            FragmentPagerItemAdapter adapter = new FragmentPagerItemAdapter(
-                    getSupportFragmentManager(), FragmentPagerItems.with(this)
-                    .add(lst.get(0), Schedule.class,new Bundler().putString("ID", ID.get(0)).get())
-                    .add(lst.get(1), Schedule.class,new Bundler().putString("ID", ID.get(1)).get())
-                    .add(lst.get(2), Schedule.class,new Bundler().putString("ID", ID.get(2)).get())
-                    .add(lst.get(3), Schedule.class,new Bundler().putString("ID", ID.get(3)).get())
-                    .add(lst.get(4), Schedule.class,new Bundler().putString("ID", ID.get(4)).get())
-                    .create());
-
-            ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
-            viewPager.setAdapter(adapter);
-
-            SmartTabLayout viewPagerTab = (SmartTabLayout) findViewById(R.id.viewpagertab);
-            viewPagerTab.setViewPager(viewPager);
-        }
+//        if(lst.size()==1) {
+//            FragmentPagerItemAdapter adapter = new FragmentPagerItemAdapter(
+//                    getSupportFragmentManager(), FragmentPagerItems.with(this)
+//                    .add(lst.get(0),Schedule.class,new Bundler().putString("ID", ID.get(0)).get())
+//                    .create());
+//
+//            ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
+//            viewPager.setAdapter(adapter);
+//
+//            SmartTabLayout viewPagerTab = (SmartTabLayout) findViewById(R.id.viewpagertab);
+//            viewPagerTab.setViewPager(viewPager);
+//        }
+//
+//
+//        if(lst.size()==2) {
+//            FragmentPagerItemAdapter adapter = new FragmentPagerItemAdapter(
+//                    getSupportFragmentManager(), FragmentPagerItems.with(this)
+//                    .add(lst.get(0), Schedule.class,new Bundler().putString("ID", ID.get(0)).get())
+//                    .add(lst.get(1), Schedule.class,new Bundler().putString("ID", ID.get(1)).get())
+//                    .create());
+//
+//            ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
+//            viewPager.setAdapter(adapter);
+//
+//            SmartTabLayout viewPagerTab = (SmartTabLayout) findViewById(R.id.viewpagertab);
+//            viewPagerTab.setViewPager(viewPager);
+//        }
+//
+//        if(lst.size()==3) {
+//
+//            FragmentPagerItemAdapter adapter = new FragmentPagerItemAdapter(
+//                    getSupportFragmentManager(), FragmentPagerItems.with(this)
+//                    .add(lst.get(0), Schedule.class,new Bundler().putString("ID", ID.get(0)).get())
+////                    .add(lst.get(1), Schedule.class,new Bundler().putString("ID", ID.get(1)).get())
+////                    .add(lst.get(2), Schedule.class,new Bundler().putString("ID", ID.get(2)).get())
+//                    .create());
+//
+//            ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
+//            viewPager.setAdapter(adapter);
+//
+//            SmartTabLayout viewPagerTab = (SmartTabLayout) findViewById(R.id.viewpagertab);
+//            viewPagerTab.setViewPager(viewPager);
+//        }
+//
+//        if(lst.size()==4) {
+//            FragmentPagerItemAdapter adapter = new FragmentPagerItemAdapter(
+//                    getSupportFragmentManager(), FragmentPagerItems.with(this)
+//                    .add(lst.get(0), Schedule.class,new Bundler().putString("ID", ID.get(0)).get())
+////                    .add(lst.get(1), Schedule.class,new Bundler().putString("ID", ID.get(1)).get())
+////                    .add(lst.get(2), Schedule.class,new Bundler().putString("ID", ID.get(2)).get())
+////                    .add(lst.get(3), Schedule.class,new Bundler().putString("ID", ID.get(3)).get())
+//                    .create());
+//
+//            ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
+//            viewPager.setAdapter(adapter);
+//
+//            SmartTabLayout viewPagerTab = (SmartTabLayout) findViewById(R.id.viewpagertab);
+//            viewPagerTab.setViewPager(viewPager);
+//        }
+//
+//        if(lst.size()==5) {
+//            FragmentPagerItemAdapter adapter = new FragmentPagerItemAdapter(
+//                    getSupportFragmentManager(), FragmentPagerItems.with(this)
+//                    .add(lst.get(0), Schedule.class,new Bundler().putString("ID", ID.get(0)).get())
+//                    .add(lst.get(1), Schedule.class,new Bundler().putString("ID", ID.get(1)).get())
+//                    .add(lst.get(2), Schedule.class,new Bundler().putString("ID", ID.get(2)).get())
+//                    .add(lst.get(3), Schedule.class,new Bundler().putString("ID", ID.get(3)).get())
+//                    .add(lst.get(4), Schedule.class,new Bundler().putString("ID", ID.get(4)).get())
+//                    .create());
+//
+//            ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
+//            viewPager.setAdapter(adapter);
+//
+//            SmartTabLayout viewPagerTab = (SmartTabLayout) findViewById(R.id.viewpagertab);
+//            viewPagerTab.setViewPager(viewPager);
+//        }
 
     }
 

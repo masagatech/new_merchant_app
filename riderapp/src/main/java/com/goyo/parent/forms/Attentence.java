@@ -35,6 +35,7 @@ public class Attentence extends AppCompatActivity {
         if (getSupportActionBar() != null){
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayUseLogoEnabled(true);
+            getSupportActionBar().setElevation(0);
        }
 
         setTitle("Attendance");

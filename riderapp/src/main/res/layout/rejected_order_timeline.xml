@@ -86,14 +86,7 @@
                         android:visibility="gone">
 
 
-                        <com.pchmn.materialchips.ChipsInput
-                            android:id="@+id/chip"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@+id/remark_form"
-                            android:layout_margin="4dp"
-                            app:deletable="true"
-                            app:hint="  Enter Tags" />
+
                     </LinearLayout>
 
                     <LinearLayout
@@ -170,23 +163,6 @@
                         android:visibility="gone"
                         tools:text="Approved Amount : 300" />
 
-                    <co.lujun.androidtagview.TagContainerLayout
-                        android:id="@+id/Tags"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="0dp"
-                        android:padding="10dp"
-                        android:visibility="gone"
-                        app:container_background_color="#00000000"
-                        app:container_border_color="#33666666"
-                        app:container_enable_drag="false"
-                        app:horizontal_interval="10dp"
-                        app:tag_background_color="@color/orange_light"
-                        app:tag_border_color="@color/white"
-                        app:tag_clickable="false"
-                        app:tag_text_color="@color/white"
-                        app:tag_theme="none"
-                        app:vertical_interval="10dp" />
 
                     <LinearLayout
                         android:id="@+id/ClickToHide"

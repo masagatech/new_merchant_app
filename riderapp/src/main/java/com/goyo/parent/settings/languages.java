@@ -9,7 +9,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.SimpleAdapter;
-import com.goyo.parent.goyorider.MainActivity;
+
 import com.goyo.parent.R;
 import com.goyo.parent.utils.SHP;
 import com.goyo.parent.utils.common;
@@ -117,11 +117,11 @@ public class languages extends AppCompatActivity {
                     intent = new Intent(getApplicationContext(), login.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 }else{
-                    intent = new Intent(getApplicationContext(), MainActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                    intent = new Intent(getApplicationContext(), MainActivity.class);
+//                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 }
-                startActivity(intent);
-                finish();
+//                startActivity(intent);
+//                finish();
             }
         });
 
