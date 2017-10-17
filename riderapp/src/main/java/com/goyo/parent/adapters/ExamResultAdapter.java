@@ -3,6 +3,8 @@ package com.goyo.parent.adapters;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +14,8 @@ import com.goyo.parent.R;
 import com.goyo.parent.forms.ExamResultActivity;
 import com.goyo.parent.forms.Orientation;
 import com.goyo.parent.forms.PendingOrdersView;
+import com.goyo.parent.forms.frag_exam_result;
+import com.goyo.parent.gloabls.Global;
 import com.goyo.parent.model.modal_data;
 
 import java.util.List;
@@ -28,15 +32,17 @@ public class ExamResultAdapter extends RecyclerView.Adapter<pending_order_viewHo
     private boolean mWithLinePadding;
     private LayoutInflater mLayoutInflater;
     private ProgressDialog loader;
+    private Fragment mfragment;
 
 
 
 
 
-    public ExamResultAdapter(List<modal_data> feedList, Orientation orientation, boolean withLinePadding) {
+    public ExamResultAdapter(List<modal_data> feedList, Orientation orientation, boolean withLinePadding,Fragment fragment) {
         mFeedList = feedList;
         mOrientation = orientation;
         mWithLinePadding = withLinePadding;
+        mfragment=fragment;
 
     }
     @Override
@@ -65,14 +71,28 @@ public class ExamResultAdapter extends RecyclerView.Adapter<pending_order_viewHo
 
         holder.mMarchant.setText(timeLineModel.smstrname + "");
         holder.Custmer_name.setText("0");
+        holder.Btn_Call.setVisibility(View.GONE);
 
         holder.Border.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View m) {
+
+                frag_exam_result frag_exam_result = new frag_exam_result();
+                Bundle bundle = new Bundle();
+                bundle.putString("SemName", timeLineModel.smstrname);
+                bundle.putString("SemID", timeLineModel.smstrid);
+                frag_exam_result.setArguments(bundle);
+                android.support.v4.app.FragmentTransaction transaction = mfragment.getParentFragment().getChildFragmentManager().beginTransaction();
+                transaction.replace(R.id.FrameResultList, frag_exam_result);
+                transaction.addToBackStack(null);
+                transaction.commit();
+                Global.Tabfrg   = mfragment.getParentFragment().getChildFragmentManager();
+
+
                 Intent intent = new Intent(mContext, ExamResultActivity.class);
-                intent.putExtra("SemName", timeLineModel.smstrname);
-                intent.putExtra("SemID", timeLineModel.smstrid);
-                mContext.startActivity(intent);
+//                intent.putExtra("SemName", timeLineModel.smstrname);
+//                intent.putExtra("SemID", timeLineModel.smstrid);
+//                mContext.startActivity(intent);
             }
         });
     }

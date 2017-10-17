@@ -2,6 +2,7 @@ package com.goyo.parent.gloabls;
 
 import android.app.ProgressDialog;
 import android.os.Environment;
+import android.support.v4.app.FragmentManager;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -153,6 +154,7 @@ public class Global {
 //        Global.RedAlert =  Global.config.notifymin;
     }
 
+    public static FragmentManager Tabfrg = null;
     public static void hideProgress(ProgressDialog prd) {
         prd.dismiss();
     }

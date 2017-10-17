@@ -1,5 +1,6 @@
 package com.goyo.parent.forms;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -7,7 +8,12 @@ import android.support.v7.app.AppCompatActivity;
 import com.alamkanak.weekview.MonthLoader;
 import com.alamkanak.weekview.WeekView;
 import com.alamkanak.weekview.WeekViewEvent;
+import com.google.gson.JsonObject;
 import com.goyo.parent.R;
+import com.goyo.parent.common.Preferences;
+import com.goyo.parent.gloabls.Global;
+import com.koushikdutta.async.future.FutureCallback;
+import com.koushikdutta.ion.Ion;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -17,6 +23,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import static com.goyo.parent.forms.dashboard.SclId;
+
 public class Schedule extends AppCompatActivity {
     private WeekView mWeekView;
     private ProgressDialog loader;
@@ -24,6 +32,7 @@ public class Schedule extends AppCompatActivity {
     String ID = "";
     private String FromDate;
     private List<WeekViewEvent> events = new ArrayList<WeekViewEvent>();
+    private List<WeekViewEvent> timetable ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,9 +58,8 @@ public class Schedule extends AppCompatActivity {
 
         mWeekView = (WeekView) findViewById(R.id.weekView);
 
-
-
         mWeekView.setMonthChangeListener(mMonthChangeListener);
+
     }
 
     private void GetSchedule(final int Month, final int Year, String Id) {
@@ -59,13 +67,31 @@ public class Schedule extends AppCompatActivity {
 
     }
 
+
     MonthLoader.MonthChangeListener mMonthChangeListener = new MonthLoader.MonthChangeListener() {
         @Override
         public List<WeekViewEvent> onMonthChange(final  int Year, final int Month) {
 
-//                List<WeekViewEvent> events= GetSchedule(newMonth,Month,ID);
+            if (events.size() == 0) {
+                // Fetch events for the date user selected.
+                GetTimeTable(Year,Month);
+                return new ArrayList<WeekViewEvent>();
+            }
 
+            // If we've reached up to this point then it means we've already fetched the data in the previous call.
+            return events;
 
+        }
+    };
+//
+//    private boolean getWeekViewEventsFromEventModels(List eventModels,int year,int month) {
+//        // TODO Filter the events from the eventModels by year and month. It would be good idea if you remove the events that are not in the desired range (i.e. where the month is not month+-1). This will release some memory.
+//        return
+//    }
+
+    private  void  GetTimeTable(final  int Year, final int Month) {
+         timetable = new ArrayList<WeekViewEvent>();
+        if (Month == 10) {
             Calendar c = Calendar.getInstance();
             c.set(Year, Month - 1, 1, 0, 0);
             Date Date = c.getTime();
@@ -79,99 +105,103 @@ public class Schedule extends AppCompatActivity {
             SimpleDateFormat df2 = new SimpleDateFormat("dd-MMM-yyyy");
             String ToDate = df2.format(Date2);
 
-//                Dates = getDates(FromDate, ToDate);
+            Dates = getDates(FromDate, ToDate);
 
-//            JsonObject json = new JsonObject();
-//            json.addProperty("flag", "schedule");
-//            json.addProperty("uid", Preferences.getValue_String(Schedule.this, Preferences.USER_ID));
-//            json.addProperty("enttid", SclId + "");
-//            json.addProperty("studid", "1");
-//            json.addProperty("classid", "0");
-//            json.addProperty("tchrid", "0");
-//            json.addProperty("frmdt", FromDate);
-//            json.addProperty("todt", ToDate);
-//            json.addProperty("ctype", "parent");
-//            Ion.with(Schedule.this)
-//                    .load(Global.urls.getClassSchedule.value)
-//                    .setJsonObjectBody(json)
-//                    .asJsonObject()
-//                    .setCallback(new FutureCallback<JsonObject>() {
-//                        @Override
-//                        public void onCompleted(Exception e, JsonObject result) {
-//                            try {
-//                                for (int i = 0; i < result.get("data").getAsJsonArray().size(); i++) {
-//                                    String Date = result.get("data").getAsJsonArray().get(i).getAsJsonObject().get(String.valueOf("caldate")).getAsString();
-//                                    String Off = result.get("data").getAsJsonArray().get(i).getAsJsonObject().get(String.valueOf("rsttyp")).getAsString();
-//                                    if (Date.equals(FromDate)) {
-//                                        if (!Off.equals("off")) {
-//                                            JsonObject results = result.get("data").getAsJsonArray().get(i).getAsJsonObject().get("schedule").getAsJsonArray().get(i).getAsJsonObject();
-//
-//                                            String FromTime = results.get("frmtm").getAsString();
-//                                            String ToTime = results.get("totm").getAsString();
-//                                            String Subject = results.get("subname").getAsString();
-//
-//                                            //converting time to int
-//                                            Calendar cal = Calendar.getInstance();
-//                                            Calendar cal2 = Calendar.getInstance();
-//                                            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-//
-//                                            Date date = sdf.parse(FromTime);
-//                                            cal.setTime(date);
-//
-//                                            Date date2 = sdf.parse(ToTime);
-//                                            cal2.setTime(date2);
-//
-//                                            int Startmins = cal.get(Calendar.MINUTE);
-//                                            int StartHour = cal.get(Calendar.HOUR);
-//
-//                                            int Endmins = cal2.get(Calendar.MINUTE);
-//                                            int EndHour = cal2.get(Calendar.HOUR);
-//
-//                                            SimpleDateFormat format = new SimpleDateFormat("dd-MMM-yyyy");
-//                                            Date Dates = format.parse(FromDate);
-//
-//                                            Calendar StartTime = Calendar.getInstance();
-//                                            StartTime.setTime(Dates);
-//                                            StartTime.set(Calendar.HOUR_OF_DAY, StartHour);
-//                                            StartTime.set(Calendar.MINUTE, Startmins);
-//
-//                                            Calendar EndTime = (Calendar) StartTime.clone();
-//                                            StartTime.set(Calendar.HOUR_OF_DAY, EndHour);
-//                                            StartTime.set(Calendar.MINUTE, Endmins);
-//
-//
-//                                            WeekViewEvent event = new WeekViewEvent(1, Subject, StartTime, EndTime);
-//                                            event.setColor(getResources().getColor(R.color.blue_light));
-//                                            events.add(event);
+            JsonObject json = new JsonObject();
+            json.addProperty("flag", "schedule");
+            json.addProperty("uid", Preferences.getValue_String(Schedule.this, Preferences.USER_ID));
+            json.addProperty("enttid", SclId + "");
+            json.addProperty("studid", "1");
+            json.addProperty("classid", "0");
+            json.addProperty("tchrid", "0");
+            json.addProperty("frmdt", FromDate);
+            json.addProperty("todt", ToDate);
+            json.addProperty("ctype", "parent");
+            Ion.with(Schedule.this)
+                    .load(Global.urls.getClassSchedule.value)
+                    .setJsonObjectBody(json)
+                    .asJsonObject()
+                    .setCallback(new FutureCallback<JsonObject>() {
+                        @Override
+                        public void onCompleted(Exception e, JsonObject result) {
+                            try {
+                                for (int i = 0; i < result.get("data").getAsJsonArray().size(); i++) {
 
-//                                        } else {
-//                                            //Weekly off
-//                                        }
-//                                    }
-//                                }
-//
-//                            } catch (Exception ea) {
-//                                ea.printStackTrace();
-//                            }
-//                        }
-//                    });
-            if (Month == 10){
-                Calendar startTime = Calendar.getInstance();
-            startTime.set(Calendar.HOUR_OF_DAY, 3);
-            startTime.set(Calendar.MINUTE, 0);
-            startTime.set(Calendar.MONTH, Month - 1);
-            startTime.set(Calendar.YEAR, Year);
-            Calendar endTime = (Calendar) startTime.clone();
-            endTime.add(Calendar.HOUR, 1);
-            endTime.set(Calendar.MONTH, Month - 1);
-            WeekViewEvent event = new WeekViewEvent(1, "Test", startTime, endTime);
-            event.setColor(getResources().getColor(R.color.red_light));
-            events.add(event);
+                                    SimpleDateFormat format = new SimpleDateFormat("dd-MMM-yyyy");
+                                    String DateCount = format.format(Dates.get(i));
+
+                                    String Date = result.get("data").getAsJsonArray().get(i).getAsJsonObject().get(String.valueOf("caldate")).getAsString();
+                                    String Off = result.get("data").getAsJsonArray().get(i).getAsJsonObject().get(String.valueOf("rsttyp")).getAsString();
+                                    if (Date.equals(DateCount)) {
+                                        if (!Off.equals("off")) {
+                                            JsonObject results = result.get("data").getAsJsonArray().get(i).getAsJsonObject().get("schedule").getAsJsonArray().get(i).getAsJsonObject();
+
+                                            String FromTime = results.get("frmtm").getAsString();
+                                            String ToTime = results.get("totm").getAsString();
+                                            String Subject = results.get("subname").getAsString();
+
+                                            //converting time to int
+                                            Calendar cal = Calendar.getInstance();
+                                            Calendar cal2 = Calendar.getInstance();
+                                            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+
+                                            Date date = sdf.parse(FromTime);
+                                            cal.setTime(date);
+
+                                            Date date2 = sdf.parse(ToTime);
+                                            cal2.setTime(date2);
+
+                                            int Startmins = cal.get(Calendar.MINUTE);
+                                            int StartHour = cal.get(Calendar.HOUR);
+
+                                            int Endmins = cal2.get(Calendar.MINUTE);
+                                            int EndHour = cal2.get(Calendar.HOUR);
+
+                                            SimpleDateFormat format2 = new SimpleDateFormat("dd-MMM-yyyy");
+                                            Date Dates = format2.parse(DateCount);
+
+                                            Calendar StartTime = Calendar.getInstance();
+                                            StartTime.setTime(Dates);
+                                            StartTime.set(Calendar.HOUR_OF_DAY, StartHour);
+                                            StartTime.set(Calendar.MINUTE, Startmins);
+
+                                            Calendar EndTime = (Calendar) StartTime.clone();
+                                            StartTime.set(Calendar.HOUR_OF_DAY, EndHour);
+                                            StartTime.set(Calendar.MINUTE, Endmins);
+
+
+                                            WeekViewEvent event = new WeekViewEvent(1, Subject, StartTime, EndTime);
+                                            event.setColor(getResources().getColor(R.color.blue_light));
+                                            timetable.add(event);
+                                            setTimeTable(Schedule.this,timetable);
+
+                                        } else {
+                                            //Weekly off
+                                        }
+                                    }
+                                }
+
+                            } catch (Exception ea) {
+                                ea.printStackTrace();
+                            }
+                        }
+                    });
         }
-            return events;
-        }
-    };
+    }
 
+    public void setTimeTable(Activity activity, final List<WeekViewEvent> timetable) {
+        // Refresh the week view.
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                // Store the returned events in a global variable for later use.
+                events.addAll(timetable);
+
+                // This line will trigger the method 'onMonthChange()' again.
+                mWeekView.notifyDatasetChanged();
+            }
+        });
+    }
 
 
     private static List<Date> getDates(String dateString1, String dateString2) {

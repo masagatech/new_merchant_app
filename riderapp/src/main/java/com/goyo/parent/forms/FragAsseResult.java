@@ -25,8 +25,7 @@ import com.koushikdutta.ion.Ion;
 import java.lang.reflect.Type;
 import java.util.List;
 
-import static com.goyo.parent.forms.AssesmeResultActivity.AseeID;
-import static com.goyo.parent.forms.AssesmeResultActivity.AseeType;
+import static com.goyo.parent.forms.AssesmentFrag.IDs;
 import static com.goyo.parent.forms.dashboard.SclId;
 import static com.goyo.parent.gloabls.Global.urls.getAssesmentResult;
 
@@ -43,6 +42,9 @@ public class FragAsseResult extends Fragment {
     private ProgressDialog loader;
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
+    private String AseeID="";
+    private   String AseeType="",AsseName="";
+
     String ID;
 
     public FragAsseResult() {
@@ -57,9 +59,14 @@ public class FragAsseResult extends Fragment {
         view= inflater.inflate(R.layout.fragment_frag_asse_result, container, false);
         Bundle bundle = this.getArguments();
         if (bundle != null) {
+            AsseName = bundle.getString("AsseName");
+            AseeID=bundle.getString("AseeID");
+            AseeType=bundle.getString("AsseType");
             ID = bundle.getString("ID");
         }
 
+
+        getActivity().setTitle(AsseName);
 
         mOrientation = Orientation.VERTICAL;
         mWithLinePadding = true;
@@ -98,7 +105,7 @@ public class FragAsseResult extends Fragment {
     private void DataFromServer(String ID) {
         JsonObject json = new JsonObject();
         json.addProperty("flag", "byparents");
-        json.addProperty("studid", ID+"");
+        json.addProperty("studid", IDs+"");
         json.addProperty("asstyp", AseeType+"");
         json.addProperty("asstypid", AseeID+"");
         json.addProperty("enttid", SclId + "");

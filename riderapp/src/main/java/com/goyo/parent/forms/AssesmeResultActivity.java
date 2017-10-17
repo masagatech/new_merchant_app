@@ -1,6 +1,5 @@
 package com.goyo.parent.forms;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -26,8 +25,8 @@ public class AssesmeResultActivity extends AppCompatActivity {
 
     List<String> Student_Name;
     List<String> Student_Id;
-    public static String AseeID="";
-    public static String AseeType="";
+//    public String AseeID="";
+//    public  String AseeType="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,14 +40,14 @@ public class AssesmeResultActivity extends AppCompatActivity {
         }
 
         //getting Group Id and Name
-        Intent intent = getIntent();
-        String AsseName = intent.getExtras().getString("AsseName");
-        AseeID=intent.getExtras().getString("AseeID");
-        AseeType=intent.getExtras().getString("AsseType");
+//        Intent intent = getIntent();
+//        String AsseName = intent.getExtras().getString("AsseName");
+//        AseeID=intent.getExtras().getString("AseeID");
+//        AseeType=intent.getExtras().getString("AsseType");
 
-        setTitle(AsseName);
-
-        GetStudent();
+//        setTitle(AsseName);
+//
+//        GetStudent();
     }
 
     private void GetStudent() {

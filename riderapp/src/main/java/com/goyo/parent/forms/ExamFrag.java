@@ -24,7 +24,7 @@ import java.lang.reflect.Type;
 import java.util.List;
 
 import static com.goyo.parent.forms.dashboard.SclId;
-import static com.goyo.parent.gloabls.Global.urls.getExamDetails;
+import static com.goyo.parent.gloabls.Global.urls.getExamResult;
 
 public class ExamFrag extends Fragment {
 
@@ -36,11 +36,20 @@ public class ExamFrag extends Fragment {
     private ProgressDialog loader;
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
+    public static String IDss;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_exam, container, false);
+
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            IDss = bundle.getString("ID");
+        }
+
+        getActivity().setTitle("Exams");
 
         mOrientation = Orientation.VERTICAL;
         mWithLinePadding = true;
@@ -74,10 +83,11 @@ public class ExamFrag extends Fragment {
 
     private void DataFromServer() {
         JsonObject json = new JsonObject();
-        json.addProperty("flag", "smstrlist");
+        json.addProperty("flag", "semester");
         json.addProperty("enttid", SclId+"");
+        json.addProperty("studid", IDss+"");
         Ion.with(this)
-                .load(getExamDetails.value)
+                .load(getExamResult.value)
                 .setJsonObjectBody(json)
                 .asJsonObject()
                 .setCallback(new FutureCallback<JsonObject>() {
@@ -110,7 +120,7 @@ public class ExamFrag extends Fragment {
         if (lst.size() > 0) {
             mRecyclerView.setVisibility(View.VISIBLE);
             view.findViewById(R.id.txtNodata).setVisibility(View.GONE);
-            mTimeLineAdapter = new ExamResultAdapter(lst, mOrientation, mWithLinePadding);
+            mTimeLineAdapter = new ExamResultAdapter(lst, mOrientation, mWithLinePadding,this);
             mRecyclerView.setAdapter(mTimeLineAdapter);
             mTimeLineAdapter.notifyDataSetChanged();
         } else {

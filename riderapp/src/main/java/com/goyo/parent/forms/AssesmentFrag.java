@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -40,6 +41,8 @@ public class AssesmentFrag extends Fragment {
     private boolean mWithLinePadding;
     private ProgressDialog loader;
     private SwipeRefreshLayout mSwipeRefreshLayout;
+    private FrameLayout frame;
+    public static String IDs;
 
     public AssesmentFrag() {
         // Required empty public constructor
@@ -52,8 +55,16 @@ public class AssesmentFrag extends Fragment {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_assesment, container, false);
 
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            IDs = bundle.getString("ID");
+        }
+
+        getActivity().setTitle("Assessment");
+
         mOrientation = Orientation.VERTICAL;
         mWithLinePadding = true;
+
 
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         mRecyclerView.setLayoutManager(getLinearLayoutManager());
@@ -79,6 +90,7 @@ public class AssesmentFrag extends Fragment {
                 DataFromServer();
             }
         });
+
         return view;
     }
 
@@ -86,6 +98,7 @@ private void DataFromServer() {
     JsonObject json = new JsonObject();
     json.addProperty("flag", "asstypelist");
     json.addProperty("enttid", SclId+"");
+    json.addProperty("studid", IDs+"");
     Ion.with(this)
             .load(getAssesmentResult.value)
             .setJsonObjectBody(json)
@@ -120,7 +133,7 @@ private void DataFromServer() {
         if (lst.size() > 0) {
             mRecyclerView.setVisibility(View.VISIBLE);
             view.findViewById(R.id.txtNodata).setVisibility(View.GONE);
-            mTimeLineAdapter = new AssesFragAdapter(lst, mOrientation, mWithLinePadding);
+            mTimeLineAdapter = new AssesFragAdapter(lst, mOrientation, mWithLinePadding,this);
             mRecyclerView.setAdapter(mTimeLineAdapter);
             mTimeLineAdapter.notifyDataSetChanged();
         } else {
@@ -128,4 +141,5 @@ private void DataFromServer() {
             view.findViewById(R.id.txtNodata).setVisibility(View.VISIBLE);
         }
     }
+
 }

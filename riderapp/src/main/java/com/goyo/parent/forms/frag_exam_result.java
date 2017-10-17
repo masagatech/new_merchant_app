@@ -26,7 +26,8 @@ import com.koushikdutta.ion.Ion;
 import java.lang.reflect.Type;
 import java.util.List;
 
-import static com.goyo.parent.forms.ExamResultActivity.SemIDs;
+import static android.os.Build.ID;
+import static com.goyo.parent.forms.ExamFrag.IDss;
 import static com.goyo.parent.forms.dashboard.SclId;
 import static com.goyo.parent.gloabls.Global.urls.getExamResult;
 
@@ -44,7 +45,7 @@ public class frag_exam_result extends Fragment {
     private ProgressDialog loader;
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
-    String ID;
+    String SemName,SemIDs;
 
     public frag_exam_result() {
         // Required empty public constructor
@@ -57,11 +58,14 @@ public class frag_exam_result extends Fragment {
         // Inflate the layout for this fragment
         view=inflater.inflate(R.layout.fragment_frag_exam_result, container, false);
 
+
         Bundle bundle = this.getArguments();
         if (bundle != null) {
-            ID = bundle.getString("ID");
+            SemIDs = bundle.getString("SemID");
+            SemName = bundle.getString("SemName");
         }
 
+        getActivity().setTitle(SemName);
 
         mOrientation = Orientation.VERTICAL;
         mWithLinePadding = true;
@@ -100,7 +104,7 @@ public class frag_exam_result extends Fragment {
     private void DataFromServer(String ID) {
         JsonObject json = new JsonObject();
         json.addProperty("flag", "byparents");
-        json.addProperty("studid", ID+"");
+        json.addProperty("studid", IDss+"");
         json.addProperty("enttid", SclId+"");
         json.addProperty("smstrid", SemIDs+"");
         json.addProperty("uid", Preferences.getValue_String(getActivity(), Preferences.USER_ID));
@@ -114,7 +118,6 @@ public class frag_exam_result extends Fragment {
                         // do stuff with the result or error
                         try {
                             if (result != null) Log.v("result", result.toString());
-                            // JSONObject jsnobject = new JSONObject(jsond);
                             Gson gson = new Gson();
                             Type listType = new TypeToken<List<modal_data>>() {
                             }.getType();

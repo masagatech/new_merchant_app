@@ -3,6 +3,8 @@ package com.goyo.parent.adapters;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,8 +12,10 @@ import android.view.ViewGroup;
 
 import com.goyo.parent.R;
 import com.goyo.parent.forms.AssesmeResultActivity;
+import com.goyo.parent.forms.FragAsseResult;
 import com.goyo.parent.forms.Orientation;
 import com.goyo.parent.forms.PendingOrdersView;
+import com.goyo.parent.gloabls.Global;
 import com.goyo.parent.model.modal_data;
 
 import java.util.List;
@@ -28,15 +32,17 @@ public class AssesFragAdapter extends RecyclerView.Adapter<pending_order_viewHol
     private boolean mWithLinePadding;
     private LayoutInflater mLayoutInflater;
     private ProgressDialog loader;
+    private Fragment mfragment;
 
 
 
 
 
-    public AssesFragAdapter(List<modal_data> feedList, Orientation orientation, boolean withLinePadding) {
+    public AssesFragAdapter(List<modal_data> feedList, Orientation orientation, boolean withLinePadding,Fragment fragment) {
         mFeedList = feedList;
         mOrientation = orientation;
         mWithLinePadding = withLinePadding;
+        mfragment=fragment;
 
     }
     @Override
@@ -68,15 +74,29 @@ public class AssesFragAdapter extends RecyclerView.Adapter<pending_order_viewHol
         holder.Border.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View m) {
+
+
+                FragAsseResult fragAsseResult = new FragAsseResult();
+                Bundle bundle = new Bundle();
+                bundle.putString("AsseName", timeLineModel.asstypname);
+                bundle.putString("AsseType", timeLineModel.asstyp);
+                bundle.putString("AseeID", timeLineModel.asstypid);
+                fragAsseResult.setArguments(bundle);
+                android.support.v4.app.FragmentTransaction transaction = mfragment.getParentFragment().getChildFragmentManager().beginTransaction();
+                transaction.replace(R.id.FrameResultList, fragAsseResult);
+                transaction.addToBackStack(null);
+                transaction.commit();
+                Global.Tabfrg   = mfragment.getParentFragment().getChildFragmentManager();
+
                 Intent intent = new Intent(mContext, AssesmeResultActivity.class);
-                intent.putExtra("AsseName", timeLineModel.asstypname);
-                intent.putExtra("AsseType", timeLineModel.asstyp);
-                intent.putExtra("AseeID", timeLineModel.asstypid);
-                mContext.startActivity(intent);
+//                intent.putExtra("AsseName", timeLineModel.asstypname);
+//                intent.putExtra("AsseType", timeLineModel.asstyp);
+//                intent.putExtra("AseeID", timeLineModel.asstypid);
+//                mContext.startActivity(intent);
             }
         });
     }
-//
+
 //        if (timeLineModel.isEnabled) {
 //            holder.ClickToHide.setVisibility(View.VISIBLE);
 //        } else {
