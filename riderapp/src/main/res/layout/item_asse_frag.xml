@@ -19,6 +19,47 @@
         app:lineSize="3dp"
         app:markerSize="20dp" />
 
+    <LinearLayout
+        android:id="@+id/Hide"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/sub"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableLeft="@drawable/bo"
+            android:gravity="center_vertical"
+            android:textColor="#000"
+            android:textSize="12dp"
+            android:padding="2dp"
+            tools:text="sub" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/From"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableLeft="@drawable/times"
+            android:gravity="center_vertical"
+            android:textColor="@android:color/black"
+            android:textSize="12dp"
+            tools:text="Passed" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/To"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableLeft="@drawable/time_up_rider"
+            android:gravity="center_vertical"
+            android:textColor="@android:color/black"
+            android:textSize="12dp"
+            tools:text="Passed" />
+    </LinearLayout>
+
     <TextView
         android:visibility="gone"
         android:id="@+id/Header"

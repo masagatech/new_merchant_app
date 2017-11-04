@@ -66,7 +66,7 @@ public class FragAsseResult extends Fragment {
         }
 
 
-        getActivity().setTitle(AsseName);
+        getActivity().setTitle("Assessment - "+AsseName);
 
         mOrientation = Orientation.VERTICAL;
         mWithLinePadding = true;

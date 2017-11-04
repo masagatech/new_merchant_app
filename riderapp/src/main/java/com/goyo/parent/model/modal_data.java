@@ -54,6 +54,9 @@ public class modal_data {
     @SerializedName("totm")
     public String totm;
 
+    @SerializedName("passmarks")
+    public String passmarks;
+
 
     @SerializedName("countexam")
     public String countexam;
@@ -100,6 +103,53 @@ public class modal_data {
     @SerializedName("asstyp")
     public String asstyp;
 
+
+    @SerializedName("receiptno")
+    public String receiptno;
+
+
+    @SerializedName("receivedate")
+    public String receivedate;
+
+
+    @SerializedName("paidfees")
+    public String paidfees;
+
+    @SerializedName("classname")
+    public String classname;
+
+    @SerializedName("pendfees")
+    public String pendfees;
+
+    @SerializedName("receiptnobill")
+    public String receiptnobill;
+
+    @SerializedName("catname")
+    public String catname;
+
+
+    @SerializedName("paidfeesbill")
+    public String paidfeesbill;
+
+
+    @SerializedName("studnamebill")
+    public String studnamebill;
+
+
+    @SerializedName("classnamebill")
+    public String classnamebill;
+
+    @SerializedName("exmfrmtm")
+    public String exmfrmtm;
+
+    @SerializedName("exmdate")
+    public String exmdate;
+
+    @SerializedName("exmtotm")
+    public String exmtotm;
+
+    @SerializedName("exmchptrname")
+    public String exmchptrname;
 
 
     public boolean isEnabled = false;

@@ -64,9 +64,12 @@ public class ResultFragAdapter  extends RecyclerView.Adapter<ResultFragViewHolde
 
 
         //setting Group name and last update date
+        holder.From.setText(timeLineModel.exmfrmtm + "");
+        holder.To.setText(timeLineModel.exmtotm + "");
+        holder.Sub.setText(timeLineModel.exmchptrname + "");
         holder.mOrder.setText(timeLineModel.resremark + "");
         holder.mMarchant.setText(timeLineModel.ressubname + "");
-        holder.Status.setText(timeLineModel.status + "");
+        holder.Status.setText(timeLineModel.exmdate + "");
         holder.mDate.setText("Out of "+timeLineModel.outofmarks );
 //        holder.Custmer_name.setText(timeLineModel.countannc + "");
 
@@ -94,6 +97,12 @@ public class ResultFragAdapter  extends RecyclerView.Adapter<ResultFragViewHolde
         holder.Border.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View m) {
+                if( holder.Hide.getVisibility()==View.GONE){
+                    holder.Hide.setVisibility(View.VISIBLE);
+
+                }else {
+                    holder.Hide.setVisibility(View.GONE);
+                }
 //                    Intent intent = new Intent(mContext, complated_order.class);
 //                    intent.putExtra("GrpName", timeLineModel.grpname);
 //                    intent.putExtra("GrpID", timeLineModel.grpid);

@@ -1,15 +1,8 @@
-<?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:app="http://schemas.android.com/apk/res-auto"
-xmlns:tools="http://schemas.android.com/tools"
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-android:fitsSystemWindows="true"
-    android:id="@+id/Frames"
-android:background="@color/colorBackground"
-tools:context="com.goyo.parent.forms.SemesterList">
-
-
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.goyo.parent.forms.FeesList">
     <TextView
         android:layout_marginTop="40dp"
         android:id="@+id/txtNodata"
@@ -30,6 +23,7 @@ tools:context="com.goyo.parent.forms.SemesterList">
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/Refresh"
+        android:layout_marginBottom="50dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <android.support.v7.widget.RecyclerView
@@ -41,4 +35,23 @@ tools:context="com.goyo.parent.forms.SemesterList">
 
     </android.support.v4.widget.SwipeRefreshLayout>
 
-</FrameLayout>
+    <android.support.v7.widget.CardView
+        android:layout_centerInParent="true"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_margin="10dp"
+
+        android:layout_height="wrap_content">
+        <TextView
+            android:drawableLeft="@drawable/late"
+            android:textColor="@color/white"
+            android:gravity="center"
+            android:id="@+id/PendingFees"
+            android:background="@color/orange_light"
+            android:layout_width="match_parent"
+            android:visibility="gone"
+            android:layout_height="match_parent"
+            android:text=""/>
+    </android.support.v7.widget.CardView>
+
+</RelativeLayout>

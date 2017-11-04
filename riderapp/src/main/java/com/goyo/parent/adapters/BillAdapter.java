@@ -15,10 +15,10 @@ import com.goyo.parent.model.modal_data;
 import java.util.List;
 
 /**
- * Created by mis on 15-Sep-17.
+ * Created by mis on 30-Oct-17.
  */
 
-public class LeaveAdapter  extends RecyclerView.Adapter<pending_order_viewHolder>  {
+public class BillAdapter extends RecyclerView.Adapter<pending_order_viewHolder>  {
 
     private List<modal_data> mFeedList;
     private Context mContext;
@@ -31,7 +31,7 @@ public class LeaveAdapter  extends RecyclerView.Adapter<pending_order_viewHolder
 
 
 
-    public LeaveAdapter(List<modal_data> feedList, Orientation orientation, boolean withLinePadding) {
+    public BillAdapter(List<modal_data> feedList, Orientation orientation, boolean withLinePadding) {
         mFeedList = feedList;
         mOrientation = orientation;
         mWithLinePadding = withLinePadding;
@@ -48,7 +48,7 @@ public class LeaveAdapter  extends RecyclerView.Adapter<pending_order_viewHolder
         mLayoutInflater = LayoutInflater.from(mContext);
         View view;
 
-        view = mLayoutInflater.inflate(R.layout.leave_item, parent, false);
+        view = mLayoutInflater.inflate(R.layout.bill_item, parent, false);
 
         return new pending_order_viewHolder(view, viewType);
     }
@@ -61,20 +61,9 @@ public class LeaveAdapter  extends RecyclerView.Adapter<pending_order_viewHolder
 
 
         //setting Group name and last update date
-        holder.mDate.setText(timeLineModel.appldate+"");
-        if(timeLineModel.reason!=null) {
-            holder.mOrder.setText(timeLineModel.reason + "");
-        }
-        holder.mMarchant.setText(timeLineModel.lvtype + "");
-        holder.Custmer_name.setText(timeLineModel.countannc + "");
-        holder.Remark.setText(timeLineModel.frmdt + "");
-        holder.mTime.setText(timeLineModel.todt+ "");
-
-        if(timeLineModel.frmdt.equals(timeLineModel.todt)){
-            holder.mTime.setVisibility(View.GONE);
-        }else {
-            holder.mTime.setVisibility(View.VISIBLE);
-        }
+        holder.mOrder.setText("₹"+timeLineModel.paidfeesbill + "");
+        holder.mMarchant.setText(timeLineModel.catname + "");
+//        holder.Custmer_name.setText(timeLineModel.countannc + "");
 
 //        if(timeLineModel.countannc.equals("0")){
 //            Toast.makeText(mContext, "There is no Announcement in this group!", Toast.LENGTH_SHORT).show();
@@ -88,14 +77,14 @@ public class LeaveAdapter  extends RecyclerView.Adapter<pending_order_viewHolder
 //                    mContext.startActivity(intent);
                 }
             });
-        }
+//        }
 //
 //        if (timeLineModel.isEnabled) {
 //            holder.ClickToHide.setVisibility(View.VISIBLE);
 //        } else {
 //            holder.ClickToHide.setVisibility(View.GONE);
 //        }
-//    }
+    }
 
     @Override
     public int getItemCount() {

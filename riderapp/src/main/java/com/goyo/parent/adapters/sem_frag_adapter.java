@@ -63,8 +63,10 @@ public class sem_frag_adapter extends RecyclerView.Adapter<pending_order_viewHol
         holder.mOrder.setText(timeLineModel.chptrname + "");
         holder.mMarchant.setText(timeLineModel.subname + "");
 //        holder.Custmer_name.setText(timeLineModel.countannc + "");
-        holder.Remark.setText("From : " + timeLineModel.frmtm + "");
-        holder.mTime.setText("To : " + timeLineModel.totm + "");
+        holder.Remark.setText(timeLineModel.frmtm + "");
+        holder.mTime.setText( timeLineModel.totm + "");
+        holder.mDeliver_at.setText(timeLineModel.passmarks + "");
+        holder.DeliverTexts.setText(timeLineModel.outofmarks + "");
 
 //        if(timeLineModel.countannc.equals("0")){
 //            Toast.makeText(mContext, "There is no Announcement in this group!", Toast.LENGTH_SHORT).show();

@@ -99,6 +99,7 @@ public class newOrder extends AppCompatActivity {
         JsonObject json = new JsonObject();
         json.addProperty("flag", "byparents");
         json.addProperty("enttid", SclId+"");
+        json.addProperty("sendtype", "parents");
         json.addProperty("uid", Preferences.getValue_String(getApplicationContext(), Preferences.USER_ID));
         Ion.with(this)
                 .load(Global.urls.getNotification.value)

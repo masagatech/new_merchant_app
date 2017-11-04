@@ -29,6 +29,7 @@ public class ResultMainFragment extends Fragment {
     private View view;
     private TextView Count_Exams,Count_Ass;
     private String _exam="",_ass="";
+
     public ResultMainFragment() {
         // Required empty public constructor
     }
@@ -132,6 +133,13 @@ public class ResultMainFragment extends Fragment {
     private void setCount(String exam,String ass) {
         Count_Exams.setText(exam);
         Count_Ass.setText(ass);
+
+        if(Count_Exams.getText().toString().equals("0")){
+            Exams.setEnabled(false);
+        }
+        if(Count_Ass.getText().toString().equals("0")){
+            Assesment.setEnabled(false);
+        }
     }
 
 }

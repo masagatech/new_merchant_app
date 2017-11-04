@@ -3,7 +3,9 @@ package com.goyo.parent.forms;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import com.alamkanak.weekview.MonthLoader;
 import com.alamkanak.weekview.WeekView;
@@ -25,7 +27,7 @@ import java.util.List;
 
 import static com.goyo.parent.forms.dashboard.SclId;
 
-public class Schedule extends AppCompatActivity {
+public class Schedule extends android.support.v4.app.Fragment {
     private WeekView mWeekView;
     private ProgressDialog loader;
     private List<Date> Dates;
@@ -33,38 +35,39 @@ public class Schedule extends AppCompatActivity {
     private String FromDate;
     private List<WeekViewEvent> events = new ArrayList<WeekViewEvent>();
     private List<WeekViewEvent> timetable ;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_schedule);
-
-        if(getSupportActionBar()!=null)
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-
-        setTitle("Schedule");
+    private View view;
 
 //    @Override
-//    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-//                             Bundle savedInstanceState) {
-//        // Inflate the layout for this fragment
-//        view = inflater.inflate(R.layout.activity_schedule, container, false);
+//    protected void onCreate(Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//        setContentView(R.layout.activity_schedule);
 //
-//        Bundle bundle = this.getArguments();
-//        if (bundle != null) {
-//            ID = bundle.getString("ID");
-//        }
+//        if(getSupportActionBar()!=null)
+//            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//
+//
+//        setTitle("Schedule");
 
-        mWeekView = (WeekView) findViewById(R.id.weekView);
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        view = inflater.inflate(R.layout.activity_schedule, container, false);
+
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            ID = bundle.getString("ID");
+        }
+
+        mWeekView = (WeekView) view.findViewById(R.id.weekView);
 
         mWeekView.setMonthChangeListener(mMonthChangeListener);
+
+        return view;
 
     }
 
     private void GetSchedule(final int Month, final int Year, String Id) {
-
-
     }
 
 
@@ -109,7 +112,7 @@ public class Schedule extends AppCompatActivity {
 
             JsonObject json = new JsonObject();
             json.addProperty("flag", "schedule");
-            json.addProperty("uid", Preferences.getValue_String(Schedule.this, Preferences.USER_ID));
+            json.addProperty("uid", Preferences.getValue_String(getActivity(), Preferences.USER_ID));
             json.addProperty("enttid", SclId + "");
             json.addProperty("studid", "1");
             json.addProperty("classid", "0");
@@ -173,7 +176,7 @@ public class Schedule extends AppCompatActivity {
                                             WeekViewEvent event = new WeekViewEvent(1, Subject, StartTime, EndTime);
                                             event.setColor(getResources().getColor(R.color.blue_light));
                                             timetable.add(event);
-                                            setTimeTable(Schedule.this,timetable);
+                                            setTimeTable(getActivity(),timetable);
 
                                         } else {
                                             //Weekly off

@@ -25,7 +25,6 @@ import com.koushikdutta.ion.Ion;
 import java.lang.reflect.Type;
 import java.util.List;
 
-import static com.goyo.parent.forms.Semester.SemID;
 import static com.goyo.parent.forms.dashboard.SclId;
 import static com.goyo.parent.gloabls.Global.urls.getExamDetails;
 
@@ -43,6 +42,7 @@ public class sem_fragment extends Fragment {
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
     String ID;
+    String SemIDs,SemName;
 
     public sem_fragment() {
         // Required empty public constructor
@@ -58,7 +58,11 @@ public class sem_fragment extends Fragment {
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             ID = bundle.getString("ID");
+            SemName = bundle.getString("SemName");
+            SemIDs = bundle.getString("SemID");
         }
+
+       getActivity().setTitle("Exam - "+SemName);
 
 
         mOrientation = Orientation.VERTICAL;
@@ -101,7 +105,7 @@ public class sem_fragment extends Fragment {
         json.addProperty("flag", "byparents");
         json.addProperty("studid", ID+"");
         json.addProperty("enttid", SclId+"");
-        json.addProperty("smstrid", SemID+"");
+        json.addProperty("smstrid", SemIDs+"");
         json.addProperty("uid", Preferences.getValue_String(getActivity(), Preferences.USER_ID));
         Ion.with(this)
                 .load(getExamDetails.value)

@@ -45,17 +45,48 @@
             android:clickable="true"
             android:padding="5dp">
 
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/text_marchent"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:textSize="12dp"
-                android:drawableLeft="@drawable/order_id"
-                android:gravity="center_vertical"
-                android:textColor="@android:color/black"
-                android:textStyle="bold"
-                tools:text="Hindi " />
+                android:orientation="horizontal">
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/Remark"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:textColor="@android:color/black"
+                    android:textStyle="bold"
+                    android:textSize="12dp"
+                    tools:text="Passed" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/From"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:drawableLeft="@drawable/times"
+                    android:gravity="center_vertical"
+                    android:textColor="@android:color/black"
+                    android:textSize="12dp"
+                    tools:text="Passed" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/To"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:drawableLeft="@drawable/time_up_rider"
+                    android:gravity="center_vertical"
+                    android:textColor="@android:color/black"
+                    android:textSize="12dp"
+                    tools:text="Passed" />
+
+            </LinearLayout>
+
+
+
 
             <LinearLayout
                 android:id="@+id/pending_orders"
@@ -64,69 +95,52 @@
                 android:layout_gravity="center"
                 android:orientation="horizontal">
 
-
-            <LinearLayout
-                android:layout_marginTop="35dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-
-                <az.plainpie.PieView
-                    android:id="@+id/pieView"
-                    android:layout_width="65dp"
-                    android:layout_height="65dp"
-                    android:layout_gravity="center"
-                    plainpie:inner_pie_padding="30"
-                    plainpie:inner_text_visibility="true"
-                    plainpie:percentage_size="14" />
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/text_timeline_date"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="12sp"
-                    android:layout_marginTop="5dp"
-                    android:gravity="center"
-                    tools:text="01/Aug/2017" />
-
-                </LinearLayout>
-
                 <LinearLayout
-                    android:layout_marginTop="35dp"
+                    android:layout_marginTop="30dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:orientation="vertical">
 
+
+
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:orientation="vertical">
 
                         <android.support.v7.widget.AppCompatTextView
-                            android:id="@+id/Remark"
-                            android:layout_width="wrap_content"
+                            android:id="@+id/text_marchent"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-
-                            android:drawableLeft="@drawable/status"
+                            android:textSize="19dp"
+                            android:fontFamily="sans-serif-light"
+                            android:layout_marginTop="25dp"
+                            android:drawableLeft="@drawable/order_id"
                             android:gravity="center_vertical"
                             android:textColor="@android:color/black"
-                            android:textSize="12dp"
-                            tools:text="Passed" />
-
+                            tools:text="Hindi " />
                     </LinearLayout>
 
-
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-
+                        <LinearLayout
+                            android:id="@+id/Hide"
+                            android:visibility="gone"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+                        <android.support.v7.widget.AppCompatTextView
+                            android:id="@+id/sub"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:drawableLeft="@drawable/bo"
+                            android:gravity="center_vertical"
+                            android:textColor="#000"
+                            android:textSize="12dp"
+                            android:padding="2dp"
+                            tools:text="sub" />
                         <android.support.v7.widget.AppCompatTextView
                             android:id="@+id/text_timeline_title"
                             android:layout_width="match_parent"
@@ -136,8 +150,38 @@
                             android:gravity="center_vertical"
                             android:textColor="#000"
                             android:textSize="12dp"
-                            tools:text="Very Good" />
+                            android:padding="2dp"
+                            tools:text="Very Good fsgsshshsssjshsssjsshsjsjsjjsjshsjsjsjshsjsj" />
                     </LinearLayout>
+
+
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_marginTop="30dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:orientation="vertical">
+
+                    <az.plainpie.PieView
+                        android:id="@+id/pieView"
+                        android:layout_width="65dp"
+                        android:layout_height="65dp"
+                        android:layout_gravity="center"
+                        plainpie:inner_pie_padding="30"
+                        plainpie:inner_text_visibility="true"
+                        plainpie:percentage_size="14" />
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/text_timeline_date"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="12sp"
+                        android:layout_marginTop="5dp"
+                        android:gravity="center"
+                        tools:text="01/Aug/2017" />
+
                 </LinearLayout>
             </LinearLayout>
         </RelativeLayout>

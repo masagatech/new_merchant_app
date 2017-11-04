@@ -36,6 +36,7 @@ public class Leave extends Fragment {
     List<String> Absent;
     List<String> Present;
     List<String> Holiday;
+    List<String> Leave;
     private View view;
     String ID="";
 
@@ -95,13 +96,14 @@ public class Leave extends Fragment {
 
     }
 
-    private void SetDates( List<String> Present, List<String> Absent, List<String> Holiday){
+    private void SetDates( List<String> Present, List<String> Absent, List<String> Holiday,List<String> Leave){
         ColorDrawable orenge = new ColorDrawable(getResources().getColor(R.color.orange_light));
         ColorDrawable red = new ColorDrawable(getResources().getColor(R.color.red_light));
         ColorDrawable green = new ColorDrawable(getResources().getColor(R.color.green_light));
+        ColorDrawable blue = new ColorDrawable(getResources().getColor(R.color.blue_light));
 
         if(Present.size()>0) {
-            for (int i = 0; i < Present.size() - 1; i++) {
+            for (int i = 0; i < Present.size(); i++) {
                 DateFormat df1 = new SimpleDateFormat("dd-MMM-yyyy");
                 Date Presents = null;
 
@@ -113,14 +115,28 @@ public class Leave extends Fragment {
                 }
             }
         }
+
+        if(Leave.size()>0) {
+            for (int i = 0; i < Leave.size(); i++) {
+                DateFormat df1 = new SimpleDateFormat("dd-MMM-yyyy");
+                Date Leaves = null;
+
+                try {
+                    Leaves = df1.parse(Leave.get(i));
+                    caldroidFragment.setBackgroundDrawableForDate(red, Leaves);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
         if(Absent.size()>0) {
-            for (int i = 0; i < Absent.size() - 1; i++) {
+            for (int i = 0; i < Absent.size(); i++) {
                 DateFormat df1 = new SimpleDateFormat("dd-MMM-yyyy");
                 Date Absents = null;
 
                 try {
                     Absents = df1.parse(Absent.get(i));
-                    caldroidFragment.setBackgroundDrawableForDate(red, Absents);
+                    caldroidFragment.setBackgroundDrawableForDate(blue, Absents);
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
@@ -128,7 +144,7 @@ public class Leave extends Fragment {
         }
 
         if(Holiday.size()>0) {
-            for (int i = 0; i < Holiday.size() - 1; i++) {
+            for (int i = 0; i < Holiday.size(); i++) {
                 DateFormat df1 = new SimpleDateFormat("dd-MMM-yyyy");
                 Date Holidayts = null;
 
@@ -152,12 +168,13 @@ public class Leave extends Fragment {
         loader.show();
 
        JsonObject json = new JsonObject();
-        json.addProperty("flag", "student");
+        json.addProperty("flag", "byparents");
         json.addProperty("uid", Preferences.getValue_String(getActivity(), Preferences.USER_ID));
-        json.addProperty("schoolid", SclId+"");
-        json.addProperty("monthname", MonthName);
+        json.addProperty("enttid", SclId+"");
+        json.addProperty("month", MonthName);
+        json.addProperty("studid", ID);
         Ion.with(this)
-                .load(Global.urls.getAttendanceReports.value)
+                .load(Global.urls.getAttendance.value)
                 .setJsonObjectBody(json)
                 .asJsonObject()
                 .setCallback(new FutureCallback<JsonObject>() {
@@ -167,17 +184,16 @@ public class Leave extends Fragment {
                             Absent= new ArrayList<String>();
                             Present= new ArrayList<String>();
                             Holiday= new ArrayList<String>();
+                            Leave= new ArrayList<String>();
                             for(int i=0;i<result.get("data").getAsJsonArray().size();i++){
-                                if(result.get("data").getAsJsonArray().get(i).getAsJsonObject().get("stdid").getAsString().equals(ID)) {
-                                    for (int j = 1; j < 40; j++) {
-                                        if (result.get("data").getAsJsonArray().get(i).getAsJsonObject().get(String.valueOf(j)).getAsString() != null) {
-                                            String Data = result.get("data").getAsJsonArray().get(i).getAsJsonObject().get(String.valueOf(j)).getAsString();
+                                        if (result.get("data").getAsJsonArray().get(i).getAsJsonObject().get("status").getAsString() != null) {
+                                            String Data = result.get("data").getAsJsonArray().get(i).getAsJsonObject().get("status").getAsString();
 
                                             //present data
-                                            if (Data.equals("P") || Data.equals("PA") || Data.equals("BP") || Data.equals("PD") || Data.equals("NP")) {
+                                            if (Data.equals("p")) {
 
                                                 Calendar c = Calendar.getInstance();
-                                                c.set(Year, Month - 1, j, 0, 0);
+                                                c.set(Year, Month - 1, i+1, 0, 0);
                                                 Date Date = c.getTime();
                                                 SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
                                                 String Dates = df.format(Date);
@@ -185,10 +201,10 @@ public class Leave extends Fragment {
                                             }
 
                                             //absent data
-                                            if (Data.equals("L") || Data.equals("A") || Data.equals("DA") || Data.equals("AS")) {
+                                            if (Data.equals("a")) {
 
                                                 Calendar c = Calendar.getInstance();
-                                                c.set(Year, Month - 1, j, 0, 0);
+                                                c.set(Year, Month - 1, i+1, 0, 0);
                                                 Date Date = c.getTime();
                                                 SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
                                                 String Dates = df.format(Date);
@@ -196,22 +212,30 @@ public class Leave extends Fragment {
                                             }
 
                                             //holiday data
-                                            if (Data.equals("H") || Data.equals("HD")) {
+                                            if (Data.equals("hld") || Data.equals("wo")) {
                                                 Calendar c = Calendar.getInstance();
-                                                c.set(Year, Month - 1, j, 0, 0);
+                                                c.set(Year, Month - 1, i+1, 0, 0);
                                                 Date Date = c.getTime();
                                                 SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
                                                 String Dates = df.format(Date);
                                                 Holiday.add(Dates);
                                             }
+
+                                            //Leave data
+                                            if (Data.equals("l")) {
+                                                Calendar c = Calendar.getInstance();
+                                                c.set(Year, Month - 1, i+1, 0, 0);
+                                                Date Date = c.getTime();
+                                                SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
+                                                String Dates = df.format(Date);
+                                                Leave.add(Dates);
+                                            }
                                         }
-                                    }
-                                }
                             }
                         } catch (Exception ea) {
                             ea.printStackTrace();
                         }
-                        SetDates(Present,Absent,Holiday);
+                        SetDates(Present,Absent,Holiday,Leave);
                         loader.hide();
 
 

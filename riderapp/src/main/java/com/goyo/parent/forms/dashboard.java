@@ -503,7 +503,7 @@ public class dashboard extends AppCompatActivity {
 
     @OnClick(R.id.Complated_Orders)
     void click3() {
-        Intent intent = new Intent(this, SemesterList.class);
+        Intent intent = new Intent(this, Semester.class);
         startActivity(intent);
     }
 
@@ -555,7 +555,7 @@ public class dashboard extends AppCompatActivity {
 
     @OnClick(R.id.Schadule)
     void click11() {
-        Intent intent = new Intent(this, Schedule.class);
+        Intent intent = new Intent(this, SchodulActivity.class);
         startActivity(intent);
     }
 
@@ -567,7 +567,7 @@ public class dashboard extends AppCompatActivity {
 
     @OnClick(R.id.fees)
     void click13() {
-        Intent intent = new Intent(this, StillDev.class);
+        Intent intent = new Intent(this, FeesActivity.class);
         startActivity(intent);
     }
 

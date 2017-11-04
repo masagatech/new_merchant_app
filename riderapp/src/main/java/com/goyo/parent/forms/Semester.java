@@ -1,6 +1,5 @@
 package com.goyo.parent.forms;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -13,19 +12,18 @@ import com.goyo.parent.gloabls.Global;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
-import com.ogaclejapan.smarttablayout.utils.v4.Bundler;
+import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItem;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItemAdapter;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItems;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Hashtable;
+import java.util.Set;
 
 import static com.goyo.parent.forms.dashboard.SclId;
 
 public class Semester extends AppCompatActivity {
 
-    List<String> Student_Name;
-    List<String> Student_Id;
+    Hashtable<String, String> Student_Name;
     public static String SemID="";
 
     @Override
@@ -33,18 +31,20 @@ public class Semester extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_semester);
 
+
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayUseLogoEnabled(true);
             getSupportActionBar().setElevation(0);
         }
 
-        //getting Group Id and Name
-        Intent intent = getIntent();
-        String SemName = intent.getExtras().getString("SemName");
-        SemID=intent.getExtras().getString("SemID");
+//        //getting Group Id and Name
+//        Intent intent = getIntent();
+//        String SemName = intent.getExtras().getString("SemName");
+//        SemID=intent.getExtras().getString("SemID");
 
-        setTitle(SemName);
+//        setTitle(SemName);
+        setTitle("Exams");
 
         GetStudent();
 
@@ -63,13 +63,12 @@ public class Semester extends AppCompatActivity {
                     public void onCompleted(Exception e, JsonObject result) {
                         // do stuff with the result or error
                         try {
-                            Student_Name = new ArrayList<String>();
-                            Student_Id = new ArrayList<String>();
+                            Student_Name = new Hashtable<String, String>();
                             for (int i = 0; i < result.get("data").getAsJsonArray().size(); i++) {
-                                Student_Name.add(result.get("data").getAsJsonArray().get(i).getAsJsonObject().get("studentname").getAsString());
-                                Student_Id.add(result.get("data").getAsJsonArray().get(i).getAsJsonObject().get("autoid").getAsString());
+                                JsonObject o = result.get("data").getAsJsonArray().get(i).getAsJsonObject();
+                                Student_Name.put(o.get("autoid").getAsString(), o.get("studentname").getAsString());
                             }
-                            SetStudent(Student_Name,Student_Id);
+                            SetStudent();
 
                         } catch (Exception ea) {
                             ea.printStackTrace();
@@ -81,83 +80,25 @@ public class Semester extends AppCompatActivity {
     }
 
 
-    private void SetStudent(List<String> lst,List<String> ID){
+    private void SetStudent(){
 
-        if(lst.size()==1) {
-            FragmentPagerItemAdapter adapter = new FragmentPagerItemAdapter(
-                    getSupportFragmentManager(), FragmentPagerItems.with(this)
-                    .add(lst.get(0), sem_fragment.class,new Bundler().putString("ID", ID.get(0)).get())
-                    .create());
+        Set<String> keys = Student_Name.keySet();
+        if (keys.size() == 0) return;
+        FragmentPagerItems dynamicFragment = FragmentPagerItems.with(this).create();
+        for (String key : keys) {
+            //Student_Name.get(key);
+            Bundle b = new Bundle();
+            b.putString("ID", key);
+            dynamicFragment.add(FragmentPagerItem.of(Student_Name.get(key), SemesterList.class, b));
 
-            ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
-            viewPager.setAdapter(adapter);
 
-            SmartTabLayout viewPagerTab = (SmartTabLayout) findViewById(R.id.viewpagertab);
-            viewPagerTab.setViewPager(viewPager);
         }
+        FragmentPagerItemAdapter adapter = new FragmentPagerItemAdapter(getSupportFragmentManager(), dynamicFragment);
+        ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
+        viewPager.setAdapter(adapter);
 
-
-        if(lst.size()==2) {
-            FragmentPagerItemAdapter adapter = new FragmentPagerItemAdapter(
-                    getSupportFragmentManager(), FragmentPagerItems.with(this)
-                    .add(lst.get(0), sem_fragment.class,new Bundler().putString("ID", ID.get(0)).get())
-                    .add(lst.get(1), sem_fragment.class,new Bundler().putString("ID", ID.get(1)).get())
-                    .create());
-
-            ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
-            viewPager.setAdapter(adapter);
-
-            SmartTabLayout viewPagerTab = (SmartTabLayout) findViewById(R.id.viewpagertab);
-            viewPagerTab.setViewPager(viewPager);
-        }
-
-        if(lst.size()==3) {
-            FragmentPagerItemAdapter adapter = new FragmentPagerItemAdapter(
-                    getSupportFragmentManager(), FragmentPagerItems.with(this)
-                    .add(lst.get(0), sem_fragment.class,new Bundler().putString("ID", ID.get(0)).get())
-                    .add(lst.get(1), sem_fragment.class,new Bundler().putString("ID", ID.get(1)).get())
-                    .add(lst.get(2), sem_fragment.class,new Bundler().putString("ID", ID.get(2)).get())
-                    .create());
-
-            ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
-            viewPager.setAdapter(adapter);
-
-            SmartTabLayout viewPagerTab = (SmartTabLayout) findViewById(R.id.viewpagertab);
-            viewPagerTab.setViewPager(viewPager);
-        }
-
-        if(lst.size()==4) {
-            FragmentPagerItemAdapter adapter = new FragmentPagerItemAdapter(
-                    getSupportFragmentManager(), FragmentPagerItems.with(this)
-                    .add(lst.get(0), sem_fragment.class,new Bundler().putString("ID", ID.get(0)).get())
-                    .add(lst.get(1), sem_fragment.class,new Bundler().putString("ID", ID.get(1)).get())
-                    .add(lst.get(2), sem_fragment.class,new Bundler().putString("ID", ID.get(2)).get())
-                    .add(lst.get(3), sem_fragment.class,new Bundler().putString("ID", ID.get(3)).get())
-                    .create());
-
-            ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
-            viewPager.setAdapter(adapter);
-
-            SmartTabLayout viewPagerTab = (SmartTabLayout) findViewById(R.id.viewpagertab);
-            viewPagerTab.setViewPager(viewPager);
-        }
-
-        if(lst.size()==5) {
-            FragmentPagerItemAdapter adapter = new FragmentPagerItemAdapter(
-                    getSupportFragmentManager(), FragmentPagerItems.with(this)
-                    .add(lst.get(0), sem_fragment.class,new Bundler().putString("ID", ID.get(0)).get())
-                    .add(lst.get(1), sem_fragment.class,new Bundler().putString("ID", ID.get(1)).get())
-                    .add(lst.get(2), sem_fragment.class,new Bundler().putString("ID", ID.get(2)).get())
-                    .add(lst.get(3), sem_fragment.class,new Bundler().putString("ID", ID.get(3)).get())
-                    .add(lst.get(4), sem_fragment.class,new Bundler().putString("ID", ID.get(4)).get())
-                    .create());
-
-            ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
-            viewPager.setAdapter(adapter);
-
-            SmartTabLayout viewPagerTab = (SmartTabLayout) findViewById(R.id.viewpagertab);
-            viewPagerTab.setViewPager(viewPager);
-        }
+        SmartTabLayout viewPagerTab = (SmartTabLayout) findViewById(R.id.viewpagertab);
+        viewPagerTab.setViewPager(viewPager);
 
     }
 

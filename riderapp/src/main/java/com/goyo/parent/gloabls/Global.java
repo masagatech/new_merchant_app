@@ -22,9 +22,9 @@ public class Global {
 //      public final static String REST_URL = "http://traveltrack.goyo.in:8080/goyoapi";
 //      public static final String SOCKET_URL = "http://traveltrack.goyo.in:8080/";
 
-//    public final static String REST_URL = "http://192.168.1.104:8082/goyoapi";
-//    public static final String SOCKET_URL = "http://192.168.1.104:8091/";
-//    public final static String IMAGE_URL = "http://192.168.1.104:8082/images/";
+//    public final static String REST_URL = "http://192.168.1.102:8082/goyoapi";
+//    public static final String SOCKET_URL = "http://192.168.1.102:8091/";
+//    public final static String IMAGE_URL = "http://192.168.1.102:8082/images/";
 
     public final static String REST_URL = "http://track.goyo.in:8082/goyoapi";
     public static final String SOCKET_URL = "http://track.goyo.in:8082/";
@@ -108,7 +108,9 @@ public class Global {
         getgallerydetails("getgallerydetails", REST_URL +"/erp/getgallerydetails"),
         getExamDetails("getgallerydetails", REST_URL +"/erp/getExamDetails"),
         getExamResult("getExamResult", REST_URL +"/erp/getExamResult"),
-        getAssesmentResult("getAssesmentResult", REST_URL +"/erp/getAssesmentResult");
+        getAssesmentResult("getAssesmentResult", REST_URL +"/erp/getAssesmentResult"),
+        getAttendance("getAttendance", REST_URL +"/erp/getAttendance"),
+        getFeesCollection("getFeesCollection", REST_URL +"/erp/getFeesCollection");
 
 
 

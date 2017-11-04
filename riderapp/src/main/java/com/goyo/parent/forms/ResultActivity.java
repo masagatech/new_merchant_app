@@ -53,6 +53,7 @@ public class ResultActivity extends AppCompatActivity {
 //
 //        SmartTabLayout viewPagerTab = (SmartTabLayout) findViewById(R.id.viewpagertab);
 //        viewPagerTab.setViewPager(viewPager);
+
         GetStudent();
     }
 

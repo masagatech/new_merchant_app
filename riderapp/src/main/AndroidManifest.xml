@@ -217,17 +217,25 @@
             android:name=".forms.StillDev"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".forms.SemesterList"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".forms.Semester"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".forms.ResultActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".forms.ExamResultActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".forms.AssesmeResultActivity"
-            android:screenOrientation="portrait"></activity>
+            android:name=".forms.Semester"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".forms.ResultActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".forms.ExamResultActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".forms.AssesmeResultActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".forms.FeesActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity android:name=".forms.FeesBill"
+            android:screenOrientation="portrait">
+
+        </activity>
     </application>
 
 </manifest>

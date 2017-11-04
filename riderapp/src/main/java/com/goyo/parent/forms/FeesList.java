@@ -3,6 +3,7 @@ package com.goyo.parent.forms;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,12 +12,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.goyo.parent.R;
-import com.goyo.parent.adapters.ResultFragAdapter;
+import com.goyo.parent.adapters.FeesListAdapter;
 import com.goyo.parent.common.Preferences;
 import com.goyo.parent.model.modal_data;
 import com.koushikdutta.async.future.FutureCallback;
@@ -25,28 +27,27 @@ import com.koushikdutta.ion.Ion;
 import java.lang.reflect.Type;
 import java.util.List;
 
-import static android.os.Build.ID;
-import static com.goyo.parent.forms.ExamFrag.IDss;
 import static com.goyo.parent.forms.dashboard.SclId;
-import static com.goyo.parent.gloabls.Global.urls.getExamResult;
+import static com.goyo.parent.gloabls.Global.urls.getFeesCollection;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class frag_exam_result extends Fragment {
+public class FeesList extends Fragment {
 
 
     private View view;
     private RecyclerView mRecyclerView;
-    private com.goyo.parent.adapters.ResultFragAdapter mTimeLineAdapter;
+    private com.goyo.parent.adapters.FeesListAdapter mTimeLineAdapter;
     private Orientation mOrientation;
     private boolean mWithLinePadding;
     private ProgressDialog loader;
     private SwipeRefreshLayout mSwipeRefreshLayout;
+    private FloatingActionButton AddLeave;
+    String ID;
+    private TextView PendingFees;
 
-    String SemName,SemIDs;
-
-    public frag_exam_result() {
+    public FeesList() {
         // Required empty public constructor
     }
 
@@ -55,26 +56,24 @@ public class frag_exam_result extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        view=inflater.inflate(R.layout.fragment_frag_exam_result, container, false);
-
+        view = inflater.inflate(R.layout.fragment_fees_list, container, false);
 
         Bundle bundle = this.getArguments();
         if (bundle != null) {
-            SemIDs = bundle.getString("SemID");
-            SemName = bundle.getString("SemName");
+            ID = bundle.getString("ID");
         }
 
-        getActivity().setTitle("Exam - "+SemName);
 
         mOrientation = Orientation.VERTICAL;
         mWithLinePadding = true;
 
-
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
+        PendingFees = (TextView) view.findViewById(R.id.PendingFees);
         mRecyclerView.setLayoutManager(getLinearLayoutManager());
         mRecyclerView.setHasFixedSize(true);
 
-        mSwipeRefreshLayout=(SwipeRefreshLayout) view.findViewById(R.id.Refresh);
+
+        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.Refresh);
 
         //refresh data at first time
         mSwipeRefreshLayout.post(new Runnable() {
@@ -96,19 +95,17 @@ public class frag_exam_result extends Fragment {
         });
 
 
-
         return view;
     }
 
     private void DataFromServer(String ID) {
         JsonObject json = new JsonObject();
-        json.addProperty("flag", "byparents");
-        json.addProperty("studid", IDss+"");
-        json.addProperty("enttid", SclId+"");
-        json.addProperty("smstrid", SemIDs+"");
+        json.addProperty("flag", "byparent");
+        json.addProperty("studid", ID + "");
+        json.addProperty("enttid", SclId + "");
         json.addProperty("uid", Preferences.getValue_String(getActivity(), Preferences.USER_ID));
         Ion.with(this)
-                .load(getExamResult.value)
+                .load(getFeesCollection.value)
                 .setJsonObjectBody(json)
                 .asJsonObject()
                 .setCallback(new FutureCallback<JsonObject>() {
@@ -117,6 +114,7 @@ public class frag_exam_result extends Fragment {
                         // do stuff with the result or error
                         try {
                             if (result != null) Log.v("result", result.toString());
+                            // JSONObject jsnobject = new JSONObject(jsond);
                             Gson gson = new Gson();
                             Type listType = new TypeToken<List<modal_data>>() {
                             }.getType();
@@ -131,20 +129,26 @@ public class frag_exam_result extends Fragment {
 //                    }
                 });
     }
+
     private LinearLayoutManager getLinearLayoutManager() {
         return new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
     }
+
     private void bindCurrentTrips(List<modal_data> lst) {
         if (lst.size() > 0) {
             mRecyclerView.setVisibility(View.VISIBLE);
             view.findViewById(R.id.txtNodata).setVisibility(View.GONE);
-            mTimeLineAdapter = new ResultFragAdapter(lst, mOrientation, mWithLinePadding);
+            mTimeLineAdapter = new FeesListAdapter(lst, mOrientation, mWithLinePadding,ID);
             mRecyclerView.setAdapter(mTimeLineAdapter);
             mTimeLineAdapter.notifyDataSetChanged();
+            PendingFees.setVisibility(View.VISIBLE);
+            PendingFees.setText("Pending Fees : "+lst.get(0).pendfees);
         } else {
+            PendingFees.setVisibility(View.GONE);
             mRecyclerView.setVisibility(View.INVISIBLE);
             view.findViewById(R.id.txtNodata).setVisibility(View.VISIBLE);
         }
     }
+
 
 }

@@ -21,25 +21,24 @@ import java.util.Set;
 
 import static com.goyo.parent.forms.dashboard.SclId;
 
-public class StudentLeaveActivity extends AppCompatActivity {
+public class FeesActivity extends AppCompatActivity {
 
     Hashtable<String, String> Student_Name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_ann);
+        setContentView(R.layout.activity_fees);
 
-        if (getSupportActionBar() != null) {
+        if (getSupportActionBar() != null){
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayUseLogoEnabled(true);
             getSupportActionBar().setElevation(0);
         }
 
-        setTitle("Leave");
+        setTitle("Fees");
 
         GetStudent();
-
     }
 
     private void GetStudent() {
@@ -82,7 +81,7 @@ public class StudentLeaveActivity extends AppCompatActivity {
             //Student_Name.get(key);
             Bundle b = new Bundle();
             b.putString("ID", key);
-            dynamicFragment.add(FragmentPagerItem.of(Student_Name.get(key), Student_Leave.class, b));
+            dynamicFragment.add(FragmentPagerItem.of(Student_Name.get(key), FeesList.class, b));
 
 
         }
@@ -93,17 +92,27 @@ public class StudentLeaveActivity extends AppCompatActivity {
         SmartTabLayout viewPagerTab = (SmartTabLayout) findViewById(R.id.viewpagertab);
         viewPagerTab.setViewPager(viewPager);
 
-
     }
+
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//
+//        // Inflate the menu; this adds items to the action bar if it is present.
+//        getMenuInflater().inflate(R.menu.menu_calander, menu);
+//        return true;
+//    }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        //Menu
         switch (item.getItemId()) {
             //When home is clicked
             case android.R.id.home:
                 onBackPressed();
                 return true;
+//            case R.id.calander:
+//                return true;
+
             default:
         }
         return super.onOptionsItemSelected(item);

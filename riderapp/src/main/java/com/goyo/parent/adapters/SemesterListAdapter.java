@@ -2,7 +2,8 @@ package com.goyo.parent.adapters;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,7 +12,7 @@ import android.view.ViewGroup;
 import com.goyo.parent.R;
 import com.goyo.parent.forms.Orientation;
 import com.goyo.parent.forms.PendingOrdersView;
-import com.goyo.parent.forms.Semester;
+import com.goyo.parent.forms.sem_fragment;
 import com.goyo.parent.model.modal_data;
 
 import java.util.List;
@@ -28,15 +29,18 @@ public class SemesterListAdapter extends RecyclerView.Adapter<pending_order_view
     private boolean mWithLinePadding;
     private LayoutInflater mLayoutInflater;
     private ProgressDialog loader;
+    private Fragment mfragment;
+
+    private String ID;
 
 
 
-
-
-    public SemesterListAdapter(List<modal_data> feedList, Orientation orientation, boolean withLinePadding) {
+    public SemesterListAdapter(List<modal_data> feedList, Orientation orientation, boolean withLinePadding,Fragment fragment,String Id) {
         mFeedList = feedList;
         mOrientation = orientation;
         mWithLinePadding = withLinePadding;
+        mfragment=fragment;
+        ID=Id;
 
     }
     @Override
@@ -71,10 +75,22 @@ public class SemesterListAdapter extends RecyclerView.Adapter<pending_order_view
             holder.Border.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(final View m) {
-                    Intent intent = new Intent(mContext, Semester.class);
-                    intent.putExtra("SemName", timeLineModel.smstrname);
-                    intent.putExtra("SemID", timeLineModel.smstrid);
-                    mContext.startActivity(intent);
+
+                    sem_fragment sem_fragment = new sem_fragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putString("SemName", timeLineModel.smstrname);
+                    bundle.putString("SemID", timeLineModel.smstrid);
+                    bundle.putString("ID", ID);
+                    sem_fragment.setArguments(bundle);
+                    android.support.v4.app.FragmentTransaction transaction = mfragment.getChildFragmentManager().beginTransaction();
+                    transaction.replace(R.id.Frames, sem_fragment);
+                    transaction.addToBackStack(null);
+                    transaction.commit();
+
+//                    Intent intent = new Intent(mContext, Semester.class);
+//                    intent.putExtra("SemName", timeLineModel.smstrname);
+//                    intent.putExtra("SemID", timeLineModel.smstrid);
+//                    mContext.startActivity(intent);
                 }
             });
         }

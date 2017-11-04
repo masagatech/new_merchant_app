@@ -2,6 +2,7 @@ package com.goyo.parent.adapters;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -16,12 +17,13 @@ import az.plainpie.PieView;
 
 public class ResultFragViewHolder extends RecyclerView.ViewHolder {
 
-    TextView mDate,Header;
+    TextView mDate,Header,From,To,Sub;
     TextView mOrder;
     TextView Status;
     TextView mMarchant;
     TimelineView mTimelineView;
     RelativeLayout Border;
+    LinearLayout Hide;
     PieView pieView;
 
 
@@ -30,6 +32,10 @@ public class ResultFragViewHolder extends RecyclerView.ViewHolder {
         super(itemView);
 
         mDate=(TextView) itemView.findViewById(R.id.text_timeline_date);
+        From=(TextView) itemView.findViewById(R.id.From);
+        To=(TextView) itemView.findViewById(R.id.To);
+        Sub=(TextView) itemView.findViewById(R.id.sub);
+        Hide=(LinearLayout) itemView.findViewById(R.id.Hide);
         Header=(TextView) itemView.findViewById(R.id.Header);
         mOrder=(TextView) itemView.findViewById(R.id.text_timeline_title);
         Status=(TextView) itemView.findViewById(R.id.Remark);

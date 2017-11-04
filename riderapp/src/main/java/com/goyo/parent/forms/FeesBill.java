@@ -1,21 +1,24 @@
 package com.goyo.parent.forms;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.goyo.parent.R;
-import com.goyo.parent.adapters.SemesterListAdapter;
+import com.goyo.parent.adapters.BillAdapter;
+import com.goyo.parent.common.Preferences;
 import com.goyo.parent.model.modal_data;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
@@ -24,85 +27,87 @@ import java.lang.reflect.Type;
 import java.util.List;
 
 import static com.goyo.parent.forms.dashboard.SclId;
-import static com.goyo.parent.gloabls.Global.urls.getExamDetails;
+import static com.goyo.parent.gloabls.Global.urls.getFeesCollection;
 
-public class SemesterList  extends Fragment{
+public class FeesBill extends AppCompatActivity {
 
     private RecyclerView mRecyclerView;
-    private com.goyo.parent.adapters.SemesterListAdapter mTimeLineAdapter;
+    private com.goyo.parent.adapters.BillAdapter mTimeLineAdapter;
     private Orientation mOrientation;
     private boolean mWithLinePadding;
-    private View view;
     private ProgressDialog loader;
     private SwipeRefreshLayout mSwipeRefreshLayout;
+    String ID,RecivDate,Totals;
+    private TextView Total,Name,Class,Id;
+    private CardView cardView;
 
-    String ID;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_fees_bill);
 
-    public SemesterList() {
-        // Required empty public constructor
-    }
 
 
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_semester_list);
+        if(getSupportActionBar()!=null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayUseLogoEnabled(true);
+        }
 
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                Bundle savedInstanceState) {
-            // Inflate the layout for this fragment
-            view=inflater.inflate(R.layout.activity_semester_list, container, false);
-
-            Bundle bundle = this.getArguments();
-            if (bundle != null) {
-                ID = bundle.getString("ID");
-            }
-
-            getActivity().setTitle("Exams");
-
+        //getting Group Id and Name
+        Intent intent = getIntent();
+        ID = intent.getExtras().getString("StudID");
+        Totals = intent.getExtras().getString("Total");
+        RecivDate=intent.getExtras().getString("ReciveDate");
 
         mOrientation = Orientation.VERTICAL;
         mWithLinePadding = true;
 
+        setTitle("Bill");
 
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
+        mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        Total=(TextView)findViewById(R.id.Total);
+        Name=(TextView)findViewById(R.id.Name);
+        Class=(TextView)findViewById(R.id.Class);
+        Id=(TextView)findViewById(R.id.Id);
+        cardView=(CardView) findViewById(R.id.Card);
         mRecyclerView.setLayoutManager(getLinearLayoutManager());
         mRecyclerView.setHasFixedSize(true);
 
-        mSwipeRefreshLayout=(SwipeRefreshLayout) view.findViewById(R.id.Refresh);
+
+
+//        mSwipeRefreshLayout=(SwipeRefreshLayout) findViewById(R.id.Refresh);
 
         //refresh data at first time
-        mSwipeRefreshLayout.post(new Runnable() {
-            @Override
-            public void run() {
-                mSwipeRefreshLayout.setRefreshing(true);
+//        mSwipeRefreshLayout.post(new Runnable() {
+//            @Override
+//            public void run() {
+//                mSwipeRefreshLayout.setRefreshing(true);
                 //api call
                 DataFromServer();
-            }
-        });
+//            }
+//        });
 
         //swipe to refresh data
-        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                // Refresh items and get data from server
-                DataFromServer();
-            }
-        });
-
-        return view;
+//        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+//            @Override
+//            public void onRefresh() {
+//                // Refresh items and get data from server
+//                DataFromServer();
+//            }
+//        });
 
     }
 
 
     private void DataFromServer() {
         JsonObject json = new JsonObject();
-        json.addProperty("flag", "smstrlist");
+        json.addProperty("flag", "feesdetails");
+        json.addProperty("uid", Preferences.getValue_String(getApplicationContext(), Preferences.USER_ID));
         json.addProperty("enttid", SclId+"");
-        json.addProperty("studid", ID+"");
+        json.addProperty("studid", ID);
+        json.addProperty("receivedate", RecivDate);
         Ion.with(this)
-                .load(getExamDetails.value)
+                .load(getFeesCollection.value)
                 .setJsonObjectBody(json)
                 .asJsonObject()
                 .setCallback(new FutureCallback<JsonObject>() {
@@ -120,27 +125,47 @@ public class SemesterList  extends Fragment{
                         } catch (Exception ea) {
                             ea.printStackTrace();
                         }
-                        mSwipeRefreshLayout.setRefreshing(false);
+//                        mSwipeRefreshLayout.setRefreshing(false);
                     }
 
 //                    }
                 });
     }
     private LinearLayoutManager getLinearLayoutManager() {
-        return new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+        return new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
     }
     private void bindCurrentTrips(List<modal_data> lst) {
         if (lst.size() > 0) {
-
             mRecyclerView.setVisibility(View.VISIBLE);
-            view.findViewById(R.id.txtNodata).setVisibility(View.GONE);
-            mTimeLineAdapter = new SemesterListAdapter(lst, mOrientation, mWithLinePadding,this,ID);
+            findViewById(R.id.txtNodata).setVisibility(View.GONE);
+            mTimeLineAdapter = new BillAdapter(lst, mOrientation, mWithLinePadding);
             mRecyclerView.setAdapter(mTimeLineAdapter);
             mTimeLineAdapter.notifyDataSetChanged();
+            cardView.setVisibility(View.VISIBLE);
+
+            Total.setText("₹"+Totals+"");
+            Id.setText(lst.get(0).receiptnobill);
+            Class.setText(lst.get(0).classnamebill);
+            Name.setText(lst.get(0).studnamebill);
         } else {
+            cardView.setVisibility(View.GONE);
             mRecyclerView.setVisibility(View.INVISIBLE);
-            view.findViewById(R.id.txtNodata).setVisibility(View.VISIBLE);
+            findViewById(R.id.txtNodata).setVisibility(View.VISIBLE);
         }
     }
 
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        //Menu
+        switch (item.getItemId()) {
+            //When home is clicked
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+            default:
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }
