@@ -7,7 +7,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.goyo.parent.forms.crew_details"
+    tools:context="com.goyo.marchant.forms.crew_details"
     android:background="@color/background">
 
     <LinearLayout

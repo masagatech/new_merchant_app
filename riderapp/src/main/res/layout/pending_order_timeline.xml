@@ -27,7 +27,7 @@
             android:layout_width="90dp"
             android:layout_height="90dp"
             app:cardElevation="30dp"
-            android:id="@+id/view2"
+            android:id="@+id/Cardview"
             app:cardCornerRadius="45dp"
             android:layout_centerHorizontal="true"
             android:innerRadius="0dp"

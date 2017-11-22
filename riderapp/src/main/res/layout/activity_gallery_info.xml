@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.goyo.parent.forms.GalleryInfo">
+    tools:context="com.goyo.marchant.forms.GalleryInfo">
 
 
     <com.ogaclejapan.smarttablayout.SmartTabLayout

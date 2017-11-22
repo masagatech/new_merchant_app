@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.goyo.parent.forms.VideoGallery">
+    tools:context="com.goyo.marchant.forms.VideoGallery">
 
     <ListView
         android:id="@+id/listview"

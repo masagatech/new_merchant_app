@@ -4,23 +4,44 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.goyo.parent.forms.Schedule">
+    tools:context="com.goyo.marchant.forms.Schedule">
 
-    <com.alamkanak.weekview.WeekView
-        android:id="@+id/weekView"
+    <com.github.badoualy.datepicker.DatePickerTimeline
+        android:id="@+id/DatePicker"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:mti_primaryColor="@color/about_facebook_color"
+        app:mti_primaryDarkColor="@color/white" />
+
+    <TextView
+        android:layout_marginTop="120dp"
+        android:id="@+id/txtNodata"
+        android:visibility="gone"
+        android:drawableTop="@drawable/nostud"
+        android:layout_width="match_parent"
+        android:gravity="center"
+        android:fontFamily="sans-serif-light"
+        android:textColor="@color/blue_light"
+        android:layout_height="wrap_content"
+        android:text="There is no data to fetch!"
+        android:textSize="16sp"
+        />
+    <android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_marginTop="130dp"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:eventTextColor="@color/white"
-        app:textSize="12sp"
-        app:hourHeight="60dp"
-        app:headerColumnPadding="8dp"
-        app:headerColumnTextColor="@color/blue_light"
-        app:headerRowPadding="12dp"
-        app:columnGap="8dp"
-        app:noOfVisibleDays="3"
-        app:headerRowBackgroundColor="@color/orange_light"
-        app:dayBackgroundColor="#05000000"
-        app:todayBackgroundColor="#1848adff"
-        app:headerColumnBackground="@color/white"/>
+        android:id="@+id/Refresh"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:clipToPadding="false"/>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
 
 </RelativeLayout>

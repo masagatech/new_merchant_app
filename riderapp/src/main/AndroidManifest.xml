@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.goyo.parent"
+    package="com.goyo.marchant"
     android:versionCode="1"
     android:versionName="1.0">
 
@@ -48,7 +48,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
-        android:name=".App"
+        android:name="com.goyo.marchant.App"
         android:allowBackup="true"
         android:icon="@drawable/goyologo"
         android:label="@string/app_name"
@@ -91,7 +91,7 @@
 
         <!-- Activities -->
         <activity
-            android:name=".initials.splash_screen"
+            android:name="com.goyo.marchant.initials.splash_screen"
             android:configChanges="locale|keyboardHidden|orientation|screenSize"
             android:label="@string/app_name"
             android:launchMode="singleTask"
@@ -108,18 +108,18 @@
         <!-- android:configChanges="locale|orientation|screenSize|keyboardHidden" -->
         <!-- android:screenOrientation="portrait" /> -->
         <activity
-            android:name=".initials.login"
+            android:name="com.goyo.marchant.initials.login"
             android:configChanges="locale|keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".forms.crew_details"
+            android:name="com.goyo.marchant.forms.crew_details"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".settings.languages"
+            android:name="com.goyo.marchant.settings.languages"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".settings.settings"
+            android:name="com.goyo.marchant.settings.settings"
             android:configChanges="locale|orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait" />
         <!-- <activity android:name="com.goyo.goyorider.forms.googlemapexp" /> -->
@@ -127,34 +127,34 @@
 
         <!-- [END firebase_iid_service] -->
         <activity
-            android:name=".initials.sessionchecker"
+            android:name="com.goyo.marchant.initials.sessionchecker"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".forms.dashboard"
+            android:name="com.goyo.marchant.forms.dashboard"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".forms.pending_order"
+            android:name="com.goyo.marchant.forms.pending_order"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".forms.complated_order"
+            android:name="com.goyo.marchant.forms.complated_order"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".forms.rejected_order"
+            android:name="com.goyo.marchant.forms.rejected_order"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".forms.all_order"
+            android:name="com.goyo.marchant.forms.all_order"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".forms.PushOrder"
+            android:name="com.goyo.marchant.forms.PushOrder"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".forms.newOrder"
+            android:name="com.goyo.marchant.forms.newOrder"
             android:launchMode="singleInstance"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -176,63 +176,63 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".initials.SliderScreen"
+            android:name="com.goyo.marchant.initials.SliderScreen"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".forms.About_us" />
+        <activity android:name="com.goyo.marchant.forms.About_us" />
         <activity
-            android:name=".forms.AddLeave"
+            android:name="com.goyo.marchant.forms.AddLeave"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".forms.Holyday"
+            android:name="com.goyo.marchant.forms.Holyday"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".forms.Profile_Page"
+            android:name="com.goyo.marchant.forms.Profile_Page"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".forms.Announcment"
+            android:name="com.goyo.marchant.forms.Announcment"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".forms.StudentLeaveActivity"
+            android:name="com.goyo.marchant.forms.StudentLeaveActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".forms.Attentence"
+            android:name="com.goyo.marchant.forms.Attentence"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".forms.MyKidsRegistration"
+            android:name="com.goyo.marchant.forms.MyKidsRegistration"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".forms.SchodulActivity"
+            android:name="com.goyo.marchant.forms.SchodulActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".forms.Album"
+            android:name="com.goyo.marchant.forms.Album"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".forms.GalleryInfo"
+            android:name="com.goyo.marchant.forms.GalleryInfo"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".forms.Schedule"
+            android:name="com.goyo.marchant.forms.Schedule"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".forms.StillDev"
+            android:name="com.goyo.marchant.forms.StillDev"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".forms.Semester"
+            android:name="com.goyo.marchant.forms.Semester"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".forms.ResultActivity"
+            android:name="com.goyo.marchant.forms.ResultActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".forms.ExamResultActivity"
+            android:name="com.goyo.marchant.forms.ExamResultActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".forms.AssesmeResultActivity"
+            android:name="com.goyo.marchant.forms.AssesmeResultActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".forms.FeesActivity"
+            android:name="com.goyo.marchant.forms.FeesActivity"
             android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".forms.FeesBill"
+        <activity android:name="com.goyo.marchant.forms.FeesBill"
             android:screenOrientation="portrait">
 
         </activity>

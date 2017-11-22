@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.goyo.parent.forms.StudentLeaveActivity">
+    tools:context="com.goyo.marchant.forms.StudentLeaveActivity">
 
 
     <com.ogaclejapan.smarttablayout.SmartTabLayout

@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:float="http://schemas.android.com/apk/res-auto"
-    tools:context="com.goyo.parent.forms.AddLeave"
+    tools:context="com.goyo.marchant.forms.AddLeave"
     android:orientation="vertical">
 <LinearLayout
 xmlns:android="http://schemas.android.com/apk/res/android"
@@ -15,7 +15,7 @@ xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:float="http://schemas.android.com/apk/res-auto"
-    tools:context="com.goyo.parent.forms.AddLeave"
+    tools:context="com.goyo.marchant.forms.AddLeave"
 android:orientation="vertical">
 
 

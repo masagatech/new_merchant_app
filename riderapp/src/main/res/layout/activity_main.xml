@@ -1,10 +1,10 @@
-<com.goyo.parent.layouts.DashboardLayout
+<com.goyo.marchant.layouts.DashboardLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:layout_weight="1"
-    tools:context="com.goyo.parent.goyorider.MainActivity"
+    tools:context="com.goyo.marchant.goyorider.MainActivity"
     android:background="@color/background">
 
     <GridView
@@ -22,4 +22,4 @@
         <!--android:drawableTop="@drawable/messages_default"-->
         <!--android:id="@+id/btnMyTrip"/>-->
 
-</com.goyo.parent.layouts.DashboardLayout>
+</com.goyo.marchant.layouts.DashboardLayout>

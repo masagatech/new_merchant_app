@@ -32,9 +32,10 @@
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:id="@+id/Cardview"
         android:layout_gravity="center_vertical"
-        android:layout_marginBottom="2dp"
-        app:cardElevation="1dp"
+        android:layout_marginBottom="3dp"
+        app:cardElevation="2dp"
         app:contentPadding="1dp">
 
         <RelativeLayout
@@ -43,23 +44,27 @@
             android:layout_height="match_parent"
             android:background="?android:attr/selectableItemBackground"
             android:clickable="true"
-            android:padding="5dp">
+           >
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/Remark"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="2dp"
+                android:gravity="center"
+                android:background="@color/about_facebook_color"
+                android:textColor="@android:color/white"
+                android:textStyle="bold"
+                android:textSize="13dp"
+                tools:text="Passed" />
 
             <LinearLayout
+                android:layout_marginTop="19dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/Remark"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center_vertical"
-                    android:textColor="@android:color/black"
-                    android:textStyle="bold"
-                    android:textSize="12dp"
-                    tools:text="Passed" />
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/From"
@@ -158,7 +163,7 @@
 
                 </LinearLayout>
                 <LinearLayout
-                    android:layout_marginTop="30dp"
+                    android:layout_marginTop="35dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
@@ -180,7 +185,8 @@
                         android:textSize="12sp"
                         android:layout_marginTop="5dp"
                         android:gravity="center"
-                        tools:text="01/Aug/2017" />
+                        tools:text="01/Aug/2017"
+                        android:paddingBottom="5dp"/>
 
                 </LinearLayout>
             </LinearLayout>

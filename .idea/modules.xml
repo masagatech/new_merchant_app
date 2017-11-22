@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/goyo_parent.iml" filepath="$PROJECT_DIR$/goyo_parent.iml" />
+      <module fileurl="file://$PROJECT_DIR$/goyo_marchant.iml" filepath="$PROJECT_DIR$/goyo_marchant.iml" />
       <module fileurl="file://E:\Works\goyo_parent\goyo_travel_tracker.iml" filepath="E:\Works\goyo_parent\goyo_travel_tracker.iml" />
       <module fileurl="file://E:\Works\goyo_parent\gyo_delivery_rider.iml" filepath="E:\Works\goyo_parent\gyo_delivery_rider.iml" />
       <module fileurl="file://$PROJECT_DIR$/riderapp/riderapp.iml" filepath="$PROJECT_DIR$/riderapp/riderapp.iml" />

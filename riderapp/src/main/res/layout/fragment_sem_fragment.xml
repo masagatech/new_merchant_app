@@ -5,7 +5,7 @@ android:layout_width="match_parent"
 android:layout_height="match_parent"
 android:fitsSystemWindows="true"
 android:background="@color/colorBackground"
-tools:context="com.goyo.parent.forms.sem_fragment">
+tools:context="com.goyo.marchant.forms.sem_fragment">
 
 <TextView
     android:layout_marginTop="40dp"

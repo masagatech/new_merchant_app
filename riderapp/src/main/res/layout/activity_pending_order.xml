@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:background="@color/colorBackground"
-    tools:context="com.goyo.parent.forms.pending_order">
+    tools:context="com.goyo.marchant.forms.pending_order">
 
     <TextView
         android:layout_marginTop="40dp"

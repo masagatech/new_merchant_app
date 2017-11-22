@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
    android:id="@+id/cal"
     android:layout_height="match_parent"
-    tools:context="com.goyo.parent.forms.Leave"
+    tools:context="com.goyo.marchant.forms.Leave"
     android:orientation="vertical">
     <LinearLayout
         android:layout_width="match_parent"

@@ -7,7 +7,7 @@ android:layout_height="match_parent"
 android:fitsSystemWindows="true"
     android:id="@+id/FrameExamList"
 android:background="@color/colorBackground"
-tools:context="com.goyo.parent.forms.ExamFrag">
+tools:context="com.goyo.marchant.forms.ExamFrag">
 
 <TextView
     android:layout_marginTop="40dp"

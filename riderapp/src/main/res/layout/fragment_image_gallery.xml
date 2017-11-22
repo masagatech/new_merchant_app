@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:orientation="vertical"
     android:layout_height="match_parent"
-    tools:context="com.goyo.parent.forms.ImageGallery">
+    tools:context="com.goyo.marchant.forms.ImageGallery">
 
     <!-- TODO: Update blank fragment layout -->
     <com.veinhorn.scrollgalleryview.ScrollGalleryView
